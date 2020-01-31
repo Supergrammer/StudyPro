@@ -43,7 +43,7 @@ export default {
   components: {
     Board: Board,
     Chatting: Chatting,
-    FaceTalk: FaceTalk
+    FaceTalk: FaceTalk,
   },
 
   created() {
@@ -55,10 +55,14 @@ export default {
     this.socket.emit("join", 1);
   },
   mounted(){
+    
     window.onbeforeunload = () => {
       this.socket.emit('leave', 1);
+    
     };
-
+    window.onresize=()=>{
+      
+    }
   }
 };
 </script>
