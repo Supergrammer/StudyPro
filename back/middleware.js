@@ -10,6 +10,7 @@ export const localsMiddelWare = async (req, res, next) => {
             if (decoded) {
                 const user = await users.findOne({ where: { id: decoded.user_id } });
                 res.locals.user = user.dataValues;
+
             } else {
                 next();
             }
