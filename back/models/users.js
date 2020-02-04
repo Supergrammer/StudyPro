@@ -83,13 +83,7 @@ module.exports = function (sequelize, DataTypes) {
         nickname,
         gender } = user;
 
-      let hash;
-      if (platform_type != "local") {
-        hash = await users.hash(password);
-      } else {
-        hash = password;
-      }
-
+      const hash = await users.hash(password);
       const new_user = await this.create({
         email,
         platform_type,
@@ -102,7 +96,6 @@ module.exports = function (sequelize, DataTypes) {
       })
       return new_user;
     } catch (err) {
-      console.log(err)
       return false;
     }
   }
