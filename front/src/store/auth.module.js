@@ -14,9 +14,9 @@ export const auth = {
             if (!initialState.user) return
 
             AuthService.checkUserDefault().then(
-                res => {
-                    if (res) {
-                        commit('loginSuccess', res)
+                user => {
+                    if (user) {
+                        commit('loginSuccess', user)
                     } else {
                         commit('loginFailure')
                     }
@@ -27,9 +27,9 @@ export const auth = {
         // 로그인
         async login({ commit }, user) {
             return await AuthService.login(user).then(
-                res => {
-                    if (res) {
-                        commit('loginSuccess', res.user)
+                user => {
+                    if (user) {
+                        commit('loginSuccess', user)
                         return true
                     } else {
                         commit('loginFailure')
@@ -89,6 +89,9 @@ export const auth = {
         },
         getUser: (state) => {
             return state.user
+        },
+        getUserNickname: (state) => {
+            return state.status.nickname
         },
         getToken: (state) => {
             return state.user.accessToken

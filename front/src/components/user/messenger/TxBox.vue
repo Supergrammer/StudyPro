@@ -16,12 +16,12 @@
       </v-row>
     </v-list-item>
 
-    <v-list-item v-for="item in txBox" :key="item.title">
+    <v-list-item v-for="item in sendMsg" :key="item.title">
       <v-card elevation="0" width="1500" @click="viewDetail(item)">
         <v-row style="border-bottom: 1px solid #E5C1D4;">
           <v-col cols="2" align="center">
             <v-avatar size="40px" class="ma-0">
-              <img :src="item.avatar" />
+              <img :src="item.to.profile_url" />
             </v-avatar>
 
             <p style="font-size:14px" class="ma-0 pt-2">{{ item.receiver }}</p>
@@ -89,9 +89,7 @@ export default {
     }
   },
   async created() {
-    console.log("sebdMsg-created")
     const sendMsg = await AlarmService.getSendAlarm()
-    console.log(sendMsg)
     this.txBox = sendMsg.data
   }
 };
