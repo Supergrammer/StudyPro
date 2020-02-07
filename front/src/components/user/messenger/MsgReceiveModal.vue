@@ -3,13 +3,14 @@
     <v-dialog v-model="open" max-width="40%">
       <v-card id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
-          <span class="headline">[제목]  {{ item.title }}</span>
+          <span class="headline">[제목] {{ item.title }}</span>
         </v-card-title>
         <v-card-text class="py-0 px-7">
           <v-container class="pb-0">
             <v-row class="justify-center">
               <v-avatar size="140" color="white">
-                <v-img :src="item.avatar"></v-img>
+                <v-img v-if="tab==='tx'" :src="item.to ? item.to.profile_url : null"></v-img>
+                <v-img v-if="tab==='rx'" :src="item.from ? item.from.profile_url : null"></v-img>
                 <!-- <v-icon size="140">mdi-account-circle</v-icon> -->
               </v-avatar>
             </v-row>
@@ -29,7 +30,8 @@
                 >
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{ item.sender }}</v-content>
+                <v-content v-if="tab==='tx'" text class="py-0">{{ item.to ? item.to.nickname : null}}</v-content>
+                <v-content v-if="tab==='rx'" text class="py-0">{{ item.from ? item.from.nickname : null}}</v-content>
               </v-col>
             </v-row>
             <v-row class="py-1">
@@ -39,10 +41,10 @@
                 >
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0"
-                  >{{ item.year }}-{{ item.month }}-{{ item.day }}
-                  {{ item.hour }}:{{ item.minute }}</v-content
-                >
+                <v-content text class="py-0">
+                  {{item.created_date ? item.created_date.substr(0, 10) : null}}
+                  {{item.created_date ? item.created_date.substr(11, 5) : null}}
+                </v-content>
               </v-col>
             </v-row>
 
@@ -54,7 +56,7 @@
                 >
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">{{ item.detail }}</v-content>
+                <v-content text class="py-0">{{ item.content }}</v-content>
               </v-col>
             </v-row>
           </v-container>
@@ -109,23 +111,24 @@
 
 <script>
 import AlarmService from "@/services/alarm.service"
+
 export default {
-  show: false,
-  name: "groupmodal",
   data: () => ({
     open: false,
     regText: "",
     showResponse: false
   }),
-  props: ["groupModal", "gid", "item"],
+  props: ["groupModal", "gid", "item", "tab"],
   watch: {
     groupModal() {
       this.open = this.groupModal;
     },
-    open() {
-      if (this.open == false) {
+    open(op) {
+      if (op == false) {
         this.showResponse = false;
         this.$emit("close");
+      } else if (op == true && this.tab == "rx") {        
+        AlarmService.checkAlarm({alarm_id:this.item.id})
       }
     }
   },
@@ -151,6 +154,6 @@ export default {
       this.open = false;
       this.regText = "";
     }
-  }
+  },
 };
 </script>

@@ -16,15 +16,14 @@
       </v-row>
     </v-list-item>
 
-    <v-list-item v-for="item in sendMsg" :key="item.title">
+    <v-list-item v-for="item in sendMsg" :key="item.id">
       <v-card elevation="0" width="1500" @click="viewDetail(item)">
         <v-row style="border-bottom: 1px solid #E5C1D4;">
           <v-col cols="2" align="center">
             <v-avatar size="40px" class="ma-0">
               <img :src="item.to.profile_url" />
             </v-avatar>
-
-            <p style="font-size:14px" class="ma-0 pt-2">{{ item.receiver }}</p>
+            <p style="font-size:14px" class="ma-0 pt-2">{{ item.to.nickname }}</p>
           </v-col>
 
           <v-col align-self="center" cols="8">
@@ -46,6 +45,7 @@
       <group-modal
         :group-modal="groupModal"
         :item="item"
+        :tab="txmsg"
         v-on:close="modalClose"
         v-on:clickRes="modalReload"
       />
@@ -60,9 +60,10 @@ export default {
   data: () => ({
     groupModal: false,
     item: {},
-    txBox: []
+    txBox: [],
+    txmsg: "tx"
   }),
-
+  props: ["tab"],
   computed: {
     isAuth: function() {
       return this.$store.getters.isAuth;
@@ -87,6 +88,14 @@ export default {
       this.groupModal = false;
       this.groupModal = true;
     }
+  },
+  watch: {
+      async tab(t){
+        if (t === 1) {
+          const sendMsg = await AlarmService.getSendAlarm();
+          this.txBox = sendMsg.data
+        }
+      }
   },
   async created() {
     const sendMsg = await AlarmService.getSendAlarm()

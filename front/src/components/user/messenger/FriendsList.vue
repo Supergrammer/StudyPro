@@ -12,43 +12,37 @@
           </v-col>
 
           <v-col align-self="center" cols="8">
-            <v-row> </v-row>
+            <v-row></v-row>
           </v-col>
 
           <v-col align-self="center" cols="2">
-            <v-btn color="green lighten-4" @click="viewDetail(item)"
-              >쪽지 보내기</v-btn
-            >
+            <v-btn color="green lighten-4" @click="viewDetail(item)">쪽지 보내기</v-btn>
           </v-col>
         </v-row>
       </v-card>
     </v-list-item>
     <template>
-      <group-modal
-        :group-modal="groupModal"
-        :item="item"
-        v-on:close="modalClose"
-      />
+      <group-modal :group-modal="groupModal" :item="item" v-on:close="modalClose" />
     </template>
   </v-list>
 </template>
 
 <script>
-import UserService from "@/services/user.service"
+import UserService from "@/services/user.service";
 
 export default {
   data: () => ({
     groupModal: false,
     item: {},
-    userItems: [],
+    userItems: []
   }),
-
+  props: ["tab"],
   computed: {
     isAuth: function() {
       return this.$store.getters.isAuth;
     },
     userList: function() {
-      return this.userItems
+      return this.userItems;
     }
   },
   components: {
@@ -67,8 +61,15 @@ export default {
 
   async created() {
     const userInfo = await UserService.getAllUser();
-    this.userItems = userInfo.data
-    //console.log(userInfo.data)
+    this.userItems = userInfo.data;
+  },
+  watch: {
+    async tab(t) {
+      if (t === 2) {
+        const userInfo = await UserService.getAllUser();
+        this.userItems = userInfo.data;
+      }
+    }
   }
 };
 </script>
