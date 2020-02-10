@@ -276,7 +276,7 @@
               <group-modal
                 :group-modal="groupModal"
                 :id="id"
-                :item="item"
+                :study-info="item"
                 v-on:close="modalClose"
               />
             </v-layout>
@@ -395,7 +395,6 @@ export default {
           this.displayItems.push(this.searchedItems.shift());
         }
       }
-      console.log(this.displayItems)
       this.searchInput = ''
       if (this.displayItems.length == 0) {
         this.noResult = true

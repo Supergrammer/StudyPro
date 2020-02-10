@@ -265,7 +265,6 @@ export default {
         this.$router.push({ path: "/user/calendar" });
       } else if (name == "signout") {
         this.signout();
-        location.reload();
       }
     }
   }
