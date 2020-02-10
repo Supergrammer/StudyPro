@@ -3,6 +3,10 @@
 // }
 $black: #212529;
 $white: #ffffff;
+.theme--light.v-application {
+    background-color: #fff;
+}
+
 .dropPanel {
     display: block;
     text-decoration: none;
