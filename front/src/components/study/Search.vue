@@ -215,19 +215,13 @@
           <template>
             <v-layout class="ma-2" row>
               <v-list-item :key="item.id">
-                <v-list-item-content class="pt-0 pb-1">
+                <v-list-item-content class="pt-0 pb-1 d-block">
                   <v-row class="px-2">
-                    <v-col cols="12" md="5" class="align-center justify-center">
-                      <v-avatar color="white">
-                        <v-icon size="62">mdi-account-circle</v-icon>
-                      </v-avatar>
-                    </v-col>
-
                     <!-- 내용 -->
-                    <v-col cols="12" md="7" class="pl-4">
+                    <v-col cols="12" md="9" class="pl-4">
                       <!-- 스터디 소개글 -->
                       <v-row class="pb-2">
-                        <v-col cols="4" md="5" class="text-end pr-3">
+                        <v-col cols="5" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >스터디 목표</v-content
                           >
@@ -238,7 +232,7 @@
                       </v-row>
                       <!-- 시작시간 -->
                       <v-row class="pb-2">
-                        <v-col cols="4" md="5" class="text-end pr-3">
+                        <v-col cols="5" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >시작날짜</v-content
                           >
@@ -249,7 +243,7 @@
                       </v-row>
                       <!-- 스터디기간 -->
                       <v-row>
-                        <v-col cols="4" md="5" class="text-end pr-3">
+                        <v-col cols="6" class="text-end pr-3">
                           <v-content text class="pt-0 font-weight-bold"
                             >스터디기간</v-content
                           >
@@ -259,9 +253,7 @@
                         }}</v-col>
                       </v-row>
                     </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" class="justify-center pa-0">
+                    <v-col cols="12" md="3" class="justify-center align-center pa-0">
                       <v-btn
                         class="white lighten-3"
                         elevation="1"
@@ -276,7 +268,7 @@
               <group-modal
                 :group-modal="groupModal"
                 :id="id"
-                :item="item"
+                :study-info="item"
                 v-on:close="modalClose"
               />
             </v-layout>
@@ -362,6 +354,7 @@ export default {
       for (var i = 0; i < len; i++) {
         this.displayItems.push(this.copyItems.shift());
       }
+      console.log(this.displayItems)
     },
 
     loadMore() {
@@ -395,7 +388,6 @@ export default {
           this.displayItems.push(this.searchedItems.shift());
         }
       }
-      console.log(this.displayItems)
       this.searchInput = ''
       if (this.displayItems.length == 0) {
         this.noResult = true

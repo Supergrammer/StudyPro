@@ -1,7 +1,7 @@
 <template>
   <div id="createGroup" class="mx-5">
     <v-card class="pa-5 pb-2" elevation="0" v-if="!created">
-      <p class="ml-5">그룹 생성</p>
+      <p class="ml-5 cus-title">그룹 생성</p>
       <hr />
       <v-simple-table>
         <template>
@@ -314,7 +314,7 @@ export default {
 </script>
 
 <style>
-p {
+.cus-title {
   font-size: 30px;
 }
 

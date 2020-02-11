@@ -15,26 +15,50 @@
           multiple
           show-arrows
         >
-          <v-slide-item v-for="item in items" :key="item.gid">
+          <v-slide-item v-for="studyInfo in studyList" :key="studyInfo.id">
             <v-card
               color="white"
               class="ma-4"
               height="auto"
               width="200"
-              @click="viewDetail(item)"
+              @click="viewDetail(studyInfo)"
             >
               <v-img
+                color="rgb(255, 0, 0, 0.2)"
+                class="white--text align-end"
+                height="auto"
+                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+              >
+                <v-row class="pt-4" justify="center">
+                  <v-avatar size="100" class="mr-2">
+                    <v-img :src="studyInfo.captain.profile_url"> </v-img>
+                  </v-avatar>
+                </v-row>
+
+                <v-card-title style="font-size:30px">{{
+                  studyInfo.name
+                }}</v-card-title>
+                <v-card-title style="font-size:15px">{{
+                  studyInfo.description
+                }}</v-card-title>
+                <v-card-title style="font-size:15px">
+                  시간 : {{ studyInfo.start_time }} -
+                  {{ studyInfo.end_time }}</v-card-title
+                >
+              </v-img>
+
+              <!-- <v-img
                 class="white--text align-end"
                 height="150px"
                 :src="item.imgsrc"
-              ></v-img>
+              ></v-img> -->
 
-              <v-row justify="center">
-                <p id="istudyname" class="mt-3">{{ item.name }}</p>
+              <!-- <v-row justify="center">
+                <p id="istudyname" class="mt-3">{{ studyInfo.name }}</p>
               </v-row>
 
               <v-row justify="center">
-                <p id="istudytopic">{{ item.topic }}</p>
+                <p id="istudytopic">{{ studyInfo.description }}</p>
               </v-row>
 
               <v-row justify="center">
@@ -43,19 +67,19 @@
 
               <v-row justify="center">
                 <p style="font-size:15px">
-                  시간 : {{ item.starttime }} - {{ item.endtime }}
+                  시간 : {{ studyInfo.start_time }} - {{ studyInfo.end_time }}
                 </p>
               </v-row>
 
               <v-row justify="center">
                 <p style="font-size:15px">인원 : {{ item.member }} / 6</p>
-              </v-row>
+              </v-row> -->
             </v-card>
           </v-slide-item>
           <template>
             <group-modal
               :group-modal="groupModal"
-              :item="item"
+              :study-info="studyInfo"
               v-on:close="modalClose"
             />
           </template>
@@ -95,90 +119,23 @@
 </template>
 
 <script>
+import StudyService from "@/services/study.service";
+
 export default {
   name: "tabs",
   data: () => ({
     current: "ng",
 
+    studyList: [],
+    studyInfo: null,
+
     groupModal: false,
     item: {},
-    items: [
-      {
-        imgsrc: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        name: "OS 2주 완성",
-        topic: "운영체제",
-        goal: "운영체제 기초 다지기",
-        gmaster: "나야나",
-        startdate: "2020-02-03",
-        days: "토,일",
-        starttime: "10",
-        endtime: "12",
-        duration: "",
-        intro: "마! 너 내 동료가 돼라!",
-        member: "2"
-      },
-
-      {
-        imgsrc: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        name: "DS 마스터",
-        topic: "자료구조",
-        goal: "이 세상 모든 자료형 마스터",
-        gmaster: "김자료",
-        startdate: "2020-01-13",
-        days: "수,금",
-        starttime: "19",
-        endtime: "21",
-        duration: "",
-        intro: "옷장 정리 잘하시는 분 환영",
-        member: "4"
-      },
-
-      {
-        imgsrc: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        name: "백준 직강",
-        topic: "알고리즘",
-        goal: "코딩 테스트 패스하기",
-        gmaster: "알고몬",
-        startdate: "2019-11-13",
-        days: "월,수,금",
-        starttime: "06",
-        endtime: "08",
-        duration: "",
-        intro: "함께 해요~",
-        member: "5"
-      },
-
-      {
-        imgsrc: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        name: "면접의 신",
-        topic: "기술면접",
-        goal: "면접관 뽀개기",
-        gmaster: "신면접",
-        startdate: "2019-12-22",
-        days: "금",
-        starttime: "20",
-        endtime: "22",
-        duration: "",
-        intro: "모의면접을 실전면접처럼",
-        member: "0"
-      },
-
-      {
-        imgsrc: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-        name: "알파베타감마고",
-        topic: "인공지능",
-        goal: "알파고 이기기",
-        gmaster: "델타고",
-        startdate: "2019-12-29",
-        days: "화,금,토",
-        starttime: "21",
-        endtime: "23",
-        duration: "",
-        intro: "로봇에게 질 순 없잖아요?",
-        member: "3"
-      }
-    ]
+    items: []
   }),
+  async created() {
+    this.studyList = await StudyService.getAllStudy();
+  },
   computed: {
     isAuth: function() {
       return this.$store.getters.isAuth;
@@ -191,9 +148,10 @@ export default {
     tabSwitch(target) {
       this.current = target;
     },
-    viewDetail(item) {
+    viewDetail(studyInfo) {
+      console.log('viewde',studyInfo)
       this.groupModal = true;
-      this.item = item;
+      this.studyInfo = studyInfo;
     },
     modalClose() {
       this.groupModal = false;

@@ -38,7 +38,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     created_date: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: DataTypes.NOW
     },
     view: {
       type: DataTypes.INTEGER,
@@ -161,17 +162,14 @@ module.exports = function(sequelize, DataTypes) {
     let result;
     
     result = await this.findAll(
-      { offset: offset,
+      { offset: Number(offset),
         limit: 10,
         where : {
           study_id : study_id,
-          board : board
-        }
-    }).map(post => {
-      delete post.dataValues.content
-      return post
+          board : board,
+        },
+        order:  [['id','DESC']]
     })
-    //console.log(result)
     return result;
   }
 

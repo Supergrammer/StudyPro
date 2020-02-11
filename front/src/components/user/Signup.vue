@@ -1,138 +1,137 @@
 ﻿<template>
-  <div id="singup">
-    <v-form>
-      <v-content>
-        <v-container>
-          <div id="app">
-            <v-app id="inspire">
-              <v-form ref="form" v-model="valid">
-                <v-card max-width="1000" class="mx-auto">
-                  <v-toolbar flat color="customTheme" dark>
-                    <v-row>
-                      <v-col class="py-0" offset="1">
-                        <v-toolbar-title>회원가입</v-toolbar-title>
-                      </v-col>
-                    </v-row>
-                  </v-toolbar>
-                  <br />
+  <v-content id="signup" class="pa-0">
+    <v-form ref="form" v-model="valid">
+      <v-row justify="center">
+        <v-col cols="11" lg="10">
+          <v-card max-width="1000" class="mx-auto">
+            <v-toolbar flat color="customTheme" dark>
+              <v-row>
+                <v-col class="py-0" offset="1">
+                  <v-toolbar-title>회원가입</v-toolbar-title>
+                </v-col>
+              </v-row>
+            </v-toolbar>
+            <br />
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-text-field
-                        v-model="id"
-                        :rules="idRules"
-                        label="아이디"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-text-field
+                  v-model="id"
+                  :rules="idRules"
+                  label="아이디"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-text-field
-                        label="비밀번호"
-                        v-model="password"
-                        :rules="passwordRules"
-                        type="password"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-text-field
+                  label="비밀번호"
+                  v-model="password"
+                  :rules="passwordRules"
+                  type="password"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-text-field
-                        label="비밀번호 확인"
-                        v-model="confirmPassword"
-                        :rules="
-                          confirmPasswordRules.concat(passwordConfirmationRule)
-                        "
-                        type="password"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-text-field
+                  label="비밀번호 확인"
+                  v-model="confirmPassword"
+                  :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
+                  type="password"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-text-field
-                        v-model="name"
-                        :rules="nameRules"
-                        label="이름"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-text-field
+                  v-model="name"
+                  :rules="nameRules"
+                  label="이름"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-select
-                        v-model="genderinput"
-                        :items="gender"
-                        label="성별"
-                        :rules="genderRules"
-                        dense
-                      ></v-select>
-                    </v-col>
-                  </v-row>
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-select
+                  v-model="genderinput"
+                  :items="gender"
+                  label="성별"
+                  :rules="genderRules"
+                  dense
+                ></v-select>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-text-field
-                        v-model="nickname"
-                        :counter="10"
-                        :rules="nicknameRules"
-                        label="닉네임"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-text-field
+                  v-model="nickname"
+                  :counter="10"
+                  :rules="nicknameRules"
+                  label="닉네임"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-text-field
-                        v-model="phone"
-                        :rules="phoneRules"
-                        label="휴대전화 번호( - 제외하고 입력해 주세요.)"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-text-field
+                  v-model="phone"
+                  :rules="phoneRules"
+                  label="휴대전화 번호( - 제외하고 입력해 주세요.)"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center" align="center">
-                    <v-col cols="10">
-                      <v-textarea
+            <v-row justify="center" align="center">
+              <v-col cols="10">
+                <v-textarea
                   label="소개"
                   outlined
                   height="150px"
-                  v-model="introducing"
+                  v-model="about"
                   single-line
-                  :rules="introducingRules"
                   :counter="50"
                 ></v-textarea>
-                    </v-col>
-                  </v-row>
+              </v-col>
+            </v-row>
 
-                  <v-row justify="center">
-                    <image-input v-model="avatar" class="wrap-content">
-                      <div slot="activator" class="wrap-content pointer">
-                        <v-avatar
-                          size="150px"
-                          v-ripple
-                          v-if="!avatar"
-                          class="grey lighten-3 mb-3"
-                        >
-                          <span>Click to add avatar</span>
-                        </v-avatar>
-                        <v-avatar size="150px" v-ripple v-else class="mb-3">
-                          <img :src="avatar.imageURL" alt="avatar" />
-                        </v-avatar>
-                      </div>
-                    </image-input>
-                  </v-row>
-                </v-card>
+            <v-row justify="center">
+              <image-input v-model="avatar" class="wrap-content">
+                <div slot="activator" class="wrap-content pointer">
+                  <v-avatar
+                    size="150px"
+                    v-ripple
+                    v-if="!avatar"
+                    class="grey lighten-3 mb-3"
+                  >
+                    <span>Click to add avatar</span>
+                  </v-avatar>
+                  <v-avatar size="150px" v-ripple v-else class="mb-3">
+                    <img :src="avatar.imageURL" alt="avatar" />
+                  </v-avatar>
+                </div>
+              </image-input>
+            </v-row>
+            <v-row justify="center">
+              <v-btn text @click="imgInit">
+                이미지 초기화
+              </v-btn>
+            </v-row>
+          </v-card>
 
-                <v-row>
+          <!-- <v-row>
                   <v-col cols="12" sm="12">
                     <v-card class="px-5 mx-auto" max-width="1000">
                       <v-card-text class="pt-0" style="font-size:18px">
@@ -205,37 +204,34 @@
                       </v-row>
                     </v-card>
                   </v-col>
-                </v-row>
+                </v-row> -->
 
-                <v-card
-                  class="mx-auto"
-                  max-width="1000"
-                  color="rgb(0, 0, 0, 0)"
-                  elevation="0"
-                >
-                  <v-layout row right justify-end>
-                    <span
-                      class="red--text lighten-1 mr-10 pt-2"
-                      v-show="notcreated"
-                      >아이디가 이미 존재합니다.</span
-                    >
-                    <v-btn
-                      class="mr-4"
-                      :disabled="!valid || isLoading"
-                      color="green lighten-4"
-                      @click="onSignup()"
-                    >
-                      가입하기
-                    </v-btn>
-                  </v-layout>
-                </v-card>
-              </v-form>
-            </v-app>
-          </div>
-        </v-container>
-      </v-content>
+          <v-card
+            class="mx-auto"
+            max-width="1000"
+            color="rgb(0, 0, 0, 0)"
+            elevation="0"
+          >
+            <v-layout row right justify-end>
+              <span
+                class="red--text lighten-1 mr-10 pt-2 mt-2"
+                v-show="notcreated"
+                >아이디가 이미 존재합니다.</span
+              >
+              <v-btn
+                class="mr-4 mt-2"
+                :disabled="!valid || isLoading"
+                color="green lighten-4"
+                @click="onSignup()"
+              >
+                가입하기
+              </v-btn>
+            </v-layout>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-form>
-  </div>
+  </v-content>
 </template>
 
 <script>
@@ -266,11 +262,7 @@ export default {
         /(?=.*\d)/.test(v) || "문자 / 숫자 혼용 8자리 이상으로 만들어 주세요."
     ],
     confirmPasswordRules: [v => !!v || "비밀번호를 한 번 더 입력해 주세요."],
-    introducing: "",
-    introducingRules: [
-      v => !!v || "하고싶은 말을 자유롭게 작성해 보세요!",
-      v => (v && v.length <= 50) || "최대 50자까지 입력 가능합니다."
-    ],
+    about: "",
 
     name: "",
     nameRules: [
@@ -311,6 +303,11 @@ export default {
     avatar: null,
     isLoading: false
   }),
+  watch: {
+    password() {
+      this.confirmPassword = "";
+    }
+  },
   components: {
     ImageInput: () => import("@/components/base/ImageInput")
   },
@@ -324,10 +321,11 @@ export default {
         formData.append("nickname", this.nickname);
         formData.append("gender", this.genderinput == "남성" ? "M" : "W");
         formData.append("phone", this.phone);
-        if(this.avatar){
+        formData.append("about", this.about);
+        if (this.avatar) {
           formData.append("img", this.avatar.imageFile);
-        }else{
-          formData.append("img", null)
+        } else {
+          formData.append("img", null);
         }
         await this.$store.dispatch("auth/register", formData).then(state => {
           if (state) {
@@ -340,6 +338,10 @@ export default {
       } catch (err) {
         console.error(err);
       }
+    },
+
+    imgInit() {
+      this.avatar = null;
     }
   },
   computed: {
@@ -361,7 +363,7 @@ export default {
     this.nickname = "";
     this.phone = "";
     this.genderinput = "";
-    this.introducing = "";
+    this.about = "";
     this.avatar = null;
   }
 };

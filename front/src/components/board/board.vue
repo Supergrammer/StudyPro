@@ -1,7 +1,8 @@
 <template>
-  <v-content id="board">
+  <v-content id="board" class="pa-0">
+    <v-img src="@/assets/images/back12.jpg" aspect-ratio="9"/>
     <v-row justify="center">
-      <v-col cols="12" sm="10">
+      <v-col cols="11" lg="10">
         <v-card>
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
@@ -41,7 +42,6 @@
 
 <script>
 import boardList from "@/components/board/board_list";
-// import postContent from "@/components/board/post_content";
 
 export default {
   name: "board",

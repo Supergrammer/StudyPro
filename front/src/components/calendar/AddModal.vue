@@ -37,22 +37,12 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="input.startDay" no-title scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    text
-                    color="dark lighten-2"
-                    @click="active.startDay = false"
-                  >
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    text
-                    color="dark lighten-2"
-                    @click="$refs.startDay.save(input.startDay)"
-                  >
-                    OK
-                  </v-btn>
+                <v-date-picker
+                  v-model="input.startDay"
+                  @click:date="$refs.startDay.save(input.startDay)"
+                  no-title
+                  scrollable
+                >
                 </v-date-picker>
               </v-menu>
             </v-col>
@@ -118,22 +108,8 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="input.endDay" no-title scrollable>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    text
-                    color="dark lighten-2"
-                    @click="active.endDay = false"
-                  >
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    text
-                    color="dark lighten-2"
-                    @click="$refs.endDay.save(input.endDay)"
-                  >
-                    OK
-                  </v-btn>
+                <v-date-picker v-model="input.endDay" no-title scrollable
+                @click:date="$refs.endDay.save(input.endDay)">
                 </v-date-picker>
               </v-menu>
             </v-col>
@@ -275,7 +251,7 @@ export default {
       group: "empty",
       color: "primary"
     },
-    event_id: '',
+    event_id: "",
 
     message: "",
 
@@ -325,7 +301,7 @@ export default {
           group: this.propEvent.group,
           color: this.propEvent.color
         };
-        this.event_id = this.propEvent.event_id
+        this.event_id = this.propEvent.event_id;
       }
     },
     open() {
@@ -430,8 +406,8 @@ export default {
       };
 
       //수정 엑시오스 요청
-      this.$emit('reload', updateEvent)
-      this.close()
+      this.$emit("reload", updateEvent);
+      this.close();
     }
   },
 
