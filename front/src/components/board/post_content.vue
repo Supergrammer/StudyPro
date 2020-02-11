@@ -159,10 +159,15 @@ export default {
       return this.$store.getters["auth/isAuth"];
     },
     isWriter() {
-      return (
+      if (this.$store.getters["auth/getUser"]) {
+    return (
         this.post_contents.writer ===
         this.$store.getters["auth/getUser"].nickname
       );
+      } else {
+        return false
+      }
+      
     },
     post_like() {
       return this.post_contents.like;
@@ -171,24 +176,22 @@ export default {
 
   methods: {
     async getPost() {
-      const tmp = await PostService.getPostContents({
+      const post = await PostService.getPostContents({
         type: "study",
         post_id: this.post_id
       });
-      this.post_contents = tmp.data;
-      this.post_like = this.post_contents.like;
-      if (this.post_like) {
+      this.post_contents = post.data;
+      if (this.post_contents.like) {
         this.post_contents.num_like--;
       }
     },
 
     async deletePost() {
-      console.log(this.post_id);
-      const tmp = await PostService.deletePost({
+      await PostService.deletePost({
         type: "study",
         post_id: this.post_id
       });
-      console.log(tmp);
+      
       this.$router.go(-1);
       this.getPost();
     },
