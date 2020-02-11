@@ -1,7 +1,13 @@
 <template>
   <v-container>
     <div>
-      <v-app-bar app fixed prominent max-height="56px">
+      <v-app-bar
+        app
+        fixed
+        prominent
+        max-height="56px"
+        height="56px"
+      >
         <v-row>
           <v-col cols="4" sm="3" md="2" class="py-0 pl-0">
             <router-link to="/home" text-decoration="none">

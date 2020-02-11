@@ -2,7 +2,7 @@
   <v-content id="signup" class="pa-0">
     <v-form ref="form" v-model="valid">
       <v-row justify="center">
-        <v-col cols="11" lg="10">
+        <v-col cols="12" md="11" lg="10">
           <v-card max-width="1000" class="mx-auto">
             <v-toolbar flat color="customTheme" dark>
               <v-row>

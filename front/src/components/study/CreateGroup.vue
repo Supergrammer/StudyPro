@@ -122,10 +122,10 @@
                 </v-row>
               </td>
             </tr>
-            <tr class="no-hover-color">
+            <!-- <tr class="no-hover-color">
               <td>태그</td>
               <td colspan="7"></td>
-            </tr>
+            </tr> -->
             <tr class="no-hover-color">
               <td>공개 비공개</td>
               <td colspan="7">
@@ -174,7 +174,7 @@ export default {
         (v && v.length <= 15 && v.length >= 3) ||
         "그룹명은 3자이상 15자이내 입니다"
     ],
-    textRules: [v => v.length <= 150 || "150자 초과"],
+    textRules: [v => !!v || (v && v.length <= 150) || "150자 초과"],
     targetRules: [
       v => !!v || "목표를 작성해주세요",
       v => (v && v.length <= 15) || "15자 이내로 작성해주세요"

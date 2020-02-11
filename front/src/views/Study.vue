@@ -3,7 +3,7 @@
       <v-img src="@/assets/images/back7.jpg" aspect-ratio="9"/>
  
     <v-row justify="center">
-      <v-col cols="11" lg="10">
+      <v-col cols="12" md="11" lg="10">
         <v-card min-height="90%" class="mx-1">
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">{{ getTitle }}</v-toolbar-title>
