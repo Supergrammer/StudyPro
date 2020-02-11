@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <v-card outlined class="pt-3 px-3">
-      <v-card  height="256" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #9bbbd4">
-        <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #9bbbd4">
+    <v-card outlined class="pt-1 px-0">
+      <v-card  height="265" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #c0c0c0">
+        <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #c0c0c0">
           <font style="display : block" size="2">{{ data[0] === '나' ? '' : data[0] }}</font>
-            <font size="2">
+            <font>
               <div v-for="(message,in_index) in data[1]" :key="`${index}-${in_index}`">
-              <span class="px-2 my-1 py-1" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #9bbbd4'"  size="2">
+              <span class="chat" :style="data[0] === '나' ? 'background-color: #fef01b' : data[0] ? 'background-color: #ffffff' : 'background-color: #c0c0c0'"  size="2">
               {{message}}
               </span>
               </div>
@@ -109,12 +109,12 @@ export default {
     });
     this.socket.on("join", data => {
       this.prvUsr = '공지'
-      const message = data.user_id === this.user.user_id ? '채팅방에 입장하였습니다' : `${data.user_nickname}님이 입장하였습니다`
+      const message = data.user_id === this.user.user_id ? '스터디룸에 입장하였습니다' : `${data.user_nickname} 님이 입장하였습니다`
       this.messages.push(['', [message]])
     })
     this.socket.on("leave", data => {
       this.prvUsr = '공지'
-      const message = data.user_id === this.user.user_id ? '채팅방에 입장하였습니다' : `${data.user_nickname}님이 퇴장하였습니다`
+      const message = data.user_id === this.user.user_id ? '스터디룸에 입장하였습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
       this.messages.push(['', [message]])
     })
   }
@@ -125,5 +125,14 @@ export default {
   span {
     display: inline-block;
     border-radius: 5px;
+    font-family: '중고딕';
+    font-weight: bolder;
+    font-size: 12px;
+  }
+  .chat {
+    margin-top: 5px;
+    /* padding-top: 3px;
+    padding-bottom: 3px; */
+    padding: 4px 6px 4px 6px;
   }
 </style>

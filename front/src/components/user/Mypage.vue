@@ -2,8 +2,8 @@
   <v-content class="pa-0" >
     <v-form v-if="isAuth" >
       <v-row justify="center"
-        ><v-col cols="11" lg="10">
-          <v-card class="mx-auto" max-width="1500">
+        ><v-col cols="12" md="11" lg="10">
+          <v-card class="mx-1">
             <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">마이페이지</v-toolbar-title>
           </v-toolbar>

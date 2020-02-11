@@ -1,10 +1,10 @@
 <template>
-  <v-content id="boardRegister">
+  <v-content id="boardModify">
     <v-row justify="center">
       <v-col cols="12" md="10">
         <v-card class="pa-5">
           <v-flex class="ma-2 mb-5">
-            <v-icon large class="mr-2" color="black">edit</v-icon>새 글 작성
+            <v-icon large class="mr-2" color="black">refresh</v-icon>수정하기
           </v-flex>
           <v-card class="pa-3 px-5" outlined>
             <div v-if="isAuth">
@@ -92,7 +92,7 @@
                   </v-dialog>
 
                   <v-btn class="mx-1 primary" @click="modify">
-                    <v-icon left dark>create</v-icon>글 작성
+                    <v-icon left dark>refresh</v-icon>수정하기
                   </v-btn>
                 </v-col>
               </v-row>
@@ -151,17 +151,18 @@ export default {
   },
   data() {
     return {
-      items: ["share", "free"],
+      items: ["study", "free"],
       dialog: false,
+      post_id: "",
 
-      postData: {
-        type: "common",
-        writer: "",
+      modified: {
+        type: "",
+        post_id: "",
         title: "",
         content: "",
-        board: "share"
+        board: ""
       },
-
+      postData: [],
       files: [],
       rules: [
         value => value.size < 5000000 || "File size should be less than 5 MB"
@@ -193,30 +194,49 @@ export default {
       ]
     };
   },
+
+  created() {
+    this.post_id = this.$route.params.post_id;
+    this.getPost();
+  },
+
   computed: {
+    currentUser() {
+      return this.$store.getters["auth/getUser"];
+    },
     isAuth() {
       return this.$store.getters["auth/isAuth"];
     },
+    isWriter() {
+      return (
+        this.post_contents.writer ===
+        this.$store.getters["auth/getUser"].nickname
+      );
+    },
+    post_like() {
+      return this.post_contents.like;
+    }
   },
 
   methods: {
-    async getPost() {
-      const post = await PostService.getPostContents({
-        type: "common",
-        post_id: this.post_id
-      });
-      this.postData = post.data;
-    },
-    modify() {
-      this.postData.writer = this.getUser().uid;
-      PostService.createPost(this.postData);
+    async modify() {
+      this.modified.type = "study";
+      this.modified.post_id = this.post_id;
+      this.modified.title = this.postData.title;
+      this.modified.content = this.postData.content;
+      this.modified.board = this.postData.board;
+      await PostService.modifyPost(this.modified);
       this.$router.go(-1);
     },
     clickBack() {
       this.$router.go(-1);
     },
-    getUser() {
-      return this.$store.getters["auth/getUser"];
+    async getPost() {
+      const tmp = await PostService.getPostContents({
+        type: "study",
+        post_id: this.post_id
+      });
+      this.postData = tmp.data;
     }
   }
 };
