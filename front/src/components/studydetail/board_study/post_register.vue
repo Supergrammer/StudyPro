@@ -151,15 +151,16 @@ export default {
   },
   data() {
     return {
-      items: ["share", "free"],
+      items: ["study", "free"],
       dialog: false,
 
       postData: {
-        type: "common",
+        type: "study",
+        study_id: "8",
         writer: "",
         title: "",
         content: "",
-        board: "share"
+        board: "study"
       },
 
       files: [],
@@ -202,7 +203,7 @@ export default {
   methods: {
     async getPost() {
       const post = await PostService.getPostContents({
-        type: "common",
+        type: "study",
         post_id: this.post_id
       });
       this.postData = post.data;

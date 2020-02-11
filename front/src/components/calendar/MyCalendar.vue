@@ -2,7 +2,7 @@
   <div id="mycal">
     <div v-if="!isAuth">
       <v-row class="fill-height" justify="center">
-        <v-col cols="11" class="mx-2">
+        <v-col cols="12" md="11" class="mx-2">
           <v-card>
             <v-toolbar flat color="customTheme" dark>
               <v-toolbar-title class="ml-5">내 일정관리</v-toolbar-title>

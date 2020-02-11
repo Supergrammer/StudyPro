@@ -40,10 +40,12 @@ class StudyService {
         //     accessToken	
         // } = payload;
         AuthHeader.changeHeadersToken()
-        return axios.post(URL + "create",
+        console.log('service Enter')
+        return axios.post(URL,
                 payload
             )
             .then(res => {
+                console.log('study.service', res)
                 return Promise.resolve(res.data)
             })
     }
