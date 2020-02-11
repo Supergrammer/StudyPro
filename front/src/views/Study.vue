@@ -1,9 +1,9 @@
 <template>
-  <v-content app id="search">
+  <v-content app id="search" >
       <v-img src="@/assets/images/back7.jpg" aspect-ratio="9"/>
  
-    <v-row class="fill-height" justify="center">
-      <v-col cols="12" sm="10">
+    <v-row justify="center">
+      <v-col cols="11" lg="10">
         <v-card min-height="90%" class="mx-1">
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">{{ getTitle }}</v-toolbar-title>
@@ -27,7 +27,7 @@
               <v-card flat>
                 <create-group v-if="isAuth" v-on:moveGroups="moveGroups" />
                 <request-signin v-else>
-                  <template v-slot:title>
+                  <template v-slot:text>
                     <p>
                       모임을 생성하려면 로그인이 필요합니다.<br />로그인해주세요.
                     </p>
