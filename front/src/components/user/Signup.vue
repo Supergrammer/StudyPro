@@ -108,26 +108,21 @@
             </v-row>
 
             <v-row justify="center">
-              <image-input v-model="avatar" class="wrap-content">
-                <div slot="activator" class="wrap-content pointer">
+              <image-input v-model="avatar" class="wrap-content" v-on:clear="imgClear">
+                <div slot="activator" class="wrap-content">
                   <v-avatar
                     size="150px"
                     v-ripple
                     v-if="!avatar"
                     class="grey lighten-3 mb-3"
                   >
-                    <span>Click to add avatar</span>
+                    <img src="@/assets/images/profile_default.png" alt="avatar" />
                   </v-avatar>
                   <v-avatar size="150px" v-ripple v-else class="mb-3">
                     <img :src="avatar.imageURL" alt="avatar" />
                   </v-avatar>
                 </div>
               </image-input>
-            </v-row>
-            <v-row justify="center">
-              <v-btn text @click="imgInit">
-                이미지 초기화
-              </v-btn>
             </v-row>
           </v-card>
 
@@ -342,6 +337,10 @@ export default {
 
     imgInit() {
       this.avatar = null;
+    },
+
+    imgClear(){
+      this.avatar = null
     }
   },
   computed: {
