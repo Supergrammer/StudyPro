@@ -1,9 +1,25 @@
 <template>
   <v-card>
     <div id="editor" />
-    <button id="download" @click="click_down">저장하기</button>
-    <button id="upload" @click="click_upload">불러오기</button>
-    <input id = "file_load" type="file" @change="load_file" hidden/>
+    <v-tooltip bottom>
+      <template v-slot:activator="{on}">
+        <v-btn class="btns" icon="true" id="download" v-on="on" @click="click_down">
+            <v-icon color="black">save</v-icon>
+        </v-btn>
+      </template>
+      <span>Save</span>
+    </v-tooltip>
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{on}">
+        <v-btn class="btns" icon="true" id="upload" @click="click_upload" v-on="on">
+        <v-icon color="black">folder_open</v-icon>
+        </v-btn>
+      </template>
+      <span>Load</span>
+    </v-tooltip>
+
+    <input id="file_load" type="file" accept=".txt, .md" @change="load_file" hidden />
   </v-card>
 </template>
 <script>
@@ -47,8 +63,20 @@ export default {
       );
     },
 
-    click_down(){
-        this.saveToFile_Chrome("123123", this.editor.getMarkdown());
+    click_down() {
+      let today = new Date();
+      let year = String(today.getFullYear());
+      let month = String(today.getMonth() + 1);
+      let day = String(today.getDay());
+      if (month.length == 1) {
+        month = "0" + month;
+      }
+      if (day.length == 1) {
+        day = "0" + day;
+      }
+
+      let title = year + month + day;
+      this.saveToFile_Chrome(title, this.editor.getMarkdown());
     },
 
     async load_file(event) {
@@ -60,7 +88,7 @@ export default {
         text: this.editor.getValue()
       });
     },
-    click_upload(){
+    click_upload() {
       document.getElementById("file_load").click();
     }
   },
@@ -68,9 +96,9 @@ export default {
     this.editor = new Editor({
       // 에디터 인스턴스 생성
       el: document.querySelector("#editor"),
-      initialEditType: "markdown",
+      initialEditType: "wysiwyg",
       previewStyle: "vertical",
-      height: "653px",
+      height: "653px"
     });
 
     document.getElementById("editor").onload = () => {
@@ -111,8 +139,6 @@ export default {
       this.editor.setValue(data.pad_data);
       this.is_change = true;
     });
-
-
   }
 };
 </script>
@@ -121,16 +147,17 @@ export default {
   z-index: 1;
 }
 
-#upload{
-  top: 3px;
-  left: 1005px;
+.btns {
+  top: -2px;
   position: absolute;
   z-index: 2;
+  font-family: fantasy;
+  font-weight: bold;
+}
+#upload {
+  left: 1070px;
 }
 #download {
-  top: 3px;
-  left: 1079px;
-  position: absolute;
-  z-index: 2;
+  left: 1105px;
 }
 </style>
