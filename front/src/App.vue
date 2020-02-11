@@ -7,9 +7,12 @@
 </template>
 
 <script>
+import WbKakao from "@/social-signin/kakao/kakao";
+
 export default {
   mounted(){
     this.$store.dispatch('auth/checkUserDefault')
+    WbKakao.init()
   }
 };
 </script>
