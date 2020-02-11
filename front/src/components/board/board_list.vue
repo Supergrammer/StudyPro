@@ -56,7 +56,7 @@
                 post.view
                 }}
               </v-col>
-              <v-col align="center" cols="1" class="pa-2 px-3">0</v-col>
+              <v-col align="center" cols="1" class="pa-2 px-3">{{post.num_like}}</v-col>
             </v-row>
           </v-card>
         </v-card>
@@ -108,7 +108,7 @@ export default {
     this.postUpdate();
     this.board_name = this.board;
 
-    if (this.$router.params.post_id) {
+    if (this.$router.params && this.$router.params.post_id) {
       this.routeTo(this.$router.params.post_id);
     }
   },
@@ -159,6 +159,7 @@ export default {
         offset: (this.page - 1) * 10
       });
       this.post_list = post_list.data;
+      console.log(this.post_list)
     },
     routeTo(post_id) {
       this.$router.push({

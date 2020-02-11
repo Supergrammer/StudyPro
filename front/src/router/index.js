@@ -93,6 +93,7 @@ const routes = [{
                 path: '?id=:post_id',
                 name: 'post_id',
                 component: postContent,
+                props: true,
             }]
             // props: (route) => ({
             //     board: route.board,

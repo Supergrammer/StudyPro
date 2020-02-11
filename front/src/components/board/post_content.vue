@@ -35,10 +35,10 @@
           <v-btn v-if="!isWriter" class="mx-1 error">
             <v-icon left small dark>report_problem</v-icon>신고하기
           </v-btn>
-          
+
           <v-dialog v-if="isWriter" v-model="dialog" persistent max-width="290">
             <template v-slot:activator="{ on }">
-              <v-btn  class="mx-1 error" v-on="on">
+              <v-btn class="mx-1 mr-3 error" v-on="on">
                 <v-icon left small dark>delete</v-icon>글 삭제
               </v-btn>
             </template>
@@ -55,6 +55,10 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-btn v-if="isWriter" class="mx-1 mr-3 yellow" @click="modify">
+            <v-icon left small dark>cached</v-icon>
+            <b>글 수정</b>
+          </v-btn>
         </v-col>
       </v-row>
       <v-card outlined>
@@ -159,10 +163,15 @@ export default {
       return this.$store.getters["auth/isAuth"];
     },
     isWriter() {
-      return (
+      if (this.$store.getters["auth/getUser"]) {
+    return (
         this.post_contents.writer ===
         this.$store.getters["auth/getUser"].nickname
       );
+      } else {
+        return false
+      }
+      
     },
     post_like() {
       return this.post_contents.like;
@@ -171,24 +180,22 @@ export default {
 
   methods: {
     async getPost() {
-      const tmp = await PostService.getPostContents({
+      const post = await PostService.getPostContents({
         type: "study",
         post_id: this.post_id
       });
-      this.post_contents = tmp.data;
-      this.post_like = this.post_contents.like;
-      if (this.post_like) {
+      this.post_contents = post.data;
+      if (this.post_contents.like) {
         this.post_contents.num_like--;
       }
     },
 
     async deletePost() {
-      console.log(this.post_id);
-      const tmp = await PostService.deletePost({
+      await PostService.deletePost({
         type: "study",
         post_id: this.post_id
       });
-      console.log(tmp);
+      
       this.$router.go(-1);
       this.getPost();
     },
@@ -221,6 +228,13 @@ export default {
         this.new_comment = "";
         this.getComment();
       }
+    },
+
+    modify() {
+      this.$router.push({
+        name: "post_modify",
+        params: { post_id: this.post_id }
+      });
     },
 
     calculate() {
@@ -272,7 +286,7 @@ export default {
             ")";
         } else {
           this.post_comments[i].created_date +=
-            ", (" + created.getMonth() + 1 + "/" + created.getDate() + ")";
+            ", (" + (created.getMonth() + 1) + "/" + created.getDate() + ")";
         }
       }
     }
