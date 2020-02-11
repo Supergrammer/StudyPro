@@ -2,8 +2,8 @@
   <v-content id="board" class="pa-0">
     <v-img src="@/assets/images/back12.jpg" aspect-ratio="9"/>
     <v-row justify="center">
-      <v-col cols="11" lg="10">
-        <v-card>
+      <v-col cols="12" md="11" lg="10">
+        <v-card class="mx-1">
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
           </v-toolbar>

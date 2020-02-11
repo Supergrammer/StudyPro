@@ -6,6 +6,7 @@
         fixed
         prominent
         max-height="56px"
+        height="56px"
       >
         <v-row>
           <v-col cols="4" sm="3" md="2" class="py-0 pl-0">

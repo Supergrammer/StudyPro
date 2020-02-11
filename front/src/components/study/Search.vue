@@ -191,21 +191,27 @@
             <v-list-item-content>
               <v-row>
                 <v-col cols="12" md="5" class="pl-3 text-center">
-                  <v-list-item-title 
-                    v-text="item.name"
-                    class="text-overflow">
+                  <v-list-item-title v-text="item.name" class="text-overflow">
                   </v-list-item-title>
                 </v-col>
                 <v-col cols="6" sm="4" md="2" class="text-center">
                   <span>Mon, Fri</span>
                 </v-col>
                 <v-col cols="6" sm="4" md="2" class="text-center">
-                  <span>{{ item.start_time+'/'+item.end_time | times}}</span>
+                  <span>{{
+                    (item.start_time + "/" + item.end_time) | times
+                  }}</span>
                 </v-col>
                 <v-col cols="6" sm="2" md="2" class="text-center">
-                  <span>{{ 0 +'/'+ item.user_limit | limit}}</span>
+                  <span>{{ (0 + "/" + item.user_limit) | limit }}</span>
                 </v-col>
-                <v-col cols="6" sm="2" md="1" class="text-center pr-3" v-if="item.isopen">
+                <v-col
+                  cols="6"
+                  sm="2"
+                  md="1"
+                  class="text-center pr-3"
+                  v-if="item.isopen"
+                >
                   <v-icon class="mdi mdi-lock"></v-icon>
                 </v-col>
               </v-row>
@@ -218,48 +224,57 @@
                 <v-list-item-content class="pt-0 pb-1 d-block">
                   <v-row class="px-2">
                     <!-- 내용 -->
-                    <v-col cols="12" md="9" class="pl-4">
-                      <!-- 스터디 소개글 -->
-                      <v-row class="pb-2">
-                        <v-col cols="5" class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >스터디 목표</v-content
-                          >
+                    <v-col cols="12" md="9">
+                      <!-- 카테고리 -->
+                      <v-row>
+                        <v-col cols="4">
+                          <span class="font-weight-bold">카테고리</span>
                         </v-col>
-                        <v-col cols="8" md="7" class="pl-2">{{
-                          item.goal
-                        }}</v-col>
+                        <v-col cols="8">{{ item.minor_class.name }}</v-col>
+                      </v-row>
+                      <!-- 현재상태 -->
+                      <v-row>
+                        <v-col cols="4" >
+                          <span class="font-weight-bold">상태</span>
+                        </v-col>
+                        <v-col cols="8">{{ item.status }}</v-col>
+                      </v-row>
+                      <!-- 스터디 소개글 -->
+                      <v-row>
+                        <v-col cols="4">
+                          <span class="font-weight-bold">스터디 목표</span>
+                        </v-col>
+                        <v-col cols="8">{{ item.goal }}</v-col>
                       </v-row>
                       <!-- 시작시간 -->
-                      <v-row class="pb-2">
-                        <v-col cols="5" class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >시작날짜</v-content
-                          >
-                        </v-col>
-                        <v-col cols="8" md="7" class="pl-2">{{
-                          item.start_date
-                        }}</v-col>
-                      </v-row>
-                      <!-- 스터디기간 -->
                       <v-row>
-                        <v-col cols="6" class="text-end pr-3">
-                          <v-content text class="pt-0 font-weight-bold"
-                            >스터디기간</v-content
-                          >
+                        <v-col cols="4">
+                          <span class="pt-0 font-weight-bold">시작날짜</span>
                         </v-col>
-                        <v-col cols="8" md="7" class="pl-2">{{
-                          item.start_date + '/' + item.end_date | duration
-                        }}</v-col>
+                        <v-col cols="8">{{ item.start_date }}</v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col cols="4">
+                          <span class="pt-0 font-weight-bold">종료날짜</span>
+                        </v-col>
+                        <v-col cols="8">{{ item.end_date }}</v-col>
                       </v-row>
                     </v-col>
-                    <v-col cols="12" md="3" class="justify-center align-center pa-0">
+                    <v-col
+                      cols="12"
+                      md="3"
+                      class="justify-center align-center pa-0"
+                    >
                       <v-btn
                         class="white lighten-3"
-                        elevation="1"
+                        elevation="0"
                         @click="viewDetail(item.id)"
                       >
-                        <span class="dark--text">view detail</span>
+                        <span
+                          class="dark--text"
+                          style="text-decoration:underline;"
+                          >view detail</span
+                        >
                       </v-btn>
                     </v-col>
                   </v-row>
@@ -311,7 +326,7 @@ export default {
     displayItems: [],
     searchedItems: [],
     disLoading: false,
-    noResult: false,
+    noResult: false
   }),
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
@@ -319,15 +334,15 @@ export default {
   },
   computed: {
     display() {
-      if(this.items.length == 0){
-        this.loadDeaultList()
+      if (this.items.length == 0) {
+        this.loadDeaultList();
       }
       return this.displayItems;
     },
 
     autocomplete() {
       return 1;
-    },
+    }
   },
   watch: {
     searchInput() {
@@ -354,7 +369,6 @@ export default {
       for (var i = 0; i < len; i++) {
         this.displayItems.push(this.copyItems.shift());
       }
-      console.log(this.displayItems)
     },
 
     loadMore() {
@@ -370,9 +384,9 @@ export default {
     },
 
     async searchEnter() {
-      this.busy = true
-      this.displayItems = []
-      this.noResult = false
+      this.busy = true;
+      this.displayItems = [];
+      this.noResult = false;
       if (!this.searchInput) {
         await this.loadDeaultList();
         this.busy = false;
@@ -383,14 +397,15 @@ export default {
             this.searchedItems.push(item);
           }
         }
-        let len = this.searchedItems.length < 20 ? this.searchedItems.length : 20;
+        let len =
+          this.searchedItems.length < 20 ? this.searchedItems.length : 20;
         for (var i = 0; i < len; i++) {
           this.displayItems.push(this.searchedItems.shift());
         }
       }
-      this.searchInput = ''
+      this.searchInput = "";
       if (this.displayItems.length == 0) {
-        this.noResult = true
+        this.noResult = true;
       }
       this.busy = false;
     },
@@ -408,33 +423,18 @@ export default {
     }
   },
   filters: {
-    duration(value){
-      let arr = value.split('/')
-      let start = arr[0].trim().split('-')
-      let end = arr[1].trim().split('-')
-      let year = end[0] - start[0]
-      let month = end[1] - start[1]
-      let day = end[2] - start[2]
-      let result = ''
-      if(year != 0)  result += year+'년 '
-      if(month != 0)  result += month+'월 '
-      if(day != 0)  result += day+'일'
-      
-      if(result == '')  return '기간미지정'
-      else  return result
+    times(value) {
+      let arr = value.split("/");
+      let start = [Math.floor(arr[0] / 100), arr[0] % 100];
+      let end = [Math.floor(arr[1] / 100), arr[1] % 100];
+      return start[0] + ":" + start[1] + " ~ " + end[0] + ":" + end[1];
     },
-    times(value){
-      let arr = value.split('/')
-      let start = [Math.floor(arr[0]/100), arr[0]%100]
-      let end = [Math.floor(arr[1]/100), arr[1]%100]
-      return start[0]+':'+start[1]+' ~ '+end[0]+':'+end[1]
-    },
-    limit(value){
-      let arr = value.split('/')
-      if(arr[0] == arr[1]){
-        return '무제한'
+    limit(value) {
+      let arr = value.split("/");
+      if (arr[0] == arr[1]) {
+        return "무제한";
       }
-      return value
+      return value;
     }
   }
 };
@@ -444,7 +444,7 @@ export default {
 .v-text-field__details {
   display: none;
 }
-.v-list-item__icon{
+.v-list-item__icon {
   min-width: 24px !important;
 }
 </style>
