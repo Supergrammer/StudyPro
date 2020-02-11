@@ -4,6 +4,8 @@
       <v-col cols="12" md="6" class="d-none d-md-block" >
         <v-card height=130  outlined tile flex id="remote_block_0">
           <video position="absolute" playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
+          <img class="mute" @click="mute($event)" :src="volume_img" alt="" id="mute_button_0">
+          <img class="mute" @click="redrawing($event)" :src="camera_on_img" alt="" id="camera_button_0" style="right : 30px">
         </v-card>
       </v-col>
       <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu($event, i)">
@@ -42,6 +44,10 @@ export default {
       local_video: null,
       local_stream: null,
 
+      local_dummy_stream: null,
+
+      video_streamings: [true, true, true, true, true, true],
+      video_mutes: [false, false, false, false, false, false],
       connected_users: [this.user.user_id, null, null, null, null, null],
       peer_connections: {},
 
@@ -70,6 +76,56 @@ export default {
     profile: profile
   },
   methods: {
+    redrawing(e) {
+      let temp_btn = e.target
+      let i = temp_btn.id[14]
+
+      if (i == 0) {
+      
+        if (this.video_streamings[i]) {
+          this.local_video.srcObject = this.local_dummy_stream
+        } else { 
+          this.local_video.srcObject = this.local_stream
+        }
+        const delete_stream = this.video_streamings[i] ? this.local_stream : this.local_dummy_stream
+        const add_stream = this.video_streamings[i] ? this.local_dummy_stream : this.local_stream
+
+        this.video_streamings[i] = !this.video_streamings[i]
+        temp_btn.src = this.video_streamings[i] ? this.camera_on_img : this.camera_off_img
+        
+        for (let i in this.peer_connections) {
+          let pc = this.peer_connections[i]
+          pc.removeStream(delete_stream)
+          pc.addStream(add_stream)
+          pc.createOffer(sdp => {
+            pc.setLocalDescription(sdp)
+            this.sendMessage({
+              message: sdp,
+              study_id: this.study_id,
+              from: this.user.user_id,
+              to: i,
+            })
+          }, e=>{console.log(e)})
+        }
+      // this.socket.emit('leave', { study_id: this.study_id, user_id: this.user.user_id, user_nickname: this.user.user_nickname })
+      // this.socket.emit('join',  { study_id: this.study_id, user_id: this.user.user_id, user_nickname: this.user.user_nickname })
+      } else {
+        const temp_stream = this.video_streamings[i] ? this.local_dummy_stream : this.remote_streams[i]
+        this.remote_videos[i].firstChild.srcObject = temp_stream
+        this.video_streamings[i] = !this.video_streamings[i]
+        temp_btn.src = this.video_streamings[i] ? this.camera_on_img : this.camera_off_img
+      }
+
+
+    },
+
+    mute(e) {
+      let temp_btn = e.target
+      let i = temp_btn.id[12]
+      this.video_mutes[i] = !this.video_mutes[i]
+      temp_btn.src = this.video_mutes[i] ? this.mute_img : this.volume_img
+      this.remote_videos[i].childNodes[0].muted = this.video_mutes[i]
+    },
     // FaceTalk
 
     sendMessage(message) {
@@ -140,10 +196,38 @@ export default {
         remote_video.style.height = "100%"
         remote_video.style.zIndex = "1"
         remote_video.style.left = "0"
+        remote_video.style.position = "absolute"
         
+        const mute_button = document.createElement('img');
+        mute_button.src = this.volume_img
+        mute_button.id = `mute_button_${video_num}`
+        mute_button.style.position = "absolute";
+        mute_button.style.zIndex = "5";
+        mute_button.style.width = "20px";
+        mute_button.style.height = "20px";
+        mute_button.style.right = '5px'
+        mute_button.style.bottom = '5px'
+
+        const camera_button = document.createElement('img')
+        camera_button.src = this.camera_on_img
+        camera_button.id = `camera_button_${video_num}`
+        camera_button.style.position = "absolute";
+        camera_button.style.zIndex = "5";
+        camera_button.style.width = "20px";
+        camera_button.style.height = "20px";
+        camera_button.style.right = '30px'
+        camera_button.style.bottom = '5px'
+
+
         const remote_block = this.remote_videos[video_num]
-        for (let i of this.remote_videos[video_num].childNodes) this.remote_videos[video_num].removeChild(i)
+      
+        while(remote_block.firstChild) remote_block.removeChild(remote_block.lastChild)
+
         remote_block.appendChild(remote_video)
+        remote_block.appendChild(mute_button)
+        remote_block.appendChild(camera_button)
+        camera_button.onclick = this.redrawing
+        mute_button.onclick = this.mute
       }
 
 
@@ -156,8 +240,8 @@ export default {
       this.remote_videos[video_num].style.borderStyle = 'solid'
       this.remote_videos[video_num].style.borderColor = '#f4ff00'
       this.remote_videos[video_num].appendChild(this.createEye())
-      this.remote_videos[video_num].childNodes[1].style.left = "25%"
-      this.remote_videos[video_num].childNodes[1].style.top = "25%"
+      this.remote_videos[video_num].lastChild.style.left = "25%"
+      this.remote_videos[video_num].lastChild.style.top = "25%"
 
 
     },
@@ -165,7 +249,7 @@ export default {
     deleteBorder(video_num, before_id) {
       if (this.connected_users[video_num] !== before_id) return
       this.remote_videos[video_num].style.border = '0px'
-      this.remote_videos[video_num].removeChild(this.remote_videos[video_num].childNodes[1])
+      this.remote_videos[video_num].removeChild(this.remote_videos[video_num].lastChild)
     },
 
     createEye() {
@@ -183,8 +267,29 @@ export default {
 
   created() {
     console.log("내아이디 : ", this.user.user_id, '내 닉네임');
+    this.mute_img = require("../../assets/images/mute.png")
+    this.volume_img = require("../../assets/images/volume.png")
+    this.camera_off_img = require("../../assets/images/camera_off.png")
+    this.camera_on_img = require("../../assets/images/camera_on.png")
   },
   mounted() {
+    this.canvas = document.createElement('canvas')
+    this.canvas.width = "172.85"
+    this.canvas.height = "128.4"
+
+    let img = document.createElement('img')
+    img.src = this.user.user_profile_url
+    console.log(img)
+    // img.src = require("../../assets/images/pengsoo.jpg")
+
+    this.canvas.getContext("2d").drawImage(img, 0, 0, 172, 128)
+    this.local_dummy_stream = this.canvas.captureStream(25)
+    // navigator.mediaDevices.getUserMedia({
+    //   video: false,
+    //   audio: true,
+    // }).then(stream => {
+    //   this.local_dummy_stream = stream
+    // })
 
 
     for (let i = 1; i <= 5; i++) {
@@ -192,12 +297,16 @@ export default {
     }
     this.local_video = document.getElementById("local_video");
     this.remote_videos[0] = document.getElementById('remote_block_0')
+    // this.remote_videos[0].appendChild(this.canvas)
+    navigator.mediaDevices ? 
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
         video: true,
       })
-      .then(this.get_stream);
+      .then(this.get_stream) :
+      this.get_stream(this.canvas.captureStream(25))
+      
 
     this.socket.on("join", message => {
       const user_id = message.user_id;
@@ -229,11 +338,15 @@ export default {
       const video_num = this.connected_users.indexOf(message.user_id)
       this.deleteBorder(video_num, this.sharing_id)
       this.connected_users[video_num] = null
-      for (let i of this.remote_videos[video_num].childNodes) this.remote_videos[video_num].removeChild(i)
+      let temp_video =  this.remote_videos[video_num]
+
+      while (temp_video.firstChild) temp_video.removeChild(temp_video.lastChild)
+
       const post_img = document.createElement('img')
       post_img.src = require('../../assets/images/pengsoo.jpg')
       post_img.style.width = "100%"
       post_img.style.height = "100%"
+
       this.remote_videos[video_num].appendChild(post_img)
       this.remote_streams[video_num] = null
       this.$emit('connected', this.connected_users)
@@ -241,6 +354,7 @@ export default {
     })
 
     this.socket.on("message", data => {
+      console.log(data)
       if (data.message.type === "offer") {
         const from = data.from;
 
@@ -278,3 +392,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .mute {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    z-index: 5;
+    right: 5px;
+    bottom: 5px;
+  }
+</style>

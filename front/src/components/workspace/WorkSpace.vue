@@ -116,27 +116,24 @@ export default {
     Chatting: Chatting
   },
   created() {
-    this.user = this.debuging
-      ? {
-          user_id: `${Math.ceil(Math.random() * 100000)}`,
-          user_nickname: `${Math.ceil(Math.random() * 100000)}`
-        }
-      : {
-          user_id: this.$store.getters["auth/getUser"].uid,
-          user_nickname: this.$store.getters["auth/getUser"].nickname
-        };
-    this.study_id = window.location.href.split("workspace/")[1];
-    // this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
-    this.socket = io.connect(
-      `http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
-      {
-        // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-        // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-        // this.socket = io.connect(`wss://us-central1-test-back-24347.cloudfunctions.net/server/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-        transports: ["websocket"],
-        secure: true
-      }
-    );
+    this.user = this.debuging ? { 
+      user_id: `${Math.ceil(Math.random() * 100000)}`,
+      user_nickname: `${Math.ceil(Math.random() * 100000)}`,
+      user_profile_url: 'http://15.164.245.201:8000/images/profile_default.png',
+
+    } : {
+      user_id: this.$store.getters['auth/getUser'].uid,
+      user_nickname: this.$store.getters['auth/getUser'].nickname,
+      user_profile_url: this.$store.getters['auth/getUser'].profile_url,
+    }
+    console.log(this.$store.getters['auth/getUser'])
+    this.study_id = window.location.href.split('workspace/')[1]
+    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
+    // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+      transports: ["websocket"],
+      secure: true,
+    });
     // this.socket.emit("join", { study_id: this.study_id, user_id: this.user.user_id });
   },
   mounted() {

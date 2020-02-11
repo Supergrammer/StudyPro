@@ -2,8 +2,8 @@
   <v-container fluid class="ma-0 pa-0">
     <v-card id="share_block" height="653px" class="ma-0 pa-0">
     <img v-show="sharing_user_id == user.user_id || sharing_user_id == 'no one'" :src="sharing_user_id === 'no one'? unloaded_img : sharing_img" alt="">
-      <v-btn color="primary" class='btns' v-show="sharing_user_id != user.user_id" @click="sharing_user_id = user.user_id">내 화면 보여주기</v-btn>
-      <v-btn color="error" class='btns' v-show="sharing_user_id == user.user_id" @click="sharing_user_id = 'no one'">그만 보여주기</v-btn>
+      <v-btn color="primary" class='btns' v-if="sharing_possible" v-show="sharing_user_id != user.user_id" @click="sharing_user_id = user.user_id">Share Mine</v-btn>
+      <v-btn color="error" class='btns' v-if="sharing_possible" v-show="sharing_user_id == user.user_id" @click="sharing_user_id = 'no one'">Stop Share</v-btn>
     </v-card>
   </v-container>
 </template>
@@ -29,12 +29,14 @@ export default {
       share_block: null,
       unloaded_img: null,
       sharing_img: null,
+      sharing_possible: false,
 
       peer_connections: {}
     };
   },
   created() {
     this.socket.emit('viewsharejoin', {user_id: this.user.user_id, study_id: this.study_id})
+    this.sharing_possible = navigator.mediaDevices ? true : false
   },
   props: ["socket", "user", "study_id", "connected_users"],
   watch: {
@@ -115,13 +117,16 @@ export default {
     }
   },
   mounted() {
+    this.canvas = document.createElement('canvas')
+    this.canvas.width = "1142"
+    this.canvas.height = "653"
+    
     this.unloaded_img = require("../../assets/images/noru.jpg")
     this.sharing_img = require("../../assets/images/now_sharing.jpg")
     this.share_block = document.getElementById("share_block");
-
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      this.local_stream = stream;
-    });
+    
+    this.get_stream(this.canvas.captureStream(25))
+    
     this.socket.on("viewsharestart", sharing_user_id => {
       for (let i in this.peer_connections) delete this.peer_connections[i];
       this.sharing_user_id = sharing_user_id;
@@ -245,5 +250,7 @@ export default {
   .btns {
     position: absolute;
     z-index : 5;
+    left: 9px;
+    top: 9px;
   }
 </style>
