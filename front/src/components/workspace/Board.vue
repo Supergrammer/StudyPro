@@ -39,7 +39,7 @@
       </template>
 
       <v-card>
-        <v-slider  label="굵기" min="1" max="20" height="40" tick-size="6" v-model="width"></v-slider>
+        <v-slider  label="굵기" min="1" max="20" height="12" tick-size="6" class="pt-5 px-3"  v-model="width"></v-slider>
       </v-card>
     </v-menu>
 

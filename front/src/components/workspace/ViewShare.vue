@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="ma-0 pa-0">
     <v-card id="share_block" height="653px" class="ma-0 pa-0">
     <img v-show="sharing_user_id == user.user_id || sharing_user_id == 'no one'" :src="sharing_user_id === 'no one'? unloaded_img : sharing_img" alt="">
       <v-btn color="primary" class='btns' v-if="sharing_possible" v-show="sharing_user_id != user.user_id" @click="sharing_user_id = user.user_id">Share Mine</v-btn>
