@@ -171,6 +171,7 @@
         v-infinite-scroll="loadMore"
         :infinite-scroll-disabled="busy"
         infinite-scroll-distance="20"
+        v-if="displayItems.length > 0"
       >
         <v-list-group
           v-for="item in displayItems"
@@ -369,7 +370,6 @@ export default {
       for (var i = 0; i < len; i++) {
         this.displayItems.push(this.copyItems.shift());
       }
-      console.log(this.displayItems);
     },
 
     loadMore() {
@@ -437,7 +437,6 @@ export default {
   async mounted(){
     this.majorItems = [];
     const getMajorRes = await this.$store.dispatch("study/getMajorClass"); //await api.getMajorClasses();
-    console.log(getMajorRes)
     for (let i = 0; i < getMajorRes.length; i++) {
       this.majorItems.push({
         value: getMajorRes[i].id,
