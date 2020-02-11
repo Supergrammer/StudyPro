@@ -1,9 +1,9 @@
 import app from "./app"
 import fs from "fs"
 const option = {
-    key: fs.readFileSync('./key/private.key'),
-    cert: fs.readFileSync('.key/certificate.crt'),
-    ca: fs.readFileSync('.key/ca_bundle.ca'),
+    key: fs.readFileSync('./keys/private.key'),
+    cert: fs.readFileSync('./keys/certificate.crt'),
+    ca: fs.readFileSync('./keys/ca_bundle.crt'),
     // cert: fs.readFileSync('../T02A106.pem')
 }
 export const server = require('http').createServer(option, app)
@@ -55,7 +55,8 @@ export const connect = () => {
                 rooms[study_id] = room;
                 user_num = 1;
             }
-
+            console.log(room.members);
+            
             socket.join(study_id);
 
             io.sockets.to(study_id).emit('join', {
@@ -70,7 +71,7 @@ export const connect = () => {
 
             socket.on('disconnect', function (data) {
                 // socket_id = socket.id;
-                console.log(rooms, 'exit')
+                // console.log(rooms, 'exit')
             });
 
 
