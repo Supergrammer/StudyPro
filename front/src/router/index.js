@@ -79,6 +79,7 @@ const routes = [{
             default: postModify,
             footer: appFooter
         },
+        props: true,
     },
     {
         path: '/board/:board',
@@ -95,10 +96,6 @@ const routes = [{
                 component: postContent,
                 props: true,
             }]
-            // props: (route) => ({
-            //     board: route.board,
-            //     post_id: route.post_id,
-            // }),
     },
     {
         path: '/user',
