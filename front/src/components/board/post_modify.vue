@@ -145,7 +145,7 @@ Vue.use(TiptapVuetifyPlugin, {
 });
 
 export default {
-  props: ["board", "post_id"],
+  props: ["post_id"],
   components: {
     TiptapVuetify,
     requestSignin: () => import("@/components/base/RequestSignin")
@@ -185,6 +185,24 @@ export default {
         HardBreak
       ]
     };
+  },
+
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/getUser"];
+    },
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
+    },
+    isWriter() {
+      return (
+        this.post_contents.writer ===
+        this.$store.getters["auth/getUser"].nickname
+      );
+    },
+    post_like() {
+      return this.post_contents.like;
+    }
   },
 
   methods: {
