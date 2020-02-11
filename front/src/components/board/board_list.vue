@@ -87,9 +87,9 @@ export default {
   props: ["board"],
   data() {
     return {
-      board_name: "study",
+      board_name: "share",
       menuIcon: "menu_book",
-      menuText: "스터디 게시판",
+      menuText: "정보 공유",
 
       page: 1,
       lastpage: 1,
@@ -97,7 +97,7 @@ export default {
       post_list: [],
 
       menus: [
-        { icon: "menu_book", text: "스터디 게시판", route: "study" },
+        { icon: "menu_book", text: "정보 공유", route: "share" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
       ]
@@ -144,18 +144,18 @@ export default {
   methods: {
     async postUpdate() {
       const post_num = await PostService.getPostNumber({
-        type: "study",
+        type: "common",
         board: this.board_name,
-        study_id: 8
       });
       this.lastpage =
         parseInt(post_num.data.post_number / 10) +
         (post_num.data.post_number % 10 === 0 ? 0 : 1);
+      
+      if (this.lastpage === 0) this.lastpage = 1;
 
       const post_list = await PostService.getAllPost({
-        type: "study",
+        type: "common",
         board: this.board_name,
-        study_id: 8,
         offset: (this.page - 1) * 10
       });
       this.post_list = post_list.data;

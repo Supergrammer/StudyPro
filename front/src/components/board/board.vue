@@ -47,11 +47,10 @@ export default {
   name: "board",
   data() {
     return {
-      defaultRoute: "/board/",
-      board_list: "study",
+      board_list: "share",
 
       menus: [
-        { icon: "menu_book", text: "스터디 게시판", route: "study" },
+        { icon: "menu_book", text: "정보 공유", route: "share" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
       ]
