@@ -55,7 +55,8 @@ export const connect = () => {
                 rooms[study_id] = room;
                 user_num = 1;
             }
-
+            console.log(room.members);
+            
             socket.join(study_id);
 
             io.sockets.to(study_id).emit('join', {
@@ -70,7 +71,7 @@ export const connect = () => {
 
             socket.on('disconnect', function (data) {
                 // socket_id = socket.id;
-                console.log(rooms, 'exit')
+                // console.log(rooms, 'exit')
             });
 
 
