@@ -125,5 +125,7 @@ export default {
   span {
     display: inline-block;
     border-radius: 5px;
+    font-family: '굴림';
+     
   }
 </style>
