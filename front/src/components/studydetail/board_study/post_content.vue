@@ -64,15 +64,15 @@
       <v-card outlined>
         <v-card v-if="!isAuth" flat class="pa-5" align="center">댓글을 입력하시려면 로그인이 필요합니다.</v-card>
         <v-card v-if="isAuth" flat class="ma-0 mt-1 pa-0">
-          <v-row no-gutters class="pa-1">
-            <v-col align-self="center" cols="2" align="center" class="pb-3">
+          <v-row no-gutters>
+            <v-col align-self="center" cols="2" align="center" class="mb-3">
               <v-avatar>
                 <img :src="currentUser.profile_url" />
               </v-avatar>
               <p style="font-size:14px" class="ma-0 pt-2">{{ currentUser.nickname }}</p>
             </v-col>
-            <v-divider vertical class="my-1 mr-3"/>
-            <v-col cols="7" class="ma-3 mb-0">
+            <v-divider vertical/>
+            <v-col cols="7" class="ma-3">
               <v-textarea
                 @keydown.enter="createComment"
                 clearable
@@ -88,9 +88,9 @@
                 v-model="new_comment"
               ></v-textarea>
             </v-col>
-            <v-col align-self="center" cols="2" class="mb-5 ml-2">
-              <v-btn dark class="green my-3" @click="createComment">
-                <v-icon left dark>create</v-icon>댓글 달기
+            <v-col align-self="center" cols="2" class="mb-7 ml-2">
+              <v-btn dark class="green my-3">
+                <v-icon left dark @click="createComment">create</v-icon>댓글 달기
               </v-btn>
             </v-col>
           </v-row>
@@ -179,7 +179,7 @@ export default {
   methods: {
     async getPost() {
       const post = await PostService.getPostContents({
-        type: "common",
+        type: "study",
         post_id: this.post_id
       });
       this.post_contents = post.data;
@@ -190,7 +190,7 @@ export default {
 
     async deletePost() {
       await PostService.deletePost({
-        type: "common",
+        type: "study",
         post_id: this.post_id
       });
       
@@ -200,7 +200,7 @@ export default {
 
     async getComment() {
       const tmp = await PostService.getPostComments({
-        type: "common",
+        type: "study",
         post_id: this.post_id
       });
       this.post_comments = tmp.data === "error" ? [] : tmp.data;
@@ -209,7 +209,7 @@ export default {
 
     async toggleLike() {
       const tmp = await PostService.toggleLike({
-        type: "common",
+        type: "study",
         post_id: this.post_id
       });
       this.post_contents.like = tmp.data.like;
@@ -219,7 +219,7 @@ export default {
       e.preventDefault();
       if (this.new_comment !== "") {
         PostService.createComment({
-          type: "common",
+          type: "study",
           post_id: this.post_id,
           content: this.new_comment
         });

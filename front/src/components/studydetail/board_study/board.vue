@@ -2,8 +2,8 @@
   <v-content id="board" class="pa-0">
     <v-img src="@/assets/images/back12.jpg" aspect-ratio="9"/>
     <v-row justify="center">
-      <v-col cols="12" md="11" lg="10">
-        <v-card class="mx-1">
+      <v-col cols="11" lg="10">
+        <v-card>
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
           </v-toolbar>
@@ -47,10 +47,11 @@ export default {
   name: "board",
   data() {
     return {
-      board_list: "share",
+      defaultRoute: "/board/",
+      board_list: "study",
 
       menus: [
-        { icon: "menu_book", text: "정보 공유", route: "share" },
+        { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
       ]
