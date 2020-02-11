@@ -35,10 +35,10 @@
           <v-btn v-if="!isWriter" class="mx-1 error">
             <v-icon left small dark>report_problem</v-icon>신고하기
           </v-btn>
-          
+
           <v-dialog v-if="isWriter" v-model="dialog" persistent max-width="290">
             <template v-slot:activator="{ on }">
-              <v-btn  class="mx-1 error" v-on="on">
+              <v-btn class="mx-1 mr-3 error" v-on="on">
                 <v-icon left small dark>delete</v-icon>글 삭제
               </v-btn>
             </template>
@@ -55,6 +55,10 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-btn v-if="isWriter" class="mx-1 mr-3 yellow" @click="modify">
+            <v-icon left small dark>cached</v-icon>
+            <b>글 수정</b>
+          </v-btn>
         </v-col>
       </v-row>
       <v-card outlined>
@@ -223,6 +227,13 @@ export default {
       }
     },
 
+    modify() {
+      this.$router.push({
+        name: "post_modify",
+        params: { post_id: this.post_id }
+      });
+    },
+
     calculate() {
       for (let i = 0; i < this.post_comments.length; i++) {
         let created = new Date(this.post_comments[i].created_date);
@@ -272,7 +283,7 @@ export default {
             ")";
         } else {
           this.post_comments[i].created_date +=
-            ", (" + created.getMonth() + 1 + "/" + created.getDate() + ")";
+            ", (" + (created.getMonth() + 1) + "/" + created.getDate() + ")";
         }
       }
     }
