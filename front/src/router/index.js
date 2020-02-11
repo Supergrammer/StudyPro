@@ -113,6 +113,7 @@ const routes = [{
             },
             {
                 path: 'signup',
+                name: 'signup',
                 component: signup
             },
             {
@@ -152,18 +153,16 @@ const routes = [{
     {
         path: '/calendar',
         name: 'calendar',
-        components:{
+        components: {
             header: appHeader,
             default: calendar,
             footer: appFooter
         },
-        children:[
-            {
-                path: 'mycal',
-                name: 'mycal',
-                component: mycal,
-            }
-        ]
+        children: [{
+            path: 'mycal',
+            name: 'mycal',
+            component: mycal,
+        }]
     }
 ]
 
