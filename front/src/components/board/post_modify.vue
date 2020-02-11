@@ -151,7 +151,7 @@ export default {
   },
   data() {
     return {
-      items: ["study", "free"],
+      items: ["share", "free"],
       dialog: false,
       post_id: "",
 
@@ -220,7 +220,7 @@ export default {
 
   methods: {
     async modify() {
-      this.modified.type = "study";
+      this.modified.type = "common";
       this.modified.post_id = this.post_id;
       this.modified.title = this.postData.title;
       this.modified.content = this.postData.content;
@@ -233,7 +233,7 @@ export default {
     },
     async getPost() {
       const tmp = await PostService.getPostContents({
-        type: "study",
+        type: "common",
         post_id: this.post_id
       });
       this.postData = tmp.data;
