@@ -1,7 +1,5 @@
 <template>
-  <v-content app id="search" >
-      <v-img src="@/assets/images/back7.jpg" aspect-ratio="9"/>
- 
+  <v-content app id="search">
     <v-row justify="center">
       <v-col cols="11" lg="10">
         <v-card min-height="90%" class="mx-1">
@@ -9,13 +7,17 @@
             <v-toolbar-title class="ml-5">{{ getTitle }}</v-toolbar-title>
           </v-toolbar>
           <v-tabs vertical class="pl-3 pt-3" v-model="tabIndex">
-            <v-tab class="py-3 justify-start" v-for="item in titles" :key="item.title">
-              <v-icon left>{{item.icon}}</v-icon>
-              <span class="d-none d-sm-flex">{{item.title}}</span>
+            <v-tab
+              class="py-3 justify-start"
+              v-for="item in titles"
+              :key="item.title"
+            >
+              <v-icon left>{{ item.icon }}</v-icon>
+              <span class="d-none d-sm-flex">{{ item.title }}</span>
             </v-tab>
             <v-tab-item>
               <v-card flat>
-                <study-search/>
+                <study-search />
               </v-card>
             </v-tab-item>
             <v-tab-item>
