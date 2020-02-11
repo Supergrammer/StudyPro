@@ -185,7 +185,7 @@ export default {
     open: false,
     regText: ""
   }),
-  props: ["groupModal", "gid", "studyInfo"],
+  props: ["groupModal", "studyInfo"],
   watch: {
     groupModal() {
       this.open = this.groupModal;

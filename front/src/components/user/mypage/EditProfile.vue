@@ -71,8 +71,8 @@
                     </v-col>
                   </v-row>
                   <v-row justify="center">
-                    <image-input v-model="avatar" class="wrap-content">
-                      <div slot="activator" class="wrap-content pointer">
+                    <image-input v-model="avatar" class="wrap-content" v-on:clear="imgClear">
+                      <div slot="activator" class="wrap-content">
                         <v-avatar
                           size="150px"
                           v-ripple
@@ -86,11 +86,6 @@
                         </v-avatar>
                       </div>
                     </image-input>
-                  </v-row>
-                  <v-row justify="center">
-                    <v-btn text @click="avatar = null">
-                      이미지 초기화
-                    </v-btn>
                   </v-row>
                   <v-row justify="end">
                     <v-col class="justify-end">
@@ -236,6 +231,9 @@ export default {
       if (this.avatar != null) {
         this.enablebtn = true;
       }
+    },
+    imgClear(){
+      this.avatar = null
     }
   },
 

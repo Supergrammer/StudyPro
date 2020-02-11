@@ -44,16 +44,42 @@
 
     <!-- 상세 검색 -->
     <v-row class="justify-center">
-      <v-col class="col-11 col-md-9 pt-0 mx-auto">
+      <v-col cols="10" class="pa-0">
         <v-expansion-panels>
           <v-expansion-panel hover>
             <v-expansion-panel-header>상세검색</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-row>
-                <v-col sm="3" class="pl-6 pb-0">
+                <v-col cols="3">
+                  <span>카테고리</span>
+                </v-col>
+                <v-col cols="9" md="4" class="pa-0">
+                  <span class="mr-3">대분류</span>
+                  <v-overflow-btn
+                    :items="majorItems"
+                    v-model="major"
+                    segmented
+                    dense
+                    style="width: 150px; display:inline-block"
+                  ></v-overflow-btn>
+                </v-col>
+                <v-col cols="3" class="d-md-none"/>
+                <v-col cols="9" md="4" class="pa-0">
+                  <span class="mr-3">소분류</span>
+                  <v-overflow-btn
+                    :items="majorItems"
+                    v-model="major"
+                    segmented
+                    dense
+                    style="width: 150px; display:inline-block"
+                  ></v-overflow-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="3">
                   <span>시작날짜</span>
                 </v-col>
-                <v-col sm="4" md="3" class="pb-0 pt-0">
+                <v-col cols="9" class="py-0">
                   <v-menu
                     ref="calendar"
                     v-model="calendar"
@@ -65,47 +91,37 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="searchForm.startdate"
-                        label="start date"
                         prepend-icon="event"
                         readonly
                         v-on="on"
                         class="pt-0"
+                        hide-details
+                        style="max-width:150px"
                       ></v-text-field>
                     </template>
                     <v-date-picker
                       v-model="searchForm.startdate"
                       no-title
                       scrollable
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="calendar = false"
-                        >Cancel</v-btn
-                      >
-                      <v-btn
-                        text
-                        color="primary"
-                        @click="$refs.calendar.save(searchForm.startdate)"
-                        >OK</v-btn
-                      >
-                    </v-date-picker>
+                      @click:date="$refs.calendar.save(searchForm.startdate)"
+                    ></v-date-picker>
                   </v-menu>
                 </v-col>
               </v-row>
-              <hr />
-              <v-row class="pb-4">
-                <v-col sm="3" class="pl-6 pb-0">
+              <v-row>
+                <v-col cols="3">
                   <span>시간</span>
                 </v-col>
-                <v-col cols="4" sm="3" class="pb-0 pr-0">
+                <v-col cols="5" class="pb-0 pr-0">
                   <timeselector
                     v-model="searchForm.starttime"
                     class="grey lighten-4"
                   />
                 </v-col>
-                <v-col cols="1" class="pb-0 px-0 text-center">
+                <v-col cols="1" class="text-center">
                   <span>~</span>
                 </v-col>
-                <v-col cols="4" sm="3" class="pb-0 pl-0">
+                <v-col cols="4" sm="3" class="pb-0 pl-0 text-end">
                   <timeselector
                     v-model="searchForm.endtime"
                     class="grey lighten-4"
@@ -113,7 +129,7 @@
                 </v-col>
                 <v-spacer />
               </v-row>
-              <hr />
+
               <v-row>
                 <v-col sm="3" class="pl-6 pb-0 pt-4">
                   <span>요일</span>
@@ -135,31 +151,8 @@
                   </v-btn-toggle>
                 </v-col>
               </v-row>
-              <hr />
-              <v-row class="pt-4">
-                <v-col sm="3" class="pl-6 pb-0 pt-4">
-                  <span>기간</span>
-                </v-col>
-                <v-col sm="2" class="pb-0 pt-2">
-                  <v-text-field
-                    class="pt-0 pb-3 inputDuration"
-                    hide-details
-                    v-model="searchForm.duration"
-                    type="number"
-                  ></v-text-field>
-                </v-col>
-                <v-col sm="3" class="pb-0 pt-0">
-                  <v-overflow-btn
-                    class="my-2 pb-0"
-                    v-model="durationOp"
-                    :items="itemsDuration"
-                    label="select"
-                    target="#"
-                    dense
-                  ></v-overflow-btn>
-                </v-col>
-              </v-row>
-              <hr />
+              <!-- 카테고리 -->
+              <v-row> </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -176,15 +169,15 @@
       </v-content>
       <v-list
         v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="busy"
-        infinite-scroll-distance="10"
+        :infinite-scroll-disabled="busy"
+        infinite-scroll-distance="20"
       >
         <v-list-group
           v-for="item in display"
           :key="item.id"
           v-model="item.active"
           :prepend-icon="item.action"
-          :disabled="disLoading"
+          :disabled="isLoading"
           no-action
         >
           <template v-slot:activator>
@@ -234,7 +227,7 @@
                       </v-row>
                       <!-- 현재상태 -->
                       <v-row>
-                        <v-col cols="4" >
+                        <v-col cols="4">
                           <span class="font-weight-bold">상태</span>
                         </v-col>
                         <v-col cols="8">{{ item.status }}</v-col>
@@ -268,7 +261,7 @@
                       <v-btn
                         class="white lighten-3"
                         elevation="0"
-                        @click="viewDetail(item.id)"
+                        @click="groupModal = true"
                       >
                         <span
                           class="dark--text"
@@ -282,7 +275,6 @@
               </v-list-item>
               <group-modal
                 :group-modal="groupModal"
-                :id="id"
                 :study-info="item"
                 v-on:close="modalClose"
               />
@@ -308,7 +300,6 @@ export default {
     calendar: false,
     durationOp: "",
     itemsDuration: ["Day", "Week", "Month", "Year"],
-    id: 0,
     searchForm: {
       name: "",
       startdate: "",
@@ -326,7 +317,11 @@ export default {
     displayItems: [],
     searchedItems: [],
     disLoading: false,
-    noResult: false
+    noResult: false,
+    major: -1,
+    minor: -1,
+    majorItems: [],
+    minorItems: [],
   }),
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
@@ -357,6 +352,22 @@ export default {
           }
         }
       }
+    },
+    async major() {
+      this.minorItems = [];
+
+      const minor_classes = await this.$store.dispatch(
+        "study/getMinorClass",
+        this.major
+      );
+      for (let i = 0; i < minor_classes.length; i++) {
+        this.minorItems.push({
+          value: minor_classes[i].id,
+          text: minor_classes[i].name,
+          callback: () => {}
+        });
+      }
+      this.validation();
     }
   },
   methods: {
@@ -369,15 +380,16 @@ export default {
       for (var i = 0; i < len; i++) {
         this.displayItems.push(this.copyItems.shift());
       }
+      console.log(this.displayItems);
     },
 
     loadMore() {
       this.busy = true;
       setTimeout(() => {
-        let len = 10;
-        if (this.recommendItems.length < 10) len = this.recommendItems.length;
+        let len = 20;
+        if (this.copyItems.length < 10) len = this.copyItems.length;
         for (var i = 0; i < len; i++) {
-          this.displayItems.push(this.recommendItems.shift());
+          this.displayItems.push(this.copyItems.shift());
         }
       }, 1000);
       this.busy = false;
@@ -387,6 +399,7 @@ export default {
       this.busy = true;
       this.displayItems = [];
       this.noResult = false;
+      this.copyItems = [];
       if (!this.searchInput) {
         await this.loadDeaultList();
         this.busy = false;
@@ -394,13 +407,12 @@ export default {
       } else {
         for (var item of this.items) {
           if (item.name.includes(this.searchInput)) {
-            this.searchedItems.push(item);
+            this.copyItems.push(item);
           }
         }
-        let len =
-          this.searchedItems.length < 20 ? this.searchedItems.length : 20;
+        let len = this.copyItems.length < 20 ? this.copyItems.length : 20;
         for (var i = 0; i < len; i++) {
-          this.displayItems.push(this.searchedItems.shift());
+          this.displayItems.push(this.copyItems.shift());
         }
       }
       this.searchInput = "";
@@ -414,10 +426,6 @@ export default {
       this.searchInput = name;
     },
 
-    viewDetail(id) {
-      this.id = id;
-      this.groupModal = true;
-    },
     modalClose() {
       this.groupModal = false;
     }
@@ -435,6 +443,17 @@ export default {
         return "무제한";
       }
       return value;
+    }
+  },
+  async mounted(){
+    this.majorItems = [];
+    const getMajorRes = await this.$store.dispatch("study/getMajorClass"); //await api.getMajorClasses();
+    for (let i = 0; i < getMajorRes.length; i++) {
+      this.majorItems.push({
+        value: getMajorRes[i].id,
+        text: getMajorRes[i].name,
+        callback: () => {}
+      });
     }
   }
 };

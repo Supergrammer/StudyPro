@@ -8,15 +8,15 @@
         max-height="56px"
         height="56px"
       >
-        <v-row>
-          <v-col cols="4" sm="3" md="2" class="py-0 pl-0">
+        <v-row style="height:56px;">
+          <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">
             <router-link to="/home" text-decoration="none">
               <v-img src="@/assets/images/LogoText.png" max-height="45px"></v-img>
             </router-link>
           </v-col>
 
           <!-- Menu Tab -->
-          <v-col cols="1" sm="6" md="8" class="py-0">
+          <v-col cols="1" sm="6" md="8" class="py-0" style="height:56px;">
             <template>
               <v-tabs
                 background-color="transparent"
@@ -32,7 +32,7 @@
             </template>
           </v-col>
 
-          <v-col cols="7" sm="3" md="2" class="py-0 justify-end align-center">
+          <v-col cols="7" sm="3" md="2" class="py-0 justify-end align-center" style="height:56px;">
             <v-btn class="d-none d-sm-inline-block" @click="signinModal = true" v-if="!isAuth" text>
               <span>로그인</span>
             </v-btn>
