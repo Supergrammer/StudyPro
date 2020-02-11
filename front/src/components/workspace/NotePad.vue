@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <div id="editor" />
-    <!-- <button id="download">저장하기</button> -->
+    <button id="download">저장하기</button>
   </v-card>
 </template>
 <script>
@@ -59,10 +59,7 @@ export default {
       this.is_change = true;
     };
 
-    // this.editor = document.getElementById("editor");
-    // this.editor.tuiEditor('on', 'focus');
     editor.on("change", () => {
-      // console.log("보낸거   ", value);
 
       if (this.is_change) {
         this.socket.emit("typing", {
@@ -71,14 +68,6 @@ export default {
         });
       }
     });
-
-    // editor.on("keydown", () => {
-    //   this.is_change = true;
-    // });
-
-    // editor.on("keyup", () => {
-    //   this.is_change = false;
-    // });
 
     this.socket.on("typing", data => {
       this.is_change = false;
@@ -111,3 +100,16 @@ export default {
   }
 };
 </script>
+<style  scoped>
+#editor{
+  z-index: 1;
+  /* top:11px; */
+  /* left:99px; */
+}
+
+#download{
+  z-index: 2;
+}
+
+
+</style>
