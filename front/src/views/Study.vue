@@ -1,7 +1,5 @@
 <template>
   <v-content app id="search">
-    <v-img src="@/assets/images/back7.jpg" aspect-ratio="9" />
-
     <v-row justify="center">
       <v-col cols="12" md="11" lg="10">
         <v-card min-height="90%" class="mx-1">
