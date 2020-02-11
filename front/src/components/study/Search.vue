@@ -171,9 +171,10 @@
         v-infinite-scroll="loadMore"
         :infinite-scroll-disabled="busy"
         infinite-scroll-distance="20"
+        v-if="displayItems.length > 0"
       >
         <v-list-group
-          v-for="item in display"
+          v-for="item in displayItems"
           :key="item.id"
           v-model="item.active"
           :prepend-icon="item.action"
@@ -323,21 +324,10 @@ export default {
     majorItems: [],
     minorItems: [],
   }),
+  props:['id'],
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
     Timeselector
-  },
-  computed: {
-    display() {
-      if (this.items.length == 0) {
-        this.loadDeaultList();
-      }
-      return this.displayItems;
-    },
-
-    autocomplete() {
-      return 1;
-    }
   },
   watch: {
     searchInput() {
@@ -380,7 +370,6 @@ export default {
       for (var i = 0; i < len; i++) {
         this.displayItems.push(this.copyItems.shift());
       }
-      console.log(this.displayItems);
     },
 
     loadMore() {
@@ -455,6 +444,8 @@ export default {
         callback: () => {}
       });
     }
+
+    this.loadDeaultList();
   }
 };
 </script>

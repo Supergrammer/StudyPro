@@ -1,7 +1,5 @@
 <template>
-  <v-content app id="search" >
-      <v-img src="@/assets/images/back7.jpg" aspect-ratio="9"/>
- 
+  <v-content app id="search">
     <v-row justify="center">
       <v-col cols="12" md="11" lg="10">
         <v-card min-height="90%" class="mx-1">
@@ -9,13 +7,17 @@
             <v-toolbar-title class="ml-5">{{ getTitle }}</v-toolbar-title>
           </v-toolbar>
           <v-tabs vertical class="pl-3 pt-3" v-model="tabIndex">
-            <v-tab class="py-3 justify-start" v-for="item in titles" :key="item.title">
-              <v-icon left>{{item.icon}}</v-icon>
-              <span class="d-none d-sm-flex">{{item.title}}</span>
+            <v-tab
+              class="py-3 justify-start"
+              v-for="item in titles"
+              :key="item.title"
+            >
+              <v-icon left>{{ item.icon }}</v-icon>
+              <span class="d-none d-sm-flex">{{ item.title }}</span>
             </v-tab>
             <v-tab-item>
               <v-card flat>
-                <study-search/>
+                <study-search />
               </v-card>
             </v-tab-item>
             <v-tab-item>
@@ -24,8 +26,8 @@
               </v-card>
             </v-tab-item>
             <v-tab-item>
-              <v-card flat>
-                <create-group v-if="isAuth" v-on:moveGroups="moveGroups" />
+              <v-card flat v-if="created">
+                <create-group v-if="isAuth" :success="success"/>
                 <request-signin v-else>
                   <template v-slot:text>
                     <p>
@@ -34,6 +36,11 @@
                   </template>
                 </request-signin>
               </v-card>
+              <create-success
+                v-else
+                :id="created"
+                v-on:movegroups="moveGroups"
+              />
             </v-tab-item>
           </v-tabs>
         </v-card>
@@ -60,13 +67,22 @@ export default {
         icon: "mdi-book-open-variant",
         title: "스터디생성"
       }
-    ]
+    ],
+    created: 0,
   }),
+  watch: {
+    tabIndex() {
+      if (this.tabIndex == 2) {
+        this.created = 0;
+      }
+    }
+  },
   components: {
     studySearch: () => import("@/components/study/Search"),
     createGroup: () => import("@/components/study/CreateGroup"),
     groupList: () => import("@/components/user/MyGroupList"),
-    requestSignin: () => import("@/components/base/RequestSignin")
+    requestSignin: () => import("@/components/base/RequestSignin"),
+    createSuccess: () => import('@/components/study/CreateSuccess')
   },
   computed: {
     isAuth() {
@@ -81,6 +97,9 @@ export default {
     moveGroups() {
       window.scrollTo(0, 0);
       this.tabIndex = 1;
+    },
+    success(gid){
+      this.created = gid
     }
   }
 };
