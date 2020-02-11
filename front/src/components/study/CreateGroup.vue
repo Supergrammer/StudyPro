@@ -1,6 +1,6 @@
 <template>
   <div id="createGroup" class="mx-5">
-    <v-card class="pa-5 pb-2" elevation="0" v-if="!created">
+    <v-card class="pa-5 pb-2" elevation="0">
       <p class="ml-5 cus-title">그룹 생성</p>
       <hr />
       <v-simple-table>
@@ -165,10 +165,15 @@
             <tr class="no-hover-color">
               <td>스터디 이미지</td>
               <td colspan="7">
-                  <v-row justify="center">
-                  <image-input v-model="image" class="wrap-content pt-4 pb-3" v-on:clear="imgClear">
+                <v-row justify="center">
+                  <image-input
+                    v-model="image"
+                    class="wrap-content pt-4 pb-3"
+                    v-on:clear="imgClear"
+                  >
                     <div slot="activator" class="wrap-content">
-                      <img src="@/assets/images/no_image.png"
+                      <img
+                        src="@/assets/images/no_image.png"
                         style="width:400px; height:200px"
                         v-if="!image"
                       />
@@ -180,7 +185,7 @@
                       />
                     </div>
                   </image-input>
-                  </v-row>
+                </v-row>
               </td>
             </tr>
             <td colspan="8">
@@ -200,11 +205,6 @@
         </template>
       </v-simple-table>
     </v-card>
-    <create-success
-      v-else
-      v-on:moveGroups="moveGroups"
-      v-on:moveDetail="moveDetail"
-    />
   </div>
 </template>
 
@@ -243,32 +243,31 @@ export default {
     endtime: "",
     radios: "공개",
     isComplete: false,
-    created: 0,
     message: "",
     image: null,
-    status: '진행준비',
-    statusItems:[ 
+    status: "진행준비",
+    statusItems: [
       {
-        text: '진행준비',
-        value: '진행준비',
+        text: "진행준비",
+        value: "진행준비",
         callback: () => {}
       },
       {
-        text: '진행중',
-        value: '진행중',
+        text: "진행중",
+        value: "진행중",
         callback: () => {}
       },
       {
-        text: '종료',
-        value: '종료',
+        text: "종료",
+        value: "종료",
         callback: () => {}
       }
     ]
   }),
+  props:['success'],
   components: {
     VDaterange,
     Timeselector,
-    CreateSuccess: () => import("@/components/study/CreateSuccess"),
     imageInput: () => import("@/components/base/ImageInput")
   },
   computed: {
@@ -333,51 +332,53 @@ export default {
       this.isComplete = true;
     },
     async createGroup() {
-      var formData = new FormData()
-      formData.append('name', this.groupName)
-      formData.append('goal', this.groupTarget)
-      formData.append('description', this.regText)
-      formData.append('minor_class_id', this.minor)
-      formData.append('user_limit', this.userLimit)
-      formData.append('start_time', this.starttime
+      var formData = new FormData();
+      formData.append("name", this.groupName);
+      formData.append("goal", this.groupTarget);
+      formData.append("description", this.regText);
+      formData.append("minor_class_id", this.minor);
+      formData.append("user_limit", this.userLimit);
+      formData.append(
+        "start_time",
+        this.starttime
           ? this.starttime.getHours() * 100 + this.starttime.getMinutes()
-          : "0000")
-      formData.append('end_time', this.endtime
+          : "0000"
+      );
+      formData.append(
+        "end_time",
+        this.endtime
           ? this.endtime.getHours() * 100 + this.endtime.getMinutes()
-          : "0000")
-      formData.append('status', this.status)
-      formData.append('img', this.image.imageFile)
-      formData.append('start_day', this.range.start
-          ? this.range.start
-          : format(new Date(), "yyyy-MM-dd"))
-      formData.append('end_day', this.range.end
-          ? this.range.end
-          : format(new Date(), "yyyy-MM-dd"))
-      formData.append('progress_days', this.dayofweek)
-      formData.append('isOpen', this.radios == '공개'? true: false)
+          : "0000"
+      );
+      formData.append("status", this.status);
+      formData.append("img", this.image.imageFile);
+      formData.append(
+        "start_day",
+        this.range.start ? this.range.start : format(new Date(), "yyyy-MM-dd")
+      );
+      formData.append(
+        "end_day",
+        this.range.end ? this.range.end : format(new Date(), "yyyy-MM-dd")
+      );
+      formData.append("progress_days", this.dayofweek);
+      formData.append("isOpen", this.radios == "공개" ? true : false);
 
       const res = await this.$store.dispatch("study/createStudy", formData);
       if (res.state == "success") {
-        this.created = res.detail.id;
+        this.$emit('success', res.gid)
+        this.message = "";
+        
       } else {
-        this.message = res.detail;
+        this.message = "이미 존재하는 모임명입니다";
       }
     },
 
-    moveGroups() {
-      this.$emit("moveGroups");
-    },
-    moveDetail() {
-      this.$router.push({ path: "study/detail/" + this.created });
-    },
-    imgClear(){
-      this.image = null
+    imgClear() {
+      this.image = null;
     }
   },
   async mounted() {
-    this.dropItems = [
-      { value: 0, text: "제한없음", callback: () => {} }
-    ];
+    this.dropItems = [{ value: 0, text: "제한없음", callback: () => {} }];
     for (var i = 1; i <= 99; i++) {
       this.dropItems.push({
         value: i,

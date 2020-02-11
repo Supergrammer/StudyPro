@@ -7,7 +7,12 @@ import "@/assets/scss/index.scss";
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import 'vuetify-daterange-picker/dist/vuetify-daterange-picker.css'
 
+//scrollbar
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
+import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
+
 Vue.use(globalComponents);
 Vue.use(infiniteScroll);
+Vue.use(PerfectScrollbar)
 
 export default {};

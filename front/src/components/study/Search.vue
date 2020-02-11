@@ -173,7 +173,7 @@
         infinite-scroll-distance="20"
       >
         <v-list-group
-          v-for="item in display"
+          v-for="item in displayItems"
           :key="item.id"
           v-model="item.active"
           :prepend-icon="item.action"
@@ -323,21 +323,10 @@ export default {
     majorItems: [],
     minorItems: [],
   }),
+  props:['id'],
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
     Timeselector
-  },
-  computed: {
-    display() {
-      if (this.items.length == 0) {
-        this.loadDeaultList();
-      }
-      return this.displayItems;
-    },
-
-    autocomplete() {
-      return 1;
-    }
   },
   watch: {
     searchInput() {
@@ -448,6 +437,7 @@ export default {
   async mounted(){
     this.majorItems = [];
     const getMajorRes = await this.$store.dispatch("study/getMajorClass"); //await api.getMajorClasses();
+    console.log(getMajorRes)
     for (let i = 0; i < getMajorRes.length; i++) {
       this.majorItems.push({
         value: getMajorRes[i].id,
@@ -455,6 +445,8 @@ export default {
         callback: () => {}
       });
     }
+
+    this.loadDeaultList();
   }
 };
 </script>
