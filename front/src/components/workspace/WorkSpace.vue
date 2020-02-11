@@ -1,6 +1,6 @@
 <template>
   <!-- <v-container fluid ma-0 pa-0 fill-height> -->
-    <v-card id="workspace_card"  class="ma-0 px-1 py-0 customTheme lighten-2">
+    <v-card id="workspace_card"  class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
       <v-row class ="my-0 py-0">
         <v-col :cols="talk ? 9 : 12" id="col" class="py-1 pr-1">
           <v-tabs height="95" grow icons-and-text centered dark color="cyan"> 
@@ -168,6 +168,6 @@ export default {
 
   max-width: 1530px;
   min-width: 1530px;
-
+  padding-top: 0px !important;
 }
 </style>
