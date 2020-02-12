@@ -55,34 +55,29 @@ export default {
     ],
     items: [
       {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30",
+        category: "",
+        name: "",
+        time: "",
+        days: "",
+        status: "",
+        member: "",
         id: 0
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30",
-        id: 1
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30",
-        id: 2
       }
     ]
   }),
+  watch: {
+    isAuth() {
+      console.log("logged");
+      this.loadItems();
+    }
+  },
+  computed: {
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
+    }
+  },
   methods: {
     clicked(event) {
-      console.log(event);
       this.$router.push({ name: "studydetail", params: { id: event.id } });
     },
     getTime(start, end) {
@@ -98,7 +93,6 @@ export default {
     async loadItems() {
       var items = await UserService.getMyGroups();
 
-      console.log(items);
       //리스트 정제
       this.items = [];
       for (var item of items) {
