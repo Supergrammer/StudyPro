@@ -141,7 +141,8 @@ export default {
       e.preventDefault();
       if (!this.connected_users[i]) return
 
-      this.show_profile_id = i
+      this.show_profile_id = this.connected_users[i]
+      console.log(this.show_profile_id)
       this.profile.showProfile = false;
       this.profile.x = e.clientX;
       this.profile.y = e.clientY;
