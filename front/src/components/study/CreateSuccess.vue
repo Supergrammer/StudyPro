@@ -21,7 +21,7 @@ export default {
         this.$emit('movegroups')
     },
     moved(){
-        this.$router.push({ path: "study/detail/" + this.id });
+        this.$router.push({ path: `${this.id}` });
     }
   },
 };

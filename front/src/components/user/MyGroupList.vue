@@ -11,9 +11,12 @@
         v-model="search"
       ></v-text-field>
     </v-card-title>
-    <div v-show="selected.length > 0">
-      <v-btn text><v-icon>delete</v-icon></v-btn>
-    </div>
+    <v-row>
+      <v-col class="text-end">
+        <v-btn text v-show="selected.length > 0"><v-icon>delete</v-icon></v-btn>
+        <v-btn text @click="loadItems">목록 갱신</v-btn>
+      </v-col>
+    </v-row>
     <v-data-table
       v-model="selected"
       :headers="headers"
@@ -30,6 +33,8 @@
 </template>
 
 <script>
+import UserService from "@/services/user.service";
+
 export default {
   components: {},
   data: () => ({
@@ -43,7 +48,8 @@ export default {
       { text: "그룹명", align: "center", value: "name" },
       { text: "시간", align: "center", value: "time" },
       { text: "요일", align: "center", sortable: false, value: "dayofweek" },
-      { text: "가입일", align: "center", value: "regDate" }
+      { text: "상태", align: "center", value: "status" },
+      { text: "인원", align: "center", value: "member" }
     ],
     items: [
       {
@@ -76,7 +82,39 @@ export default {
     clicked(event) {
       console.log(event);
       this.$router.push({ name: "studydetail", params: { id: event.id } });
+    },
+    getTime(start, end) {
+      var s_hour = Math.floor(start / 100);
+      var s_minute = start % 100;
+      var e_hour = Math.floor(end / 100);
+      var e_minute = end % 100;
+
+      return s_hour + ":" + s_minute + "~" + e_hour + ":" + e_minute;
+    },
+
+    async loadItems() {
+      var items = await UserService.getMyGroups();
+
+      console.log(items);
+      //리스트 정제
+      this.items = [];
+      for (var item of items) {
+        var tmp = {
+          id: item.id,
+          category: "empty",
+          name: item.name,
+          time: this.getTime(item.start_time, item.end_time),
+          days: "empty",
+          status: item.status,
+          membership_level: item.membership_level,
+          image_url: item.image_url
+        };
+        this.items.push(tmp);
+      }
     }
+  },
+  async mounted() {
+    this.loadItems();
   }
 };
 </script>
@@ -93,7 +131,7 @@ p {
 .clickable:hover {
   background-color: rgba(200, 200, 200, 0.2);
 }
-td.text-center{
-  cursor:pointer;
+td.text-center {
+  cursor: pointer;
 }
 </style>

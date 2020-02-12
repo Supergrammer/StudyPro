@@ -2,7 +2,7 @@
   <v-content app id="studymain">
     <v-row justify="center">
       <v-col cols="12" md="11" lg="10">
-        <v-card min-height="90%" class="mx-1">
+        <v-card min-height="100%" class="mx-1">
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">{{ getTitle }}</v-toolbar-title>
           </v-toolbar>
@@ -27,7 +27,7 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat v-if="created === 0">
-                <create-group v-if="isAuth" :success="success"/>
+                <create-group v-if="isAuth" v-on:success="success"/>
                 <request-signin v-else>
                   <template v-slot:text>
                     <p>
@@ -76,9 +76,6 @@ export default {
         this.created = 0;
       }
     },
-    create(){
-      console.log(this.created)
-    }
   },
   components: {
     studySearch: () => import("@/components/study/Search"),
@@ -98,11 +95,15 @@ export default {
   },
   methods: {
     moveGroups() {
-      window.scrollTo(0, 0);
       this.tabIndex = 1;
     },
     success(gid){
       this.created = gid
+    }
+  },
+  mounted(){
+    if(this.$route.path.split('/')[2] == 'mygroups'){
+      this.tabIndex = 1
     }
   }
 };
