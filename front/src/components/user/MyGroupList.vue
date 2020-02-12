@@ -5,32 +5,24 @@
       <v-spacer></v-spacer>
       <v-text-field
         append-icon="search"
-        label="Search"
+        label="그룹명으로 검색"
         single-line
         hide-details
         v-model="search"
       ></v-text-field>
     </v-card-title>
+    <div v-show="selected.length > 0">
+      <v-btn text><v-icon>delete</v-icon></v-btn>
+    </div>
     <v-data-table
       v-model="selected"
       :headers="headers"
       :items="items"
       :search="search"
+      show-select
+      @click:row="clicked($event)"
     >
-      <template slot="body" slot-scope="props">
-        <tr 
-          v-for="item in props.items" 
-          :key="item.id" 
-          @click="clickGroup(item)"
-          class="clickable">
-          <td class="text-center">{{ item.category }}</td>
-          <td class="text-center">{{ item.name }}</td>
-          <td class="text-center">{{ item.time }}</td>
-          <td class="text-center">{{ item.dayofweek }}</td>
-          <td class="text-center">{{ item.regDate }}</td>
-        </tr>
-      </template>
-      <v-alert slot="no-results" color="error" icon="warning">
+      <v-alert slot="no-results" icon="warning" class="ma-0">
         Your search for "{{ search }}" found no results.
       </v-alert>
     </v-data-table>
@@ -38,13 +30,13 @@
 </template>
 
 <script>
-
 export default {
   components: {},
   data: () => ({
     expanded: [],
     singleExpanded: true,
     selected: [],
+    clickedItems: [],
     search: "",
     headers: [
       { text: "카테고리", align: "center", value: "category" },
@@ -59,137 +51,31 @@ export default {
         name: "SSAFY 대비반",
         time: "18:00 ~ 20:00",
         dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
+        regDate: "2020-01-30",
+        id: 0
       },
       {
         category: "IT/소프트웨어",
         name: "SSAFY 대비반",
         time: "18:00 ~ 20:00",
         dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
+        regDate: "2020-01-30",
+        id: 1
       },
       {
         category: "IT/소프트웨어",
         name: "SSAFY 대비반",
         time: "18:00 ~ 20:00",
         dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30"
+        regDate: "2020-01-30",
+        id: 2
       }
     ]
   }),
   methods: {
-    clickGroup(p) {
-      this.$router.push({ name: 'studydetail', params:{id: p.id}})
-    }
-  },
-  mounted() {
-    for (var i = 0; i < this.items.length; i++) {
-      this.items[i].id = i;
+    clicked(event) {
+      console.log(event);
+      this.$router.push({ name: "studydetail", params: { id: event.id } });
     }
   }
 };
@@ -204,7 +90,10 @@ p {
   cursor: pointer;
 }
 
-.clickable:hover{
-  background-color: rgba(200,200,200,.2);
+.clickable:hover {
+  background-color: rgba(200, 200, 200, 0.2);
+}
+td.text-center{
+  cursor:pointer;
 }
 </style>

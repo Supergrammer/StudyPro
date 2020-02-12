@@ -84,12 +84,12 @@ export default {
       this.workspace.close();
     };
 
-    this.study_id = window.location.href.split("studydetail/")[1];
+    this.study_id = window.location.href.split("study/")[1];
   },
   methods: {
     child() {
       this.workspace = window.open(
-        `/workspace/${this.study_id}`,'WORKSPACE','a')
+        `/workspace/${this.study_id}`,'WORKSPACE',true)
         // `/workspace/${this.study_id}`,'WORKSPACE'," left=0,top=0,width="+this.screen_width+",height="+this.screen_height);
     }
   },
