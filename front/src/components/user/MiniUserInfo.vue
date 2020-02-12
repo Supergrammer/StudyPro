@@ -40,7 +40,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("auth/logout");
-      location.reload();
+      this.$router.push({name:'home'})
     }
   },
   computed: {
