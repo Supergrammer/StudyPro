@@ -67,7 +67,6 @@ export default {
   }),
   watch: {
     isAuth() {
-      console.log("logged");
       this.loadItems();
     }
   },
