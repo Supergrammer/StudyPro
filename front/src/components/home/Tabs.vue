@@ -55,7 +55,7 @@
                   <v-card-title
                     class="cardText"
                     style="font-size:30px;font-weight: 700;"
-                    >{{ studyInfo.name }}</v-card-title
+                    ><span>{{ studyInfo.name }}</span></v-card-title
                   >
                 </v-row>
                 <v-row justify="center">
