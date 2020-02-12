@@ -272,4 +272,7 @@ export default {
   width: 100%;
   justify-content: start;
 }
+.dropPanel{
+  margin-top: 150px;
+}
 </style>
