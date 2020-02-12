@@ -84,7 +84,7 @@ export default {
       this.workspace.close();
     };
 
-    this.study_id = window.location.href.split("studydetail/")[1];
+    this.study_id = window.location.href.split("study/")[1];
   },
   methods: {
     child() {

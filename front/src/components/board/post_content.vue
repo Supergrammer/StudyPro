@@ -173,7 +173,7 @@ export default {
     },
     post_like() {
       return this.post_contents.like;
-    }
+    },
   },
 
   methods: {
@@ -193,9 +193,9 @@ export default {
         type: "common",
         post_id: this.post_id
       });
+      var path = this.$route.path.split('/')
       
-      this.$router.go(-1);
-      this.getPost();
+      this.$router.push({path:"/"+path[1]+"/"+path[2]})
     },
 
     async getComment() {
@@ -215,10 +215,10 @@ export default {
       this.post_contents.like = tmp.data.like;
     },
 
-    createComment(e) {
+    async createComment(e) {
       e.preventDefault();
       if (this.new_comment !== "") {
-        PostService.createComment({
+        await PostService.createComment({
           type: "common",
           post_id: this.post_id,
           content: this.new_comment
