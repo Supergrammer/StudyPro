@@ -89,7 +89,7 @@ export default {
   methods: {
     child() {
       this.workspace = window.open(
-        `/workspace/${this.study_id}`,'WORKSPACE','a')
+        `/workspace/${this.study_id}`,'WORKSPACE',true)
         // `/workspace/${this.study_id}`,'WORKSPACE'," left=0,top=0,width="+this.screen_width+",height="+this.screen_height);
     }
   },

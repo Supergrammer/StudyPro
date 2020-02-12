@@ -89,7 +89,6 @@ export default {
         }
         const delete_stream = this.video_streamings[i] ? this.local_stream : this.local_dummy_stream
         const add_stream = this.video_streamings[i] ? this.local_dummy_stream : this.local_stream
-
         this.video_streamings[i] = !this.video_streamings[i]
         temp_btn.src = this.video_streamings[i] ? this.camera_on_img : this.camera_off_img
         
@@ -107,8 +106,6 @@ export default {
             })
           }, e=>{console.log(e)})
         }
-      // this.socket.emit('leave', { study_id: this.study_id, user_id: this.user.user_id, user_nickname: this.user.user_nickname })
-      // this.socket.emit('join',  { study_id: this.study_id, user_id: this.user.user_id, user_nickname: this.user.user_nickname })
       } else {
         const temp_stream = this.video_streamings[i] ? this.local_dummy_stream : this.remote_streams[i]
         this.remote_videos[i].firstChild.srcObject = temp_stream
@@ -197,6 +194,7 @@ export default {
         remote_video.style.zIndex = "1"
         remote_video.style.left = "0"
         remote_video.style.position = "absolute"
+        remote_video.poster = this.camera_on_img
         
         const mute_button = document.createElement('img');
         mute_button.src = this.volume_img
@@ -273,31 +271,30 @@ export default {
     this.camera_on_img = require("../../assets/images/camera_on.png")
   },
   mounted() {
-    this.canvas = document.createElement('canvas')
-    this.canvas.width = "172.85"
-    this.canvas.height = "128.4"
-
-    let img = document.createElement('img')
-    img.src = this.user.user_profile_url
-    console.log(img)
-    // img.src = require("../../assets/images/pengsoo.jpg")
-
-    this.canvas.getContext("2d").drawImage(img, 0, 0, 172, 128)
-    this.local_dummy_stream = this.canvas.captureStream(25)
-    // navigator.mediaDevices.getUserMedia({
-    //   video: false,
-    //   audio: true,
-    // }).then(stream => {
-    //   this.local_dummy_stream = stream
-    // })
-
 
     for (let i = 1; i <= 5; i++) {
       this.remote_videos.push(document.getElementById(`remote_block_${i}`));
     }
     this.local_video = document.getElementById("local_video");
     this.remote_videos[0] = document.getElementById('remote_block_0')
-    // this.remote_videos[0].appendChild(this.canvas)
+
+
+    let canvas = document.createElement('canvas')
+    canvas.width = "172.85"
+    canvas.height = "128.4"
+    this.local_dummy_stream = canvas.captureStream(25)
+    console.log(this.local_dummy_stream)
+    // video.poster = this.camera_on_img
+    
+    let img = new Image(172, 128)
+    let ctx = canvas.getContext("2d")
+    img.src = this.user.user_profile_url
+    img.onload = () => {
+      img.crossOrigin = 'anonymous'
+      ctx.fillRect(0,0,172,128)
+      ctx.drawImage(img, 0, 0, 172, 128)
+      // ctx.save()
+    }
     navigator.mediaDevices ? 
     navigator.mediaDevices
       .getUserMedia({
@@ -354,7 +351,6 @@ export default {
     })
 
     this.socket.on("message", data => {
-      console.log(data)
       if (data.message.type === "offer") {
         const from = data.from;
 
