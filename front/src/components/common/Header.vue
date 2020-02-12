@@ -14,7 +14,6 @@
               <v-tabs
                 background-color="transparent"
                 class="d-none d-sm-flex justify-center"
-                center-active
                 show-arrows
               >
                 <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
@@ -156,10 +155,9 @@ export default {
       menus: [
         { icon: "home", title: "홈", route: "/home" },
         { icon: "group", title: "스터디검색", route: "/study/search" },
-        { icon: "date_range", title: "게시판", route: "/board/share" },
-        { icon: "schedule", title: "일정관리", route: "/calendar/mycal" },
+        { icon: "library_books", title: "게시판", route: "/board/share" },
+        { icon: "date_range", title: "일정관리", route: "/calendar/mycal" },
         { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" },
-        { icon: "bug_report", title: "Test", route: "/test" }
       ],
       navigations: [
         { title: "스터디 홈", route: "/home" },
@@ -201,14 +199,15 @@ export default {
       this.isLoading = true;
       this.$store.dispatch("auth/logout");
       this.isLoading = false;
+      this.$router.push({name: 'home'})
     },
     clickUserMenu(name) {
       if (name == "info") {
         this.$router.push({ path: "/user/mypage" });
       } else if (name == "groups") {
-        this.$router.push({ path: "/user/groups" });
+        this.$router.push({ path: "/study/mygroups" });
       } else if (name == "calendar") {
-        this.$router.push({ path: "/user/calendar" });
+        this.$router.push({ path: "/calendar/mycal" });
       } else if (name == "signout") {
         this.signout();
       }

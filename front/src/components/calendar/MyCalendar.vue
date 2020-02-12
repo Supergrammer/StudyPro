@@ -1,6 +1,6 @@
 <template>
   <div id="mycal">
-    <div v-if="!isAuth">
+    <div v-if="isAuth">
       <v-row class="fill-height" justify="center">
         <v-col cols="12" md="11" class="mx-2">
           <v-card>
@@ -215,7 +215,17 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [],
+    events: [
+      {
+        name: "테스트",
+        content: "테스트내용",
+        start: "2020-02-09 10:00",
+        end: "2020-02-13 18:00",
+        group: "테스트그룹",
+        color: "pink",
+        event_id: 0
+      }
+    ],
     colors: [
       "blue",
       "indigo",
@@ -289,20 +299,7 @@ export default {
     }
   },
   mounted() {
-    //   임시 더미 입력
-    this.events.push({
-      name: "테스트",
-      content: "테스트내용",
-      start: "2020-02-09 10:00",
-      end: "2020-02-13 18:00",
-      group: "테스트그룹",
-      color: "pink",
-      event_id: 0
-    });
-
     // 마운트시 내 일정 엑시오스 요청
-
-    this.$refs.calendar.checkChange();
   },
   methods: {
     viewDay({ date }) {
