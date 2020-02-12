@@ -1,9 +1,10 @@
 <template>
   <v-card>
     <div id="editor" />
+    <div class="container pa-0 text-end">
     <v-tooltip bottom>
       <template v-slot:activator="{on}">
-        <v-btn class="btns" icon="true" id="download" v-on="on" @click="click_down">
+        <v-btn class="btns"  id="download" v-on="on" @click="click_down" icon>
             <v-icon color="black">save</v-icon>
         </v-btn>
       </template>
@@ -12,12 +13,13 @@
 
     <v-tooltip bottom>
       <template v-slot:activator="{on}">
-        <v-btn class="btns" icon="true" id="upload" @click="click_upload" v-on="on">
+        <v-btn class="btns"  id="upload" @click="click_upload" v-on="on" icon>
         <v-icon color="black">folder_open</v-icon>
         </v-btn>
       </template>
       <span>Load</span>
     </v-tooltip>
+    </div>
 
     <input id="file_load" type="file" accept=".txt, .md" @change="load_file" hidden />
   </v-card>
@@ -147,17 +149,11 @@ export default {
   z-index: 1;
 }
 
-.btns {
+.container {
   top: -2px;
   position: absolute;
   z-index: 2;
   font-family: fantasy;
   font-weight: bold;
-}
-#upload {
-  left: 1070px;
-}
-#download {
-  left: 1105px;
 }
 </style>

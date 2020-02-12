@@ -16,7 +16,7 @@
       @mousedown.right="eraiser_down"
       @mouseup.right="eraiser_up"
       height="653"
-      width="1142"
+      width="1143"
     ></canvas>
 
     <swatches
@@ -46,6 +46,7 @@
     <v-btn id="clear" absolute class="btns" fab dark small color="primary" @click="clear">
       <v-icon dark>mdi-delete</v-icon>
     </v-btn>
+    
   </v-card>
 </template>
 
@@ -201,6 +202,7 @@ export default {
 }
 #canvas {
   position: absolute;
+  left:11px;
   z-index: 2;
 }
 .btns {
@@ -212,17 +214,17 @@ export default {
 }
 #swatches {
   translate: transformY(-10%);
-  left: 7px;
+  left: 20px;
 }
 #pencil {
   z-index: 3;
   top: 11px;
-  left: 53px;
+  left: 70px;
 }
 #clear {
   z-index: 3;
   top: 11px;
-  left: 99px;
+  left: 120px;
 }
 
 .v-messages.theme--light {
