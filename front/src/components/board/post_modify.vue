@@ -226,10 +226,14 @@ export default {
       this.modified.content = this.postData.content;
       this.modified.board = this.postData.board;
       await PostService.modifyPost(this.modified);
+      // const path = this.$route.path.split('/')
+      // this.$router.push({path:"/"+path[1]+"/"+path[2]})
       this.$router.go(-1);
     },
     clickBack() {
       this.$router.go(-1);
+      // const path = this.$route.path.split('/')
+      // this.$router.push({path:"/"+path[1]+"/"+path[2]})
     },
     async getPost() {
       const tmp = await PostService.getPostContents({

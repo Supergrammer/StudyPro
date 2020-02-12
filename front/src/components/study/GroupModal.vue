@@ -1,7 +1,7 @@
 <template>
   <div id="groupmodal">
     <v-dialog v-model="open" max-width="700px">
-      <v-card id="lgiModal" class="px-0 pt-0">
+      <v-card v-if="studyInfo" id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
           <span class="headline">{{ studyInfo.name }}</span>
         </v-card-title>
@@ -196,11 +196,13 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     console.log("modal", this.studyInfo);
   },
   methods: {
-    regGroup() {}
+    regGroup() {
+
+    }
   },
   filters: {
     getTime(value) {
