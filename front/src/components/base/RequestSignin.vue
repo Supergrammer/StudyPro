@@ -1,6 +1,6 @@
 <template>
   <v-container id="requestsignin" style="min-height:400px">
-    <v-row align="center" style="min-height:400px;">
+    <v-row align="center" style="height:400px;">
       <v-col cols="12" class="text-center">
         <div>
           <span class="display-2 font-weight-thin">Study</span>
@@ -11,7 +11,7 @@
           <v-btn text class="mr-4" color="primary" @click="signinModal = true"
             >로그인</v-btn
           >
-          <v-btn text class="mr-4" color="green lighten-2" @click="moveSignup"
+          <v-btn text color="green lighten-2" @click="moveSignup"
             >회원가입</v-btn
           >
         </div>
