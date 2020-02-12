@@ -24,7 +24,7 @@
             </v-btn>
             <v-btn class="px-9" height="95" @click="exit">
               <v-icon large>power_settings_new</v-icon>
-              <v-img src="@assets/images/back7.jpg"></v-img>
+              <v-img src="@/assets/images/back7.jpg"></v-img>
             </v-btn>
           </v-card>
 
@@ -37,7 +37,7 @@
 
             <v-row>
               <v-card>
-                <!-- <v-img src="@assets/images/back7.jpg"></v-img> -->
+                <v-img src="@/assets/images/back7.jpg"></v-img>
               </v-card>
 
             </v-row>

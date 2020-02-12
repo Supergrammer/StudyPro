@@ -81,7 +81,7 @@
             <template>
               <group-modal
                 :group-modal="groupModal"
-                :study-info="studyInfo"
+                :study-info="study"
                 v-on:close="modalClose"
               />
             </template>
@@ -104,7 +104,7 @@ export default {
     current: "ng",
 
     studyList: [],
-    studyInfo: null,
+    study: [],
 
     groupModal: false,
     item: {},
@@ -126,9 +126,9 @@ export default {
       this.current = target;
     },
     viewDetail(studyInfo) {
-      console.log("viewde", studyInfo);
+      //console.log("viewde", studyInfo);
       this.groupModal = true;
-      this.studyInfo = studyInfo;
+      this.study = studyInfo;
     },
     modalClose() {
       this.groupModal = false;
