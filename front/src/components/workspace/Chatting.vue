@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card outlined class="pt-1 px-0">
-      <v-card  height="265" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #c0c0c0">
+      <v-card  height="286" class="chat overflow-y-auto mx-1 pa-2" outlined autofocus style="background-color: #c0c0c0">
         <v-list class="ma-0 pa-0" ref="chat" outlined v-for="(data, index) in messages" :key="index" :align="'나' === data[0] ? `right` : data[0] ? `left` : 'center'" style="background-color: #c0c0c0">
           <font style="display : block" size="2">{{ data[0] === '나' ? '' : data[0] }}</font>
             <font>
@@ -14,7 +14,7 @@
         </v-list>
       </v-card>
       <v-text-field
-        class="mt-5"
+        class="mt-3 mb-2"
         outlined
         dense
         v-model="message"
@@ -22,6 +22,7 @@
         :prepend-icon="icon"
         clear-icon="mdi-close-circle"
         clearable
+        hide-details
         label="전송할 메세지를 입력하세요."
         type="text"
         @click:append-outer="sendMessage"

@@ -115,11 +115,10 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
-    // if (!window.opener) {this.$router.push({name : 'home'})}
-
+    //   if (!window.opener) {this.$router.push({name : 'home'})}
   },
   created() {
-    // if (!window.opener) return
+    //   if (!window.opener) return
     this.user = this.debuging ? { 
       user_id: `${Math.ceil(Math.random() * 100000)}`,
       user_nickname: `${Math.ceil(Math.random() * 100000)}`,
@@ -130,7 +129,6 @@ export default {
       user_nickname: this.$store.getters['auth/getUser'].nickname,
       user_profile_url: this.$store.getters['auth/getUser'].profile_url,
     }
-    console.log(this.$store.getters['auth/getUser'])
     this.study_id = window.location.href.split('workspace/')[1]
     this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
       // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
@@ -140,7 +138,7 @@ export default {
     });
   },
   mounted() {
-    // if (!window.opener) return
+      // if (!window.opener) return
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
 
