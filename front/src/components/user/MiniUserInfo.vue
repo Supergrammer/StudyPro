@@ -35,13 +35,12 @@ export default {
   created() {
     AlarmService.getAlarmNumber().then(numAlarm => {
       this.numAlarm = numAlarm.data.num_alarm;
-      console.log(this.numAlarm);
     });
   },
   methods: {
     logout() {
       this.$store.dispatch("auth/logout");
-      location.reload();
+      this.$router.push({name:'home'})
     }
   },
   computed: {

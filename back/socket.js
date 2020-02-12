@@ -81,6 +81,7 @@ export const connect = () => {
                 let socket_id = socket.id;
 
                 let room = rooms[study_id];
+                if (!room) return
                 if (room.member_cnt == 1) {
                     delete rooms[study_id];
                 } else {

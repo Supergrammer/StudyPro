@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-card id="share_block" height="653px" class="ma-0 pa-0">
-    <img absolute :src="unloaded_img" width="50%" left="23%" top="10%" alt="">
+    <img absolute :src="unloaded_img" id="first" alt="">
       <v-btn color="primary" class='btns' v-if="sharing_possible" v-show="sharing_user_id != user.user_id" @click="sharing_user_id = user.user_id">Share Mine</v-btn>
       <v-btn color="error" class='btns' v-if="sharing_possible" v-show="sharing_user_id == user.user_id" @click="sharing_user_id = 'no one'">Stop Share</v-btn>
     </v-card>
@@ -239,10 +239,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  img {
-    width: 100%;
+  #first {
+    width: 50%;
     z-index : 1;
     position: absolute;
+    left: 23%;
+    top: 10%;
   }
   video {
     width: 100%;

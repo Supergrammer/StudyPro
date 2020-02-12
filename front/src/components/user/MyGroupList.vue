@@ -13,7 +13,9 @@
     </v-card-title>
     <v-row>
       <v-col class="text-end">
-        <v-btn text v-show="selected.length > 0"><v-icon>delete</v-icon></v-btn>
+        <v-btn text v-show="selected.length > 0" class="error--text"
+          >탈퇴</v-btn
+        >
         <v-btn text @click="loadItems">목록 갱신</v-btn>
       </v-col>
     </v-row>
@@ -47,40 +49,35 @@ export default {
       { text: "카테고리", align: "center", value: "category" },
       { text: "그룹명", align: "center", value: "name" },
       { text: "시간", align: "center", value: "time" },
-      { text: "요일", align: "center", sortable: false, value: "dayofweek" },
+      { text: "요일", align: "center", sortable: false, value: "days" },
       { text: "상태", align: "center", value: "status" },
-      { text: "인원", align: "center", value: "member" }
+      { text: "인원", align: "center", sortable: false, value: "member" }
     ],
     items: [
       {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30",
+        category: "",
+        name: "",
+        time: "",
+        days: "",
+        status: "",
+        member: "",
         id: 0
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30",
-        id: 1
-      },
-      {
-        category: "IT/소프트웨어",
-        name: "SSAFY 대비반",
-        time: "18:00 ~ 20:00",
-        dayofweek: "Mon, Wed, Fri",
-        regDate: "2020-01-30",
-        id: 2
       }
     ]
   }),
+  watch: {
+    isAuth() {
+      console.log("logged");
+      this.loadItems();
+    }
+  },
+  computed: {
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
+    }
+  },
   methods: {
     clicked(event) {
-      console.log(event);
       this.$router.push({ name: "studydetail", params: { id: event.id } });
     },
     getTime(start, end) {
@@ -88,28 +85,79 @@ export default {
       var s_minute = start % 100;
       var e_hour = Math.floor(end / 100);
       var e_minute = end % 100;
-
-      return s_hour + ":" + s_minute + "~" + e_hour + ":" + e_minute;
+      if (s_minute < 10) s_minute = "0" + s_minute;
+      if (e_minute < 10) e_minute = "0" + e_minute;
+      return s_hour + ":" + s_minute + " ~ " + e_hour + ":" + e_minute;
     },
 
     async loadItems() {
       var items = await UserService.getMyGroups();
 
-      console.log(items);
       //리스트 정제
       this.items = [];
       for (var item of items) {
         var tmp = {
           id: item.id,
-          category: "empty",
+          category: item.minor_class.name,
           name: item.name,
           time: this.getTime(item.start_time, item.end_time),
-          days: "empty",
+          days: this.getDays(item.process_days),
           status: item.status,
           membership_level: item.membership_level,
-          image_url: item.image_url
+          image_url: item.image_url,
+          member: this.getMember(item.num_joined_student, item.user_limit)
         };
         this.items.push(tmp);
+      }
+    },
+
+    getDays(process_days) {
+      var days = "";
+      var days_tmp = "";
+      for (var i = 0; i < process_days.length; i++) {
+        if (process_days[i].day == "," || i == process_days.length - 1) {
+          if (i == process_days.length - 1) days_tmp += process_days[i].day;
+          switch (days_tmp) {
+            case "Mon":
+              days += "월";
+              break;
+            case "Tue":
+              days += "화";
+              break;
+            case "Wed":
+              days += "수";
+              break;
+            case "Thu":
+              days += "목";
+              break;
+            case "Fri":
+              days += "금";
+              break;
+            case "Sat":
+              days += "토";
+              break;
+            case "Sun":
+              days += "일";
+              break;
+            default:
+              days += "???";
+          }
+          if (i != process_days.length - 1) {
+            days += ", ";
+          }
+          days_tmp = "";
+        } else {
+          days_tmp += process_days[i].day;
+        }
+      }
+      return days;
+    },
+
+    getMember(join, limit) {
+      if (limit == 0) {
+        return join + " / ∞";
+      } else {
+        return join + " / " + limit;
       }
     }
   },
