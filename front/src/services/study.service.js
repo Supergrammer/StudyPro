@@ -47,6 +47,14 @@ class StudyService {
                 return Promise.resolve(res.data)
             })
     }
+
+
+    applyStudy(payload) {
+        return axios.post(URL + "apply", {
+            study_id:payload.study_id,
+            comment:payload.comment
+        })
+    }
 }
 
 export default new StudyService()

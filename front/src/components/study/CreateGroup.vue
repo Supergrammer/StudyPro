@@ -264,7 +264,7 @@ export default {
       }
     ]
   }),
-  props:['success'],
+  props: ["success"],
   components: {
     VDaterange,
     Timeselector,
@@ -289,6 +289,12 @@ export default {
       this.validation();
     },
     userLimit() {
+      this.validation();
+    },
+    starttime(){
+      this.validation();
+    },
+    endtime(){
       this.validation();
     },
 
@@ -328,6 +334,23 @@ export default {
         this.isComplete = false;
         return;
       }
+
+      if(this.starttime && this.endtime){
+        //시간체크
+        var start_hour = this.starttime.getHours();
+        var start_minute = this.starttime.getMinutes();
+        var end_hour = this.endtime.getHours();
+        var end_minute = this.endtime.getMinutes();
+        if (
+          start_hour > end_hour ||
+          (start_hour == end_hour && start_minute > end_minute)
+        ) {
+          this.message = "시작시간이 종료시간보다 늦습니다";
+          this.isComplete = false;
+          return;
+        }
+      }
+
       this.message = "";
       this.isComplete = true;
     },
@@ -351,7 +374,9 @@ export default {
           : "0000"
       );
       formData.append("status", this.status);
-      formData.append("img", this.image.imageFile);
+      if (this.image) {
+        formData.append("img", this.image.imageFile);
+      }
       formData.append(
         "start_day",
         this.range.start ? this.range.start : format(new Date(), "yyyy-MM-dd")
@@ -365,9 +390,8 @@ export default {
 
       const res = await this.$store.dispatch("study/createStudy", formData);
       if (res.state == "success") {
-        this.$emit('success', res.gid)
+        this.$emit("success", res.gid);
         this.message = "";
-        
       } else {
         this.message = "이미 존재하는 모임명입니다";
       }

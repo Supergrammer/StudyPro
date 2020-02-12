@@ -207,6 +207,7 @@ export default {
           this.modalOpen = true;
           await this.load()
           this.validation()
+          this.$store.dispatch('auth/checkUserDefault')
         } else {
           this.message = "오류가 발생하여 수정되지 않았습니다";
         }
