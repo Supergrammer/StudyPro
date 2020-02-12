@@ -73,7 +73,12 @@
                 </v-row>
                 <v-row justify="center">
                   <v-card-title class="pt-0 cardText" style="font-size:15px">
-                    현재 인원 : 2 / {{ studyInfo.user_limit }}
+                    <div v-if="studyInfo.user_limit"> 
+                      현재 인원 : {{studyInfo.num_joined_student}} / {{ studyInfo.user_limit }}
+                    </div> 
+                    <div v-else> 
+                      인원제한 없음
+                    </div>
                   </v-card-title>
                 </v-row>
               </v-card>
@@ -132,7 +137,7 @@ export default {
     },
     modalClose() {
       this.groupModal = false;
-    }
+    },
   }
 };
 </script>
