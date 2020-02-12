@@ -3,19 +3,19 @@
     <v-carousel
       interval="3000"
       cycle
-      height="400"
+      height="auto"
       width="100%"
       hide-delimiter-background
       show-arrows-on-hover
     >
-      <v-carousel-item v-for="n in 5" :key="n">
+      <v-carousel-item v-for="n in 3" :key="n">
         <router-link to=user/signup text-decoration="none">
 
             <v-img v-if="n==1" src="@/assets/images/pororo.jpg"></v-img>
             <v-img v-if="n==2" src="@/assets/images/pingoo.jpg"></v-img>
              <v-img v-if="n==3" src="@/assets/images/bono.jpg"></v-img>
-            <v-img v-if="n==4" src="@/assets/images/back7.jpg"></v-img>
-            <v-img v-if="n==5" src="@/assets/images/back11.jpg"></v-img>
+            <!-- <v-img v-if="n==4" src="@/assets/images/back8.jpg"></v-img> -->
+            <!-- <v-img v-if="n==5" src="@/assets/images/back11.jpg"></v-img> -->
             </router-link>
 
 
