@@ -196,9 +196,6 @@ export default {
       }
     }
   },
-  created() {
-    console.log("modal", this.studyInfo);
-  },
   methods: {
     regGroup() {
 

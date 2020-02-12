@@ -68,6 +68,10 @@ const routes = [{
                 component: search,
             },
             {
+                path: 'mygroups',
+                name: 'mygroups',
+                component: search,
+            }, {
                 path: ':id',
                 name: 'studydetail',
                 component: studydetail,
@@ -81,7 +85,7 @@ const routes = [{
             header: null,
             default: workspace,
             footer: null
-        }
+        },
     },
     {
         path: '/board/register',

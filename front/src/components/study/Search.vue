@@ -170,8 +170,7 @@
       <v-list
         v-infinite-scroll="loadMore"
         :infinite-scroll-disabled="busy"
-        infinite-scroll-distance="20"
-        v-if="displayItems.length > 0"
+        infinite-scroll-distance="10"
       >
         <v-list-group
           v-for="item in displayItems"
@@ -445,7 +444,8 @@ export default {
       });
     }
 
-    this.loadDeaultList();
+    await this.loadDeaultList();
+    console.log(this.displayItems)
   }
 };
 </script>
