@@ -23,6 +23,7 @@ import mypage from '@/components/user/Mypage'
 
 // 스터디페이지
 import study from '@/views/Study'
+import search from '@/components/study/StudyMain'
 import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
 
@@ -60,7 +61,31 @@ const routes = [{
             header: appHeader,
             default: study,
             footer: appFooter
-        }
+        },
+        children: [{
+                path: 'search',
+                name: 'search',
+                component: search,
+            },
+            {
+                path: 'mygroups',
+                name: 'mygroups',
+                component: search,
+            }, {
+                path: ':id',
+                name: 'studydetail',
+                component: studydetail,
+            },
+        ]
+    },
+    {
+        path: '/workspace/:id',
+        name: 'workspace',
+        components: {
+            header: null,
+            default: workspace,
+            footer: null
+        },
     },
     {
         path: '/board/register',
@@ -91,11 +116,11 @@ const routes = [{
         },
         props: true,
         children: [{
-                path: '?id=:post_id',
-                name: 'post_id',
-                component: postContent,
-                props: true,
-            }]
+            path: '?id=:post_id',
+            name: 'post_id',
+            component: postContent,
+            props: true,
+        }]
     },
     {
         path: '/user',
@@ -119,24 +144,6 @@ const routes = [{
                 component: signupSuccess
             },
         ]
-    },
-    {
-        path: '/workspace/:id',
-        name: 'workspace',
-        components: {
-            header: null,
-            default: workspace,
-            footer: null
-        }
-    },
-    {
-        path: '/study/studydetail/:id',
-        name: 'studydetail',
-        components: {
-            header: appHeader,
-            default: studydetail,
-            footer: appFooter
-        }
     },
     {
         path: '/msgbox',
