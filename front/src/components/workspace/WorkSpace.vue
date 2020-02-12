@@ -24,7 +24,6 @@
             </v-btn>
             <v-btn class="px-9" height="95" @click="exit">
               <v-icon large>power_settings_new</v-icon>
-              <v-img src="@assets/images/back7.jpg"></v-img>
             </v-btn>
           </v-card>
 
@@ -37,9 +36,8 @@
 
             <v-row>
               <v-card>
-                <!-- <v-img src="@assets/images/back7.jpg"></v-img> -->
+                <v-img src="@/assets/images/back7.jpg"></v-img>
               </v-card>
-
             </v-row>
           </v-tab-item>
           <v-tab-item id="NotePad">
@@ -97,8 +95,6 @@ import Chatting from "@/components/workspace/Chatting";
 export default {
   data() {
     return {
-      imgs: "back7.jpg",
-      img: "@/assets/images/back7.jpg",
       tabs: null,
       socket: "",
       connected_users: [],
@@ -128,7 +124,8 @@ export default {
     }
     console.log(this.$store.getters['auth/getUser'])
     this.study_id = window.location.href.split('workspace/')[1]
-    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
+    // this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
+    this.socket = io.connect(`http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
     // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
     // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
       transports: ["websocket"],
