@@ -125,7 +125,9 @@
           </v-col>
 
           <v-col align="center" cols="3">
-            <v-icon @click="viewGreeting(member)" color="black">more_horiz</v-icon>
+            <v-icon @click="viewGreeting(member)" color="black"
+              >more_horiz</v-icon
+            >
           </v-col>
         </v-row>
       </v-list-item>
@@ -145,7 +147,7 @@ export default {
     declineModal: false,
     greetingModal: false,
     newbie: {},
-    member:{},
+    member: {},
     newbieList: [],
     memberList: []
   }),
@@ -188,13 +190,11 @@ export default {
           this.newbieList = newbieList.data;
         }
       );
-   
     },
     getjoinedUser() {
       StudyService.getjoinedUser({ study_id: this.study_id }).then(
         memberList => {
           this.memberList = memberList.data;
-       
         }
       );
     }
