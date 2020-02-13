@@ -1,13 +1,11 @@
 <template>
-    <div class="d-block white--text">
-        <tabs class="pa-2"/>
-    </div>
+  <div id="topleft">
+
+  </div>
 </template>
 
 <script>
 export default {
-    components: {
-        Tabs: () => import('@/components/home/Tabs'),
-    }
-}
+  components: {}
+};
 </script>
