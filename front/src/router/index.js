@@ -72,7 +72,7 @@ const routes = [{
                 name: 'mygroups',
                 component: search,
             }, {
-                path: ':id',
+                path: ':study_id',
                 name: 'studydetail',
                 component: studydetail,
             },
