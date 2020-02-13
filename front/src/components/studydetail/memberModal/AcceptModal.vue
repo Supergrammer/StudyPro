@@ -1,9 +1,9 @@
 <template>
-  <div id="joinmodal">
+  <div id="acceptmodal">
     <v-dialog v-model="open" persistent max-width="40%">
-      <v-card class="px-0 pt-0">
+      <v-card v-if="newbie.user" class="px-0 pt-0">
         <v-card-text style="font-size:15px" align="center" class="pa-5">
-          멤버 가입 요청을 승인하시겠습니까?
+          {{ newbie.user.nickname }}님의 가입 요청을 승인하시겠습니까?
         </v-card-text>
 
         <v-card-actions class="pt-0 pr-5">
@@ -25,7 +25,7 @@
     </v-dialog>
 
     <v-dialog v-model="subalert" max-width="40%">
-      <v-card v-if="this.isSuccess == true" class="px-0 pt-0">
+      <v-card class="px-0 pt-0">
         <v-card-text style="font-size:15px" align="center" class="pa-5">
           멤버 승인이 완료되었습니다
         </v-card-text>
@@ -36,74 +36,43 @@
           <v-btn
             color="error--text lighten-1 transparent"
             elevation="0"
-            @click="sendSuccess"
+            @click="clickClose"
             >닫기</v-btn
           >
         </v-card-actions>
       </v-card>
-
     </v-dialog>
   </div>
 </template>
 
 <script>
-// import AlarmService from "@/services/alarm.service";
+import StudyService from "@/services/study.service";
 
 export default {
-  name: "joinmodal",
+  name: "acceptmodal",
   data: () => ({
     open: false,
-    subalert: false,
-    isSuccess: true
+    subalert: false
   }),
-  props: ["joinModal"],
+  props: ["acceptModal", "newbie", "study_id"],
   watch: {
-    joinModal() {
-      this.open = this.joinModal;
-    },
-    subopen() {
-      if (!this.subopen) {
-        this.$emit("sendNo");
-      }
+    acceptModal() {
+      this.open = this.acceptModal;
     }
   },
   methods: {
     clickNo() {
-      this.$emit("sendNo");
+      this.$emit("close");
     },
-    sendSuccess() {
+    clickClose() {
       this.subalert = false;
-      // this.checkModal=false;
-
-      this.$emit("sendYes");
-    },
-    sendFail() {
-      this.subalert = false;
-      this.$emit("sendNo");
-      // this.checkModal=false;
+      this.$emit("close");
     },
 
     async clickYes() {
-    //   this.subalert = true;
-    //   this.subopen = false;
-    //   //통신 시도
-      
-
-    //   // 통신 성공 실패 여부
-    //   this.isSuccess = true;
-
-    //   //통신 성공
-    //   if (this.isSuccess) {
-    //     this.subopen = false;
-    //     this.$emit("sendYes");
-    //   }
-
-    //   //통신 실패
-    //   else if (!this.isSuccess) {
-    //     this.$emit("sendNo");
-    //   }
-
-    //   // this.$emit("sendYes")
+      this.subalert = true;
+      this.$emit("close");
+      await StudyService.joinStudy({ apply_id: this.newbie.id, accept: true });
     }
   }
 };
