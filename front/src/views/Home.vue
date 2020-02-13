@@ -1,7 +1,7 @@
 <template>
   <v-content app id="home" class="pa-0">
     <div class="bannerContainer">
-      <v-img class="banner" src="@/assets/images/banner/main3.png" />
+      <v-img class="banner" src="@/assets/images/banner/main.png" />
     </div>
     <v-row justify="center">
       <v-col cols="12" lg="9" md="12" sm="12" class='pt-0'>

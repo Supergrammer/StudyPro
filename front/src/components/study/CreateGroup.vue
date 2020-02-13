@@ -113,33 +113,89 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="3">요일</v-col>
+        <v-col cols="3"><span class="red--text">*</span>요일</v-col>
         <v-col cols="9">
           <v-btn-toggle v-model="dayofweek" multiple dense group>
             <v-row>
-              <v-btn text value="Mon">Mon</v-btn>
-              <v-btn text value="Tue">Tue</v-btn>
-              <v-btn text value="Wed">Wed</v-btn>
-              <v-btn text value="Thu">Thu</v-btn>
-              <v-btn text value="Fri">Fri</v-btn>
-              <v-btn text value="Sat">Sat</v-btn>
-              <v-btn text value="Sun">Sun</v-btn>
+              <v-btn class="multiplebtn" elevation="0" value="Mon">Mon</v-btn>
+              <v-btn class="multiplebtn" elevation="0" value="Tue">Tue</v-btn>
+              <v-btn class="multiplebtn" elevation="0" value="Wed">Wed</v-btn>
+              <v-btn class="multiplebtn" elevation="0" value="Thu">Thu</v-btn>
+              <v-btn class="multiplebtn" elevation="0" value="Fri">Fri</v-btn>
+              <v-btn class="multiplebtn" elevation="0" value="Sat">Sat</v-btn>
+              <v-btn class="multiplebtn" elevation="0" value="Sun">Sun</v-btn>
             </v-row>
           </v-btn-toggle>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="3">시간대</v-col>
+        <v-col cols="12" sm="3"><span class="red--text">*</span>시간대</v-col>
         <v-col cols="12" sm="9" class="py-0">
           <v-row>
-            <v-col cols="5" md="4" class="pb-0 pr-0">
-              <timeselector v-model="starttime" class="grey lighten-4" />
+            <v-col cols="5" md="4" class="py-0 pr-0">
+              <v-menu
+                ref="startTime"
+                v-model="active.startTime"
+                :close-on-content-click="false"
+                :nudge-right="30"
+                :return-value.sync="starttime"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="starttime"
+                    label="시작시간"
+                    prepend-icon="access_time"
+                    readonly
+                    hide-details
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  v-model="starttime"
+                  full-width
+                  header-color="customTheme"
+                  ampm-in-title
+                  @click:minute="$refs.startTime.save(starttime)"
+                ></v-time-picker>
+              </v-menu>
             </v-col>
             <v-col cols="2" md="1" class="pb-0 px-0 text-center">
               <span>~</span>
             </v-col>
-            <v-col cols="5" md="4" class="pb-0 pl-0">
-              <timeselector v-model="endtime" class="grey lighten-4" />
+            <v-col cols="5" md="4" class="py-0 pl-0">
+              <v-menu
+                ref="endTime"
+                v-model="active.endTime"
+                :close-on-content-click="false"
+                :nudge-right="30"
+                :return-value.sync="endtime"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="endtime"
+                    label="종료시간"
+                    prepend-icon="access_time"
+                    readonly
+                    hide-details
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  v-model="endtime"
+                  full-width
+                  header-color="customTheme"
+                  ampm-in-title
+                  @click:minute="$refs.endTime.save(endtime)"
+                ></v-time-picker>
+              </v-menu>
             </v-col>
             <v-spacer />
           </v-row>
@@ -211,7 +267,6 @@
 
 <script>
 import VDaterange from "@/components/base/VDaterange";
-import Timeselector from "vue-timeselector";
 import { format } from "date-fns";
 
 export default {
@@ -262,12 +317,15 @@ export default {
         value: "종료",
         callback: () => {}
       }
-    ]
+    ],
+    active: {
+      startTime: false,
+      endTime: false
+    }
   }),
   props: ["success"],
   components: {
     VDaterange,
-    Timeselector,
     imageInput: () => import("@/components/base/ImageInput")
   },
   computed: {
@@ -285,6 +343,9 @@ export default {
     groupTarget() {
       this.validation();
     },
+    regText() {
+      this.validation();
+    },
     minor() {
       this.validation();
     },
@@ -295,6 +356,9 @@ export default {
       this.validation();
     },
     endtime() {
+      this.validation();
+    },
+    dayofweek() {
       this.validation();
     },
 
@@ -329,26 +393,40 @@ export default {
         this.message = "그룹명은 3자이상입니다.";
         this.isComplete = false;
         return;
-      } else if (!this.groupTarget) {
+      } else if (this.groupTarget == "") {
         this.message = "그룹의 목표를 입력해주세요.";
+        this.isComplete = false;
+        return;
+      } else if (this.regText == "") {
+        this.message = "그룹소개를 입력해주세요.";
+        this.isComplete = false;
+        return;
+      } else if (this.dayofweek.length == 0) {
+        this.message = "요일을 선택해주세요.";
+        this.isComplete = false;
+        return;
+      } else if (this.starttime == "") {
+        this.message = "시작시간을 입력해주세요.";
+        this.isComplete = false;
+        return;
+      } else if (this.endtime == "") {
+        this.message = "종료시간을 입력해주세요.";
         this.isComplete = false;
         return;
       }
 
-      if (this.starttime && this.endtime) {
-        //시간체크
-        var start_hour = this.starttime.getHours();
-        var start_minute = this.starttime.getMinutes();
-        var end_hour = this.endtime.getHours();
-        var end_minute = this.endtime.getMinutes();
-        if (
-          start_hour > end_hour ||
-          (start_hour == end_hour && start_minute > end_minute)
-        ) {
-          this.message = "시작시간이 종료시간보다 늦습니다";
-          this.isComplete = false;
-          return;
-        }
+      //시간체크
+      var start_hour = this.starttime.split(':')[0];
+      var start_minute = this.starttime.split(':')[1];
+      var end_hour = this.endtime.split(':')[0];
+      var end_minute = this.endtime.split(':')[1];
+      if (
+        start_hour > end_hour ||
+        (start_hour == end_hour && start_minute > end_minute)
+      ) {
+        this.message = "시작시간이 종료시간보다 늦습니다";
+        this.isComplete = false;
+        return;
       }
 
       this.message = "";
@@ -448,5 +526,9 @@ export default {
 
 .no-hover-color:hover {
   background-color: white !important;
+}
+
+.multiplebtn {
+  background-color: rgba(0, 0, 0, 0) !important;
 }
 </style>

@@ -40,7 +40,9 @@
                 >
               </v-col>
               <v-col class="py-0">
-                <v-content text class="py-0">0 / 6</v-content>
+                <v-content text class="py-0">
+                  {{studyInfo.num_joined_student}}/{{(studyInfo.user_limit == 0)?'-':studyInfo.user_limit}}
+                </v-content>
               </v-col>
             </v-row>
             <hr />
@@ -62,7 +64,7 @@
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">{{
-                  studyInfo.description
+                  (studyInfo.description == '')?'-':studyInfo.description
                 }}</v-content>
               </v-col>
             </v-row>
@@ -139,7 +141,7 @@
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">{{
-                  studyInfo.captain.about
+                  (studyInfo.captain.about == 'null')?'-':studyInfo.captain.about
                 }}</v-content>
               </v-col>
             </v-row>

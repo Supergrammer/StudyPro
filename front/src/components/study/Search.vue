@@ -57,7 +57,7 @@
                   <span class="mr-3">대분류</span>
                   <v-overflow-btn
                     :items="majorItems"
-                    v-model="searchForm.major"
+                    v-model="major"
                     segmented
                     dense
                     style="width: 150px; display:inline-block"
@@ -68,7 +68,7 @@
                   <span class="mr-3">소분류</span>
                   <v-overflow-btn
                     :items="minorItems"
-                    v-model="searchForm.minor"
+                    v-model="minor"
                     segmented
                     dense
                     style="width: 150px; display:inline-block"
@@ -76,7 +76,7 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="3">
+                <v-col cols="3" class="pt-2">
                   <span>시작날짜</span>
                 </v-col>
                 <v-col cols="9" class="py-0">
@@ -108,25 +108,75 @@
                   </v-menu>
                 </v-col>
               </v-row>
-              <v-row>
+              <v-row class="pb-2">
                 <v-col cols="3">
-                  <span>시간</span>
+                  <span>시작/종료시간</span>
                 </v-col>
-                <v-col cols="7" sm="5" md="3" class="pb-0 pr-0">
-                  <timeselector
-                    v-model="searchForm.starttime"
-                    class="grey lighten-4"
-                  />
+                <v-col cols="7" sm="5" md="3" class="py-0 pr-0">
+                  <v-menu
+                    ref="startTime"
+                    v-model="active.startTime"
+                    :close-on-content-click="false"
+                    :nudge-right="30"
+                    :return-value.sync="searchForm.starttime"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="searchForm.starttime"
+                        label="시작시간"
+                        prepend-icon="access_time"
+                        readonly
+                        hide-details
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-model="searchForm.starttime"
+                      full-width
+                      header-color="customTheme"
+                      ampm-in-title
+                      @click:minute="$refs.startTime.save(searchForm.starttime)"
+                    ></v-time-picker>
+                  </v-menu>
                 </v-col>
                 <v-col cols="2" md="1" class="text-center">
                   <span>~</span>
                 </v-col>
                 <v-col cols="3" class="d-md-none"></v-col>
-                <v-col cols="7" sm="5" md="3" class="pb-0 pl-0 text-end">
-                  <timeselector
-                    v-model="searchForm.endtime"
-                    class="grey lighten-4"
-                  />
+                <v-col cols="7" sm="5" md="3" class="py-0 pl-0 text-end">
+                  <v-menu
+                    ref="endTime"
+                    v-model="active.endTime"
+                    :close-on-content-click="false"
+                    :nudge-right="30"
+                    :return-value.sync="searchForm.endtime"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="searchForm.endtime"
+                        label="시작시간"
+                        prepend-icon="access_time"
+                        readonly
+                        hide-details
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-model="searchForm.endtime"
+                      full-width
+                      header-color="customTheme"
+                      ampm-in-title
+                      @click:minute="$refs.endTime.save(searchForm.endtime)"
+                    ></v-time-picker>
+                  </v-menu>
                 </v-col>
                 <v-spacer />
               </v-row>
@@ -143,19 +193,36 @@
                     group
                   >
                     <v-row>
-                      <v-btn text value="Mon">Mon</v-btn>
-                      <v-btn text value="Tue">Tue</v-btn>
-                      <v-btn text value="Wed">Wed</v-btn>
-                      <v-btn text value="Thu">Thu</v-btn>
-                      <v-btn text value="Fri">Fri</v-btn>
-                      <v-btn text value="Sat">Sat</v-btn>
-                      <v-btn text value="Sun">Sun</v-btn>
+                      <v-btn class="multiplebtn" elevation="0" value="Mon"
+                        >Mon</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Tue"
+                        >Tue</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Wed"
+                        >Wed</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Thu"
+                        >Thu</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Fri"
+                        >Fri</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Sat"
+                        >Sat</v-btn
+                      >
+                      <v-btn class="multiplebtn" elevation="0" value="Sun"
+                        >Sun</v-btn
+                      >
                     </v-row>
                   </v-btn-toggle>
                 </v-col>
               </v-row>
               <!-- 카테고리 -->
               <v-row justify="end">
+                <v-btn class="mr-2" style="width:80px" @click="detailInit"
+                  >초기화</v-btn
+                >
                 <v-btn class="mr-2" style="width:80px" @click="detailSearch"
                   >검색</v-btn
                 >
@@ -195,7 +262,7 @@
                   </v-list-item-title>
                 </v-col>
                 <v-col cols="6" sm="4" md="2" class="text-center">
-                  <span>Mon, Fri</span>
+                  <span>{{ item.process_days | filterDays }}</span>
                 </v-col>
                 <v-col cols="6" sm="4" md="2" class="text-center">
                   <span>{{
@@ -203,7 +270,11 @@
                   }}</span>
                 </v-col>
                 <v-col cols="6" sm="2" md="2" class="text-center">
-                  <span>{{ (0 + "/" + item.user_limit) | limit }}</span>
+                  <span
+                    >{{ item.num_joined_student }}/{{
+                      item.user_limit | limit
+                    }}</span
+                  >
                 </v-col>
                 <v-col
                   cols="6"
@@ -268,7 +339,7 @@
                       <v-btn
                         class="white lighten-3"
                         elevation="0"
-                        @click="groupModal = true"
+                        @click="groupModal = true, modalItem = item"
                       >
                         <span
                           class="dark--text"
@@ -282,7 +353,7 @@
               </v-list-item>
               <group-modal
                 :group-modal="groupModal"
-                :study-info="item"
+                :study-info="modalItem"
                 v-on:close="modalClose"
               />
             </v-layout>
@@ -294,9 +365,6 @@
 </template>
 
 <script>
-import Timeselector from "vue-timeselector";
-//import api from "@/services";
-
 export default {
   data: () => ({
     isLoading: false,
@@ -308,13 +376,10 @@ export default {
     durationOp: "",
     itemsDuration: ["Day", "Week", "Month", "Year"],
     searchForm: {
-      name: "",
       startdate: "",
       starttime: "",
       endtime: "",
-      dayofweek: [],
-      major: -1,
-      minor: -1,
+      dayofweek: []
     },
     items: [],
     copyItems: [],
@@ -326,18 +391,22 @@ export default {
     major: -1,
     minor: -1,
     majorItems: [],
-    minorItems: []
+    minorItems: [],
+    active: {
+      startTime: false,
+      endTime: false
+    },
+    modalItem: null,
   }),
   props: ["id"],
   components: {
-    GroupModal: () => import("@/components/study/GroupModal"),
-    Timeselector
+    GroupModal: () => import("@/components/study/GroupModal")
   },
   watch: {
     searchInput() {
       this.recommendItems = [];
 
-      if (this.searchInput == "") {
+      if (!this.searchInput) {
         return;
       } else {
         for (var item of this.items) {
@@ -361,7 +430,6 @@ export default {
           callback: () => {}
         });
       }
-      this.validation();
     }
   },
   methods: {
@@ -429,13 +497,7 @@ export default {
       this.copyItems = [];
       this.noResult = false;
       for (var item of this.items) {
-        
-        if (item.name.includes(this.searchInput)
-        && (this.searchForm.major == -1 || item.minor_class.major_class_id == this.searchForm.major)
-        && (this.searchForm.minor == -1 || item.minor_class.id == this.searchForm.minor)
-        && (this.searchForm.startdate == '' || this.dateCompare(item.start_date, this.searchForm.start_date))
-        && (this.searchFrom.starttime == '' || this.timeCompare(item.start_time, this.searchForm.starttime))
-        && (this.searchForm.endtime == '' || this.timeCompare(item.end_time, this.searchForm.endtime))) {
+        if (this.checkItems(item, this.searchForm)) {
           this.copyItems.push(item);
         }
       }
@@ -445,28 +507,124 @@ export default {
       }
     },
 
-    dateCompare(d1, d2){
-      var arr1 = d1.split('-')
-      var arr2 = d2.split('-')
-      var d1_year = arr1[0]
-      var d2_year = arr2[0]
-      var d1_month = arr1[1]
-      var d2_month = arr2[1]
-      var d1_day = arr1[2]
-      var d2_day = arr2[2]
-      if(d1_year > d2_year){
+    checkItems(item, input) {
+      // 이름 검사
+      if (this.searchInput && item.name.includes(this.searchInput)) {
+        return false;
+      }
+      // 대분류 검사
+      if (this.major != -1 && item.minor_class.major_class_id != this.major) {
+        return false;
+      }
+      // 소분류 검사
+      if (this.minor != -1 && item.minor_class.id == this.minor) {
+        return false;
+      }
+      // 시작날짜 검사
+      if (
+        input.startdate != "" &&
+        this.isLaterLeftDate([
+          { date: input.startdate },
+          { date: item.start_date }
+        ])
+      ) {
+        return false;
+      }
+      // 시작시간 검사
+      if (
+        input.starttime != "" &&
+        this.isLaterLeftTime([
+          { time: input.starttime },
+          { time: item.start_time }
+        ])
+      ) {
+        return false;
+      }
+      //종료시간 검사
+      if (
+        input.endtime != "" &&
+        this.isLaterLeftTime([{ time: item.end_time }, { time: input.endtime }])
+      ) {
+        return false;
+      }
+      // 요일 검사
+      if (this.compareDays(item.process_days, input.dayofweek)) {
+        return false;
+      }
+      return true;
+    },
+
+    isLaterLeftDate(days) {
+      for (var d of days) {
+        var arr = d.date.split("-");
+        d.year = arr[0];
+        d.month = arr[1];
+        d.day = arr[2];
+      }
+      if (days[0].year > days[1].year) {
         return true;
-      }else if(d1_year == d2_year){
-        if(d1_month > d2_month){
-          return true;
-        }else if(d1_month == d2_month){
-          if(d1_day > d2_day){
-            return true;
-          }
+      }
+
+      if (days[0].year == days[1].year && days[0].month > days[1].month) {
+        return true;
+      }
+      if (days[0].month == days[1].month && days[0].day > days[1].day) {
+        return true;
+      }
+      return false;
+    },
+
+    isLaterLeftTime(times) {
+      for (var t of times) {
+        if (typeof t.time == "number") {
+          t.hour = Math.floor(t.time / 100);
+          t.minute = t.time % 100;
+        } else {
+          t.hour = t.time.split(":")[0];
+          t.minute = t.time.split(":")[1];
         }
       }
-      console.log(arr1, arr2)
+
+      if (times[0].hour > times[1].hour) {
+        return true;
+      }
+
+      if (times[0].hour == times[1].hour && times[0].minute > times[1].minute) {
+        return true;
+      }
+
       return false;
+    },
+
+    compareDays(item, input) {
+      for (var input_day of input) {
+        var notMatching = true;
+        for (var item_day of item) {
+          console.log('input_day',input_day)
+          console.log('item_day',item_day.day)
+          if (input_day == item_day.day) {
+            notMatching = false;
+            break;
+          }
+        }
+
+        if (notMatching) {
+          return true;
+        }
+      }
+    },
+
+    detailInit() {
+      this.searchForm = {
+        name: "",
+        startdate: "",
+        starttime: "",
+        endtime: "",
+        dayofweek: []
+      };
+      this.major = -1;
+      this.minor = -1;
+      this.searchInput = "";
     }
   },
   filters: {
@@ -477,11 +635,31 @@ export default {
       return start[0] + ":" + start[1] + " ~ " + end[0] + ":" + end[1];
     },
     limit(value) {
-      let arr = value.split("/");
-      if (arr[0] == arr[1]) {
-        return "무제한";
+      if (value == 0) {
+        return "-";
       }
       return value;
+    },
+
+    filterDays(value) {
+      if(value.length == 1){
+        return value[0].day
+      }
+      var days = "";
+      var weekofdays = {
+        Mon: "월",
+        Tue: "화",
+        Wed: "수",
+        Thu: "목",
+        Fri: "금",
+        Sat: "토",
+        Sun: "일"
+      };
+      for (var i = 0; i < value.length; i++) {
+        days += weekofdays[value[i].day]+ ' '
+      }
+
+      return days;
     }
   },
   async mounted() {
@@ -496,7 +674,7 @@ export default {
     }
 
     await this.loadDeaultList();
-    console.log(this.items)
+    console.log(this.items);
   }
 };
 </script>
@@ -507,5 +685,9 @@ export default {
 }
 .v-list-item__icon {
   min-width: 24px !important;
+}
+
+.multiplebtn {
+  background-color: rgba(0, 0, 0, 0) !important;
 }
 </style>
