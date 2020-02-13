@@ -34,24 +34,11 @@
     </v-navigation-drawer>
 
     <v-card flat>
-        <span >안녕하세요</span>
+      <span>안녕하세요</span>
       <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7"></v-img>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
-          <v-card outlined>
-              <v-row no-gutters>
-                  <v-col cols="9">
-                      <v-card outlined>
-                          <study-mini-board/>
-                      </v-card>
-                  </v-col>
-                  <v-col cols="3">
-                      <v-card outlined>
-                          <study-profile/>
-                      </v-card>
-                  </v-col>
-              </v-row>
-          </v-card>
+          <router-view></router-view>
         </v-col>
       </v-row>
     </v-card>
@@ -60,21 +47,31 @@
 
 <script>
 export default {
-  components: {
-    StudyMiniBoard: () =>
-      import("@/components/studydetail/groupHome/StudyMiniBoard"),
-    // StudyTodoList: () =>
-    //   import("@/components/studydetail/groupHome/StudyTodoList"),
-    StudyProfile: () =>
-      import("@/components/studydetail/groupHome/StudyProfile"),
-  },
-
   data() {
     return {
       menus: [
-        { icon: "home", title: "홈으로" },
-        { icon: "date_range", title: "일정 관리" },
-        { icon: "library_books", title: "게시판" },
+        {
+          icon: "home",
+          title: "홈으로",
+          route: {
+            routes: "study_home"
+          }
+        },
+        {
+          icon: "date_range",
+          title: "일정 관리",
+          route: {
+            routes: "study_calendar"
+          }
+        },
+        {
+          icon: "library_books",
+          title: "게시판",
+          route: {
+            routes: "study_board",
+            params: { board_name: "study" }
+          }
+        },
         { icon: "group", title: "스터디 멤버" },
         { icon: "developer_board", title: "WorkSpace" }
       ]
@@ -89,7 +86,7 @@ export default {
 
   methods: {
     routeTo(route) {
-      this.$router.push({ name: "board", params: { board: route } });
+      this.$router.push({ name: route.routes, params: route.params });
     }
   }
 };

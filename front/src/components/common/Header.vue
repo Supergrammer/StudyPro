@@ -1,13 +1,7 @@
 <template>
   <v-container>
     <div>
-      <v-app-bar
-        app
-        fixed
-        prominent
-        max-height="56px"
-        height="56px"
-      >
+      <v-app-bar app fixed prominent max-height="56px" height="56px">
         <v-row style="height:56px;">
           <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">
             <router-link to="/home" text-decoration="none">
@@ -48,39 +42,28 @@
 
             <!-- 유저 이미지 -->
             <!-- <v-container class="align-right"> -->
+            <!--  -->
             <template v-if="isAuth">
-              <a @click="usermenu = !usermenu" class="dropPanel d-none d-sm-block">
-                <v-avatar size="30" class="mr-2">
-                  <v-img :src="currentUser.profile_url"></v-img>
-                </v-avatar>
-                <span
-                  class="mr-2"
-                  style="color:rgba(70,80,255,.8);"
-                  v-if="currentUser"
-                >{{ currentUser.nickname }}</span>
-                <svg viewBox="0 0 451.847 451.847" width="12">
-                  <path
-                    d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
-		c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0
-		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z"
-                    fill="rgba(200,200,200,.7)"
-                  />
-                </svg>
-                <div :class="{ menu: usermenu }" class="dropdown">
-                  <ul class="pl-0">
-                    <li v-for="item in usermenuitems" :key="item.title">
-                      <v-btn
-                        text
-                        @click.prevent="clickUserMenu(item.name)"
-                        class="usermenubtn"
-                        :disabled="isLoading"
-                      >
-                        <span class="usermenu">{{ item.title }}</span>
-                      </v-btn>
-                    </li>
-                  </ul>
-                </div>
-              </a>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn text x-large class="pa-0" v-on="on">
+                    <v-avatar size="30" class="mx-3">
+                      <v-img :src="currentUser.profile_url"></v-img>
+                    </v-avatar>
+                    {{ currentUser.nickname }}
+                    <v-icon class="mx-2">keyboard_arrow_down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(menu, index) in usermenuitems"
+                    :key="index"
+                    @click="clickUserMenu(menu.name)"
+                  >
+                    <v-list-item-title>{{ menu.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </template>
             <!-- </v-container> -->
             <!-- 유저 이미지 끝 -->
@@ -134,18 +117,15 @@
 
       <!-- User Pages -->
       <v-container class="my-0 pa-0" v-if="isAuth">
-        <v-divider class="white ma-5 mt-0"/>
+        <v-divider class="white ma-5 mt-0" />
         <v-layout column align-center>
           <v-flex>
             <router-link to="/user/mypage">
               <v-avatar size="100" class="mb-3">
                 <img :src="currentUser.profile_url" alt />
               </v-avatar>
-              
             </router-link>
-            <p align="center" class="white--text subheading">
-                {{ currentUser.nickname }}
-              </p>
+            <p align="center" class="white--text subheading">{{ currentUser.nickname }}</p>
           </v-flex>
         </v-layout>
         <v-list>
@@ -188,7 +168,8 @@ export default {
         { icon: "group", title: "스터디검색", route: "/study/search" },
         { icon: "date_range", title: "게시판", route: "/board/share" },
         { icon: "schedule", title: "일정관리", route: "/calendar/mycal" },
-        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
+        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" },
+        { icon: "bug_report", title: "Test", route: "/test" }
       ],
       navigations: [
         { title: "스터디 홈", route: "/home" },
@@ -272,7 +253,7 @@ export default {
   width: 100%;
   justify-content: start;
 }
-.dropPanel{
+.dropPanel {
   margin-top: 150px;
 }
 </style>
