@@ -76,11 +76,14 @@ export const connect = () => {
 
 
             socket.on('leave', function (data) {
+                console.log("떠난다");
+                
                 // let study_id = 1;
                 let user_id = data.user_id;
                 let socket_id = socket.id;
 
                 let room = rooms[study_id];
+                if (!room) return
                 if (room.member_cnt == 1) {
                     delete rooms[study_id];
                 } else {

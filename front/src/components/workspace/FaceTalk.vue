@@ -3,7 +3,7 @@
     <v-row no-gutters class="pa-0" border="0px">
       <v-col cols="12" md="6" class="d-none d-md-block" >
         <v-card height=130  outlined tile flex id="remote_block_0">
-          <video position="absolute" playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
+          <video :poster="user_profiles[0]" position="absolute" playsinline id="local_video" autoplay preload="metadata" width="100%" height="100%" @contextmenu="showProfileMenu($event, 0)"></video>
           <img class="mute" @click="mute($event)" :src="volume_img" alt="" id="mute_button_0">
           <img class="mute" @click="redrawing($event)" :src="camera_on_img" alt="" id="camera_button_0" style="right : 30px">
         </v-card>
@@ -11,10 +11,11 @@
       <v-col v-for="i of [1,2,3,4,5]" :key="i" cols="12" md="6" class="d-none d-md-block" @contextmenu="showProfileMenu($event, i)">
         <v-card height=130 class="ma-0 pa-0" outlined tile flex  :id="`remote_block_${i}`">
           <img
-            src="../../assets/images/pengsoo.jpg"
+          class="mt-6"
+            src="../../assets/images/logo_gray.png"
             alt="펭수"
-            width="100%"
-            height="100%"
+            width="70%"
+            height="70%"
             id="pengsoo"
           />
         </v-card>
@@ -49,6 +50,7 @@ export default {
       video_streamings: [true, true, true, true, true, true],
       video_mutes: [false, false, false, false, false, false],
       connected_users: [this.user.user_id, null, null, null, null, null],
+      user_profiles: [null, null, null, null, null, null],
       peer_connections: {},
 
       remote_videos: [null],
@@ -77,6 +79,7 @@ export default {
   },
   methods: {
     redrawing(e) {
+
       let temp_btn = e.target
       let i = temp_btn.id[14]
 
@@ -112,8 +115,6 @@ export default {
         this.video_streamings[i] = !this.video_streamings[i]
         temp_btn.src = this.video_streamings[i] ? this.camera_on_img : this.camera_off_img
       }
-
-
     },
 
     mute(e) {
@@ -123,7 +124,6 @@ export default {
       temp_btn.src = this.video_mutes[i] ? this.mute_img : this.volume_img
       this.remote_videos[i].childNodes[0].muted = this.video_mutes[i]
     },
-    // FaceTalk
 
     sendMessage(message) {
       this.socket.emit("message", message);
@@ -139,7 +139,7 @@ export default {
       e.preventDefault();
       if (!this.connected_users[i]) return
 
-      this.show_profile_id = i
+      this.show_profile_id = this.connected_users[i]
       this.profile.showProfile = false;
       this.profile.x = e.clientX;
       this.profile.y = e.clientY;
@@ -194,7 +194,7 @@ export default {
         remote_video.style.zIndex = "1"
         remote_video.style.left = "0"
         remote_video.style.position = "absolute"
-        remote_video.poster = this.camera_on_img
+        remote_video.poster = this.user_profiles[video_num]
         
         const mute_button = document.createElement('img');
         mute_button.src = this.volume_img
@@ -218,9 +218,7 @@ export default {
 
 
         const remote_block = this.remote_videos[video_num]
-      
         while(remote_block.firstChild) remote_block.removeChild(remote_block.lastChild)
-
         remote_block.appendChild(remote_video)
         remote_block.appendChild(mute_button)
         remote_block.appendChild(camera_button)
@@ -228,8 +226,8 @@ export default {
         mute_button.onclick = this.mute
       }
 
-
       t_pc.addStream(this.local_stream);
+
       return t_pc;
     },
 
@@ -258,17 +256,18 @@ export default {
       eye.style.zIndex = "3"
       eye.style.opacity = "0.4"
 
-
       return eye
     }
   },
 
   created() {
-    console.log("내아이디 : ", this.user.user_id, '내 닉네임');
+    console.log("내아이디 : ", this.user.user_id, '내 닉네임 : ', this.user.user_nickname);
     this.mute_img = require("../../assets/images/mute.png")
     this.volume_img = require("../../assets/images/volume.png")
     this.camera_off_img = require("../../assets/images/camera_off.png")
     this.camera_on_img = require("../../assets/images/camera_on.png")
+    this.no_signal_img = 'http://15.164.245.201:8000/images/profile_default.png'
+    this.user_profiles[0] = this.user.user_profile_url
   },
   mounted() {
 
@@ -279,22 +278,11 @@ export default {
     this.remote_videos[0] = document.getElementById('remote_block_0')
 
 
-    let canvas = document.createElement('canvas')
-    canvas.width = "172.85"
-    canvas.height = "128.4"
-    this.local_dummy_stream = canvas.captureStream(25)
-    console.log(this.local_dummy_stream)
-    // video.poster = this.camera_on_img
-    
-    let img = new Image(172, 128)
-    let ctx = canvas.getContext("2d")
-    img.src = this.user.user_profile_url
-    img.onload = () => {
-      img.crossOrigin = 'anonymous'
-      ctx.fillRect(0,0,172,128)
-      ctx.drawImage(img, 0, 0, 172, 128)
-      // ctx.save()
-    }
+    this.canvas = document.createElement('canvas')
+    this.canvas.width = "172.85"
+    this.canvas.height = "128.4"
+    this.local_dummy_stream = this.canvas.captureStream(25)
+
     navigator.mediaDevices ? 
     navigator.mediaDevices
       .getUserMedia({
@@ -324,25 +312,28 @@ export default {
               message: sdp,
               study_id: this.study_id,
               from: this.user.user_id,
+              from_profile: this.user.user_profile_url || this.no_signal_img,
               to: user_id
             })
           }, e => {console.log(e)})
         })      
       }, (1000));
-
     })
+
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)
       this.deleteBorder(video_num, this.sharing_id)
       this.connected_users[video_num] = null
+      this.user_profiles[video_num] = null
       let temp_video =  this.remote_videos[video_num]
 
       while (temp_video.firstChild) temp_video.removeChild(temp_video.lastChild)
 
       const post_img = document.createElement('img')
-      post_img.src = require('../../assets/images/pengsoo.jpg')
-      post_img.style.width = "100%"
-      post_img.style.height = "100%"
+      post_img.src = require("../../assets/images/logo_gray.png")
+      post_img.className = "mt-6"
+      post_img.style.width = "70%"
+      post_img.style.height = "70%"
 
       this.remote_videos[video_num].appendChild(post_img)
       this.remote_streams[video_num] = null
@@ -357,6 +348,7 @@ export default {
         for (let idx in this.connected_users) {
           if (!this.connected_users[idx]) {
             this.connected_users[idx] = from;
+            this.user_profiles[idx] = data.from_profile
             break;
           }
         }
@@ -369,11 +361,13 @@ export default {
               message: sdp,
               study_id: this.study_id,
               from: this.user.user_id,
+              from_profile: this.user.user_profile_url,
               to: from
             });
           });
         });
       } else if (data.message.type === "answer") {
+        this.user_profiles[this.connected_users.indexOf(data.from)] = data.from_profile
         let t_pc = this.peer_connections[data.from];
         t_pc.setRemoteDescription(new RTCSessionDescription(data.message));
       } else if (data.message.type === "candidate") {
