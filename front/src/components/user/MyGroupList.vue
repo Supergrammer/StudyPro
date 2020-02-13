@@ -3,19 +3,11 @@
     <v-card-title>
       가입한 그룹목록
       <v-spacer></v-spacer>
-      <v-text-field
-        append-icon="search"
-        label="그룹명으로 검색"
-        single-line
-        hide-details
-        v-model="search"
-      ></v-text-field>
+      <v-text-field append-icon="search" label="그룹명으로 검색" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
     <v-row>
       <v-col class="text-end">
-        <v-btn text v-show="selected.length > 0" class="error--text"
-          >탈퇴</v-btn
-        >
+        <v-btn text v-show="selected.length > 0" class="error--text">탈퇴</v-btn>
         <v-btn text @click="loadItems">목록 갱신</v-btn>
       </v-col>
     </v-row>
@@ -27,9 +19,11 @@
       show-select
       @click:row="clicked($event)"
     >
-      <v-alert slot="no-results" icon="warning" class="ma-0">
-        Your search for "{{ search }}" found no results.
-      </v-alert>
+      <v-alert
+        slot="no-results"
+        icon="warning"
+        class="ma-0"
+      >Your search for "{{ search }}" found no results.</v-alert>
     </v-data-table>
   </v-card>
 </template>
@@ -77,7 +71,7 @@ export default {
   },
   methods: {
     clicked(event) {
-      this.$router.push({ name: "studydetail", params: { id: event.id } });
+      this.$router.push({ name: "study_home", params: { study_id: event.id } });
     },
     getTime(start, end) {
       var s_hour = Math.floor(start / 100);
