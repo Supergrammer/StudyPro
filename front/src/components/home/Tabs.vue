@@ -131,7 +131,7 @@ export default {
       this.current = target;
     },
     viewDetail(studyInfo) {
-      console.log("viewde", studyInfo);
+      //console.log("viewde", studyInfo);
       this.groupModal = true;
       this.studySingle = studyInfo;
     },
