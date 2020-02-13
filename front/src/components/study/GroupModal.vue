@@ -170,7 +170,7 @@
             color="primary--text transparent"
             elevation="0"
             @click="regGroup"
-            >가입하기</v-btn
+            >가입신청</v-btn
           >
         </v-card-actions>
       </v-card>

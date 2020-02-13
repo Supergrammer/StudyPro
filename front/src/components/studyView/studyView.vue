@@ -40,7 +40,6 @@
     </v-navigation-drawer>
 
     <v-card flat>
-      <span>안녕하세요</span>
       <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7"></v-img>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
