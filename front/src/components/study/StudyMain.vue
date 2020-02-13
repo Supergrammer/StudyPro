@@ -22,7 +22,14 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat>
-                <group-list />
+                <group-list v-if="isAuth"/>
+                <request-signin v-else>
+                  <template v-slot:text>
+                    <p>
+                      로그인해주세요.
+                    </p>
+                  </template>
+                </request-signin>
               </v-card>
             </v-tab-item>
             <v-tab-item>
