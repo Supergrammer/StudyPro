@@ -53,7 +53,7 @@
 
 <script>
 export default {
-  props: [ "study_id" ],
+  props: ["study_id"],
   data() {
     return {
       menus: [
@@ -79,7 +79,13 @@ export default {
             params: { board_name: "study" }
           }
         },
-        { icon: "group", title: "스터디 멤버" },
+        {
+          icon: "group",
+          title: "스터디 멤버",
+          route: {
+            routes: "study_member"
+          }
+        }
       ]
     };
   },
@@ -101,8 +107,11 @@ export default {
       this.$router.push({ name: route.routes, params: route.params });
     },
     toWorkspace() {
-      let workspace = this.$router.resolve({ name: "workspace", params: { study_id: this.study_id } });
-      window.open(workspace.href, 'WORKSPACE', 'a');
+      let workspace = this.$router.resolve({
+        name: "workspace",
+        params: { study_id: this.study_id }
+      });
+      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
     }
   }
 };
