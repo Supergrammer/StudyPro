@@ -199,9 +199,13 @@ export default {
   },
   methods: {
     regGroup() {
+      //console.log(this.studyInfo.id);
+      
       StudyService.applyStudy({
         study_id:this.studyInfo.id,
         comment:this.greetComment,
+      }).then(res => {
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA", res)
       })
     }
   },
