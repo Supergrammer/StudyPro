@@ -76,7 +76,7 @@
       </v-col>
     </v-row>
 
-    <v-overlay :value="overlay" @click="help" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+    <v-overlay :value="overlay" opacity=0.15 @click="help" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
       <v-img
       @keyup="help"
         v-show="current==='board'"
@@ -151,10 +151,13 @@ export default {
     FaceTalk: FaceTalk,
     Chatting: Chatting
   },
+  beforeCreate() {
+    //   if (!window.opener) {this.$router.push({name : 'home'})}
+  },
   created() {
     this.user = this.debuging
       ? {
-          user_id: `${Math.ceil(Math.random() * 100000)}`,
+          user_id: `${Math.ceil(40 + Math.random() * 40)}`,
           user_nickname: `${Math.ceil(Math.random() * 100000)}`,
           user_profile_url:
             "http://15.164.245.201:8000/images/profile_default.png"

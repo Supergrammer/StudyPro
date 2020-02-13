@@ -55,7 +55,7 @@
                   <v-card-title
                     class="cardText"
                     style="font-size:30px;font-weight: 700;"
-                    >{{ studyInfo.name }}</v-card-title
+                    ><span>{{ studyInfo.name }}</span></v-card-title
                   >
                 </v-row>
                 <v-row justify="center">
@@ -73,7 +73,12 @@
                 </v-row>
                 <v-row justify="center">
                   <v-card-title class="pt-0 cardText" style="font-size:15px">
-                    현재 인원 : 2 / {{ studyInfo.user_limit }}
+                    <div v-if="studyInfo.user_limit"> 
+                      현재 인원 : {{studyInfo.num_joined_student}} / {{ studyInfo.user_limit }}
+                    </div> 
+                    <div v-else> 
+                      인원제한 없음
+                    </div>
                   </v-card-title>
                 </v-row>
               </v-card>
@@ -81,7 +86,7 @@
             <template>
               <group-modal
                 :group-modal="groupModal"
-                :study-info="studyInfo"
+                :study-info="studySingle"
                 v-on:close="modalClose"
               />
             </template>
@@ -104,7 +109,7 @@ export default {
     current: "ng",
 
     studyList: [],
-    studyInfo: null,
+    studySingle: null,
 
     groupModal: false,
     item: {},
@@ -128,11 +133,11 @@ export default {
     viewDetail(studyInfo) {
       console.log("viewde", studyInfo);
       this.groupModal = true;
-      this.studyInfo = studyInfo;
+      this.studySingle = studyInfo;
     },
     modalClose() {
       this.groupModal = false;
-    }
+    },
   }
 };
 </script>

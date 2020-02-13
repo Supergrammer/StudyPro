@@ -1,7 +1,7 @@
 <template>
   <div id="groupmodal">
     <v-dialog v-model="open" max-width="700px">
-      <v-card id="lgiModal" class="px-0 pt-0">
+      <v-card v-if="studyInfo" id="lgiModal" class="px-0 pt-0">
         <v-card-title class="customTheme darken-2 white--text pb-3">
           <span class="headline">{{ studyInfo.name }}</span>
         </v-card-title>
@@ -151,7 +151,7 @@
                   label="가입인사"
                   outlined
                   height="150px"
-                  v-model="regText"
+                  v-model="greetComment"
                   single-line
                 ></v-textarea>
               </v-col>
@@ -179,11 +179,12 @@
 </template>
 
 <script>
+import StudyService from "@/services/study.service"
 export default {
   name: "groupmodal",
   data: () => ({
     open: false,
-    regText: ""
+    greetComment: ""
   }),
   props: ["groupModal", "studyInfo"],
   watch: {
@@ -196,11 +197,13 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log("modal", this.studyInfo);
-  },
   methods: {
-    regGroup() {}
+    regGroup() {
+      StudyService.applyStudy({
+        study_id:this.studyInfo.id,
+        comment:this.greetComment,
+      })
+    }
   },
   filters: {
     getTime(value) {

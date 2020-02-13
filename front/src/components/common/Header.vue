@@ -1,27 +1,19 @@
 <template>
   <v-container>
     <div>
-      <v-app-bar
-        app
-        fixed
-        prominent
-        max-height="56px"
-        height="56px"
-      >
+      <v-app-bar app fixed prominent max-height="56px" height="56px">
         <v-row style="height:56px;">
           <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">
             <router-link to="/home" text-decoration="none">
               <v-img src="@/assets/images/LogoText.png" max-height="45px"></v-img>
             </router-link>
           </v-col>
-
           <!-- Menu Tab -->
           <v-col cols="1" sm="6" md="8" class="py-0" style="height:56px;">
             <template>
               <v-tabs
                 background-color="transparent"
                 class="d-none d-sm-flex justify-center"
-                center-active
                 show-arrows
               >
                 <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
@@ -31,7 +23,6 @@
               </v-tabs>
             </template>
           </v-col>
-
           <v-col cols="7" sm="3" md="2" class="py-0 justify-end align-center" style="height:56px;">
             <v-btn class="d-none d-sm-inline-block" @click="signinModal = true" v-if="!isAuth" text>
               <span>로그인</span>
@@ -45,55 +36,40 @@
             >
               <span>회원가입</span>
             </v-btn>
-
             <!-- 유저 이미지 -->
             <!-- <v-container class="align-right"> -->
+            <!--  -->
             <template v-if="isAuth">
-              <a @click="usermenu = !usermenu" class="dropPanel d-none d-sm-block">
-                <v-avatar size="30" class="mr-2">
-                  <v-img :src="currentUser.profile_url"></v-img>
-                </v-avatar>
-                <span
-                  class="mr-2"
-                  style="color:rgba(70,80,255,.8);"
-                  v-if="currentUser"
-                >{{ currentUser.nickname }}</span>
-                <svg viewBox="0 0 451.847 451.847" width="12">
-                  <path
-                    d="M225.923,354.706c-8.098,0-16.195-3.092-22.369-9.263L9.27,151.157c-12.359-12.359-12.359-32.397,0-44.751
-		c12.354-12.354,32.388-12.354,44.748,0l171.905,171.915l171.906-171.909c12.359-12.354,32.391-12.354,44.744,0
-		c12.365,12.354,12.365,32.392,0,44.751L248.292,345.449C242.115,351.621,234.018,354.706,225.923,354.706z"
-                    fill="rgba(200,200,200,.7)"
-                  />
-                </svg>
-                <div :class="{ menu: usermenu }" class="dropdown">
-                  <ul class="pl-0">
-                    <li v-for="item in usermenuitems" :key="item.title">
-                      <v-btn
-                        text
-                        @click.prevent="clickUserMenu(item.name)"
-                        class="usermenubtn"
-                        :disabled="isLoading"
-                      >
-                        <span class="usermenu">{{ item.title }}</span>
-                      </v-btn>
-                    </li>
-                  </ul>
-                </div>
-              </a>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn text x-large class="pa-0" v-on="on">
+                    <v-avatar size="30" class="mx-3">
+                      <v-img :src="currentUser.profile_url"></v-img>
+                    </v-avatar>
+                    {{ currentUser.nickname }}
+                    <v-icon class="mx-2">keyboard_arrow_down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(menu, index) in usermenuitems"
+                    :key="index"
+                    @click="clickUserMenu(menu.name)"
+                  >
+                    <v-list-item-title>{{ menu.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </template>
             <!-- </v-container> -->
             <!-- 유저 이미지 끝 -->
-
             <v-app-bar-nav-icon @click="drawer = true" class="d-block d-sm-none"></v-app-bar-nav-icon>
           </v-col>
         </v-row>
       </v-app-bar>
     </div>
-
     <!-- Signin Modal Boxs -->
     <signin-modal :signinModal="signinModal" v-on:close="signinClose" />
-
     <!-- Navigation Bar -->
     <v-navigation-drawer
       app
@@ -116,9 +92,7 @@
           </v-flex>
         </v-layout>
       </div>
-
       <v-divider class="black ma-1" />
-
       <!-- Navigations -->
       <v-list>
         <v-list-item v-for="item in navigations" :key="item.title" :to="item.route">
@@ -131,21 +105,17 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
       <!-- User Pages -->
       <v-container class="my-0 pa-0" v-if="isAuth">
-        <v-divider class="white ma-5 mt-0"/>
+        <v-divider class="white ma-5 mt-0" />
         <v-layout column align-center>
           <v-flex>
             <router-link to="/user/mypage">
               <v-avatar size="100" class="mb-3">
                 <img :src="currentUser.profile_url" alt />
               </v-avatar>
-              
             </router-link>
-            <p align="center" class="white--text subheading">
-                {{ currentUser.nickname }}
-              </p>
+            <p align="center" class="white--text subheading">{{ currentUser.nickname }}</p>
           </v-flex>
         </v-layout>
         <v-list>
@@ -173,7 +143,6 @@
     </v-navigation-drawer>
   </v-container>
 </template>
-
 <script>
 export default {
   name: "appHeader",
@@ -185,14 +154,14 @@ export default {
       usermenu: false,
       menus: [
         { icon: "home", title: "홈", route: "/home" },
-        { icon: "group", title: "스터디검색", route: "/study" },
-        { icon: "date_range", title: "게시판", route: "/board/share" },
-        { icon: "schedule", title: "일정관리", route: "/calendar/mycal" },
-        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
+        { icon: "group", title: "스터디검색", route: "/study/search" },
+        { icon: "library_books", title: "게시판", route: "/board/share" },
+        { icon: "date_range", title: "일정관리", route: "/calendar/mycal" },
+        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" },
       ],
       navigations: [
         { title: "스터디 홈", route: "/home" },
-        { title: "스터디 검색", route: "/study" },
+        { title: "스터디 검색", route: "/study/search" },
         { title: "게시판", route: "/board/share" },
         { title: "일정 관리", route: "/calendar/mycal" },
         { title: "내 정보", route: "/user/mypage" }
@@ -230,14 +199,15 @@ export default {
       this.isLoading = true;
       this.$store.dispatch("auth/logout");
       this.isLoading = false;
+      this.$router.push({name: 'home'})
     },
     clickUserMenu(name) {
       if (name == "info") {
         this.$router.push({ path: "/user/mypage" });
       } else if (name == "groups") {
-        this.$router.push({ path: "/user/groups" });
+        this.$router.push({ path: "/study/mygroups" });
       } else if (name == "calendar") {
-        this.$router.push({ path: "/user/calendar" });
+        this.$router.push({ path: "/calendar/mycal" });
       } else if (name == "signout") {
         this.signout();
       }
@@ -245,25 +215,20 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .v-application a {
   color: gray;
   text-decoration: none;
 }
-
 .logo {
   font-size: 20px;
 }
-
 .headerText {
   color: rgba(255, 255, 255, 0.7);
 }
-
 #navDrawer {
   opacity: 0.8;
 }
-
 .usermenu {
   font-size: 13px;
   color: rgba(0, 0, 0, 0.7) !important;
@@ -271,5 +236,8 @@ export default {
 .usermenubtn {
   width: 100%;
   justify-content: start;
+}
+.dropPanel {
+  margin-top: 150px;
 }
 </style>
