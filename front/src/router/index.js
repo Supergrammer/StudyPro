@@ -94,6 +94,11 @@ const routes = [
                 component: studySchedule,
             },
             {
+                path: 'mygroups',
+                name: 'mygroups',
+                component: search,
+            },
+            {
                 path: 'board/register',
                 name: 'study_register',
                 component: studyRegister,
@@ -128,7 +133,7 @@ const routes = [
             header: null,
             default: workspace,
             footer: null
-        }
+        },
     },
     {
         path: '/board/register',

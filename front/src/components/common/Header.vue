@@ -8,14 +8,12 @@
               <v-img src="@/assets/images/LogoText.png" max-height="45px"></v-img>
             </router-link>
           </v-col>
-
           <!-- Menu Tab -->
           <v-col cols="1" sm="6" md="8" class="py-0" style="height:56px;">
             <template>
               <v-tabs
                 background-color="transparent"
                 class="d-none d-sm-flex justify-center"
-                center-active
                 show-arrows
               >
                 <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
@@ -25,7 +23,6 @@
               </v-tabs>
             </template>
           </v-col>
-
           <v-col cols="7" sm="3" md="2" class="py-0 justify-end align-center" style="height:56px;">
             <v-btn class="d-none d-sm-inline-block" @click="signinModal = true" v-if="!isAuth" text>
               <span>로그인</span>
@@ -39,7 +36,6 @@
             >
               <span>회원가입</span>
             </v-btn>
-
             <!-- 유저 이미지 -->
             <!-- <v-container class="align-right"> -->
             <!--  -->
@@ -67,16 +63,13 @@
             </template>
             <!-- </v-container> -->
             <!-- 유저 이미지 끝 -->
-
             <v-app-bar-nav-icon @click="drawer = true" class="d-block d-sm-none"></v-app-bar-nav-icon>
           </v-col>
         </v-row>
       </v-app-bar>
     </div>
-
     <!-- Signin Modal Boxs -->
     <signin-modal :signinModal="signinModal" v-on:close="signinClose" />
-
     <!-- Navigation Bar -->
     <v-navigation-drawer
       app
@@ -99,9 +92,7 @@
           </v-flex>
         </v-layout>
       </div>
-
       <v-divider class="black ma-1" />
-
       <!-- Navigations -->
       <v-list>
         <v-list-item v-for="item in navigations" :key="item.title" :to="item.route">
@@ -114,7 +105,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
       <!-- User Pages -->
       <v-container class="my-0 pa-0" v-if="isAuth">
         <v-divider class="white ma-5 mt-0" />
@@ -153,7 +143,6 @@
     </v-navigation-drawer>
   </v-container>
 </template>
-
 <script>
 export default {
   name: "appHeader",
@@ -166,10 +155,9 @@ export default {
       menus: [
         { icon: "home", title: "홈", route: "/home" },
         { icon: "group", title: "스터디검색", route: "/study/search" },
-        { icon: "date_range", title: "게시판", route: "/board/share" },
-        { icon: "schedule", title: "일정관리", route: "/calendar/mycal" },
+        { icon: "library_books", title: "게시판", route: "/board/share" },
+        { icon: "date_range", title: "일정관리", route: "/calendar/mycal" },
         { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" },
-        { icon: "bug_report", title: "Test", route: "/test" }
       ],
       navigations: [
         { title: "스터디 홈", route: "/home" },
@@ -211,14 +199,15 @@ export default {
       this.isLoading = true;
       this.$store.dispatch("auth/logout");
       this.isLoading = false;
+      this.$router.push({name: 'home'})
     },
     clickUserMenu(name) {
       if (name == "info") {
         this.$router.push({ path: "/user/mypage" });
       } else if (name == "groups") {
-        this.$router.push({ path: "/user/groups" });
+        this.$router.push({ path: "/study/mygroups" });
       } else if (name == "calendar") {
-        this.$router.push({ path: "/user/calendar" });
+        this.$router.push({ path: "/calendar/mycal" });
       } else if (name == "signout") {
         this.signout();
       }
@@ -226,25 +215,20 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .v-application a {
   color: gray;
   text-decoration: none;
 }
-
 .logo {
   font-size: 20px;
 }
-
 .headerText {
   color: rgba(255, 255, 255, 0.7);
 }
-
 #navDrawer {
   opacity: 0.8;
 }
-
 .usermenu {
   font-size: 13px;
   color: rgba(0, 0, 0, 0.7) !important;

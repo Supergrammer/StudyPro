@@ -151,7 +151,7 @@
                   label="가입인사"
                   outlined
                   height="150px"
-                  v-model="regText"
+                  v-model="greetComment"
                   single-line
                 ></v-textarea>
               </v-col>
@@ -179,11 +179,12 @@
 </template>
 
 <script>
+import StudyService from "@/services/study.service"
 export default {
   name: "groupmodal",
   data: () => ({
     open: false,
-    regText: ""
+    greetComment: ""
   }),
   props: ["groupModal", "studyInfo"],
   watch: {
@@ -196,12 +197,12 @@ export default {
       }
     }
   },
-  created() {
-    console.log("modal", this.studyInfo);
-  },
   methods: {
     regGroup() {
-
+      StudyService.applyStudy({
+        study_id:this.studyInfo.id,
+        comment:this.greetComment,
+      })
     }
   },
   filters: {

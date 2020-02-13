@@ -57,18 +57,18 @@
                   <span class="mr-3">대분류</span>
                   <v-overflow-btn
                     :items="majorItems"
-                    v-model="major"
+                    v-model="searchForm.major"
                     segmented
                     dense
                     style="width: 150px; display:inline-block"
                   ></v-overflow-btn>
                 </v-col>
-                <v-col cols="3" class="d-md-none"/>
+                <v-col cols="3" class="d-md-none" />
                 <v-col cols="9" md="4" class="pa-0">
                   <span class="mr-3">소분류</span>
                   <v-overflow-btn
-                    :items="majorItems"
-                    v-model="major"
+                    :items="minorItems"
+                    v-model="searchForm.minor"
                     segmented
                     dense
                     style="width: 150px; display:inline-block"
@@ -112,16 +112,17 @@
                 <v-col cols="3">
                   <span>시간</span>
                 </v-col>
-                <v-col cols="5" class="pb-0 pr-0">
+                <v-col cols="7" sm="5" md="3" class="pb-0 pr-0">
                   <timeselector
                     v-model="searchForm.starttime"
                     class="grey lighten-4"
                   />
                 </v-col>
-                <v-col cols="1" class="text-center">
+                <v-col cols="2" md="1" class="text-center">
                   <span>~</span>
                 </v-col>
-                <v-col cols="4" sm="3" class="pb-0 pl-0 text-end">
+                <v-col cols="3" class="d-md-none"></v-col>
+                <v-col cols="7" sm="5" md="3" class="pb-0 pl-0 text-end">
                   <timeselector
                     v-model="searchForm.endtime"
                     class="grey lighten-4"
@@ -131,28 +132,34 @@
               </v-row>
 
               <v-row>
-                <v-col sm="3" class="pl-6 pb-0 pt-4">
+                <v-col cols="3">
                   <span>요일</span>
                 </v-col>
-                <v-col sm="9" class="pb-0 pt-1 pl-0">
+                <v-col cols="9" class="pa-0">
                   <v-btn-toggle
                     v-model="searchForm.dayofweek"
                     multiple
                     dense
                     group
                   >
-                    <v-btn>Mon</v-btn>
-                    <v-btn>Tue</v-btn>
-                    <v-btn>Wed</v-btn>
-                    <v-btn>Thu</v-btn>
-                    <v-btn>Fri</v-btn>
-                    <v-btn>Sat</v-btn>
-                    <v-btn>Sun</v-btn>
+                    <v-row>
+                      <v-btn text value="Mon">Mon</v-btn>
+                      <v-btn text value="Tue">Tue</v-btn>
+                      <v-btn text value="Wed">Wed</v-btn>
+                      <v-btn text value="Thu">Thu</v-btn>
+                      <v-btn text value="Fri">Fri</v-btn>
+                      <v-btn text value="Sat">Sat</v-btn>
+                      <v-btn text value="Sun">Sun</v-btn>
+                    </v-row>
                   </v-btn-toggle>
                 </v-col>
               </v-row>
               <!-- 카테고리 -->
-              <v-row> </v-row>
+              <v-row justify="end">
+                <v-btn class="mr-2" style="width:80px" @click="detailSearch"
+                  >검색</v-btn
+                >
+              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -170,8 +177,7 @@
       <v-list
         v-infinite-scroll="loadMore"
         :infinite-scroll-disabled="busy"
-        infinite-scroll-distance="20"
-        v-if="displayItems.length > 0"
+        infinite-scroll-distance="10"
       >
         <v-list-group
           v-for="item in displayItems"
@@ -307,10 +313,8 @@ export default {
       starttime: "",
       endtime: "",
       dayofweek: [],
-      duration: "",
-      tags: "",
-      minorClass: "",
-      goal: ""
+      major: -1,
+      minor: -1,
     },
     items: [],
     copyItems: [],
@@ -322,9 +326,9 @@ export default {
     major: -1,
     minor: -1,
     majorItems: [],
-    minorItems: [],
+    minorItems: []
   }),
-  props:['id'],
+  props: ["id"],
   components: {
     GroupModal: () => import("@/components/study/GroupModal"),
     Timeselector
@@ -417,6 +421,52 @@ export default {
 
     modalClose() {
       this.groupModal = false;
+    },
+
+    detailSearch() {
+      this.busy = true;
+      this.displayItems = [];
+      this.copyItems = [];
+      this.noResult = false;
+      for (var item of this.items) {
+        
+        if (item.name.includes(this.searchInput)
+        && (this.searchForm.major == -1 || item.minor_class.major_class_id == this.searchForm.major)
+        && (this.searchForm.minor == -1 || item.minor_class.id == this.searchForm.minor)
+        && (this.searchForm.startdate == '' || this.dateCompare(item.start_date, this.searchForm.start_date))
+        && (this.searchFrom.starttime == '' || this.timeCompare(item.start_time, this.searchForm.starttime))
+        && (this.searchForm.endtime == '' || this.timeCompare(item.end_time, this.searchForm.endtime))) {
+          this.copyItems.push(item);
+        }
+      }
+      let len = this.copyItems.length < 20 ? this.copyItems.length : 20;
+      for (var i = 0; i < len; i++) {
+        this.displayItems.push(this.copyItems.shift());
+      }
+    },
+
+    dateCompare(d1, d2){
+      var arr1 = d1.split('-')
+      var arr2 = d2.split('-')
+      var d1_year = arr1[0]
+      var d2_year = arr2[0]
+      var d1_month = arr1[1]
+      var d2_month = arr2[1]
+      var d1_day = arr1[2]
+      var d2_day = arr2[2]
+      if(d1_year > d2_year){
+        return true;
+      }else if(d1_year == d2_year){
+        if(d1_month > d2_month){
+          return true;
+        }else if(d1_month == d2_month){
+          if(d1_day > d2_day){
+            return true;
+          }
+        }
+      }
+      console.log(arr1, arr2)
+      return false;
     }
   },
   filters: {
@@ -434,7 +484,7 @@ export default {
       return value;
     }
   },
-  async mounted(){
+  async mounted() {
     this.majorItems = [];
     const getMajorRes = await this.$store.dispatch("study/getMajorClass"); //await api.getMajorClasses();
     for (let i = 0; i < getMajorRes.length; i++) {
@@ -445,7 +495,8 @@ export default {
       });
     }
 
-    this.loadDeaultList();
+    await this.loadDeaultList();
+    console.log(this.items)
   }
 };
 </script>
