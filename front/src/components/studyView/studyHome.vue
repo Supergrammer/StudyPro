@@ -7,9 +7,18 @@
         </v-card>
       </v-col>
       <v-col cols="3">
+        <v-row no-gutters>
+          <v-col>
         <v-card outlined>
           <study-profile />
         </v-card>
+          </v-col>
+          <v-col>
+            <v-card outlined>
+              <study-todo-list/>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-card>
@@ -20,8 +29,8 @@ export default {
   components: {
     StudyMiniBoard: () =>
       import("@/components/studyView/module/StudyMiniBoard"),
-    // StudyTodoList: () =>
-    //   import("@/components/studydetail/groupHome/StudyTodoList"),
+    StudyTodoList: () =>
+      import("@/components/studyView/module/StudyTodoList"),
     StudyProfile: () =>
       import("@/components/studyView/module/StudyProfile")
   }

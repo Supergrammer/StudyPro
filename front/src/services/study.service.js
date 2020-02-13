@@ -55,6 +55,30 @@ class StudyService {
             comment:payload.comment
         })
     }
+
+    getApplyList(payload){
+        console.log(payload)
+        return axios.get(URL+"apply", {
+            params:{
+                study_id:payload.study_id
+            }
+        })
+    }
+
+    joinStudy(payload){
+        //accept ==> true/false
+        return axios.post(URL+"join", {
+            apply_id:payload.apply_id,
+            accept:payload.accept
+        })
+    }
+
+    getjoinedUser(payload){
+        return axios.get(URL + "join", {
+            params:{
+            study_id:payload.study_id}
+        })
+    }
 }
 
 export default new StudyService()

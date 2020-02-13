@@ -40,7 +40,6 @@
     </v-navigation-drawer>
 
     <v-card flat>
-      <span>안녕하세요</span>
       <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7"></v-img>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
@@ -53,7 +52,7 @@
 
 <script>
 export default {
-  props: [ "study_id" ],
+  props: ["study_id"],
   data() {
     return {
       menus: [
@@ -79,7 +78,13 @@ export default {
             params: { board_name: "study" }
           }
         },
-        { icon: "group", title: "스터디 멤버" },
+        {
+          icon: "group",
+          title: "스터디 멤버",
+          route: {
+            routes: "study_member"
+          }
+        }
       ]
     };
   },
@@ -101,8 +106,11 @@ export default {
       this.$router.push({ name: route.routes, params: route.params });
     },
     toWorkspace() {
-      let workspace = this.$router.resolve({ name: "workspace", params: { study_id: this.study_id } });
-      window.open(workspace.href, 'WORKSPACE', 'a');
+      let workspace = this.$router.resolve({
+        name: "workspace",
+        params: { study_id: this.study_id }
+      });
+      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
     }
   }
 };

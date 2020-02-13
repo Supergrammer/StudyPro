@@ -182,16 +182,16 @@ export default {
       usermenu: false,
       menus: [
         { icon: "home", title: "홈", route: "/home" },
-        { icon: "group", title: "스터디검색", route: "/study/search" },
+        { icon: "group", title: "스터디", route: "/study/search" },
         { icon: "library_books", title: "게시판", route: "/board/share" },
-        { icon: "date_range", title: "일정관리", route: "/calendar/mycal" },
-        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
+        { icon: "date_range", title: "일정", route: "/calendar/mycal" },
+        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" },
       ],
       navigations: [
         { title: "스터디 홈", route: "/home" },
-        { title: "스터디 검색", route: "/study/search" },
+        { title: "스터디", route: "/study/search" },
         { title: "게시판", route: "/board/share" },
-        { title: "일정 관리", route: "/calendar/mycal" },
+        { title: "일정", route: "/calendar/mycal" },
         { title: "내 정보", route: "/user/mypage" }
       ],
       userpages: [

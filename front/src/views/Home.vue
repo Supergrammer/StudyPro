@@ -8,10 +8,11 @@
         <top-left />
       </v-col>
       <v-col lg="3" class="d-none d-lg-block">
-        <v-card class="pa-1" outlined tile>
+        <v-card class="pa-1 pt-9" outlined tile>
           <top-right />
         </v-card>
       </v-col>
+      
     </v-row>
 
     <v-row>

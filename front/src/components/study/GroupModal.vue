@@ -172,7 +172,7 @@
             color="primary--text transparent"
             elevation="0"
             @click="regGroup"
-            >가입하기</v-btn
+            >가입신청</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -201,9 +201,13 @@ export default {
   },
   methods: {
     regGroup() {
+      //console.log(this.studyInfo.id);
+      
       StudyService.applyStudy({
         study_id:this.studyInfo.id,
         comment:this.greetComment,
+      }).then(res => {
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA", res)
       })
     }
   },
