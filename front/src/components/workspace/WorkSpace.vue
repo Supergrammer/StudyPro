@@ -1,5 +1,4 @@
 <template>
-  <!-- <v-container fluid ma-0 pa-0 fill-height> -->
   <v-card @keyup="help" id="workspace_card" class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
     <v-row class="my-0 py-0">
       <v-col :cols="talk ? 9 : 12" id="col" class="py-1 pr-1">
@@ -126,7 +125,6 @@
       </v-img>
     </v-overlay>
   </v-card>
-  <!-- </v-container> -->
 </template>
 
 <script>
@@ -174,11 +172,10 @@ export default {
           user_nickname: this.$store.getters["auth/getUser"].nickname,
           user_profile_url: this.$store.getters["auth/getUser"].profile_url
         };
-    console.log(this.$store.getters["auth/getUser"]);
     this.study_id = window.location.href.split("workspace/")[1];
-    // this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
-    this.socket = io.connect(
-      `http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+    // this.socket = io.connect(
+    //   `http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
       {
         // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
         // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
@@ -206,7 +203,7 @@ export default {
     };
 
     this.socket.on("alreadyexist", () => {
-      alert("못들어온단다 아가야");
+      alert("스터디룸이 꽉 찼습니다.");
       window.opener.closechild();
     });
   },
