@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import boardList from "@/components/ViewTest/board_study/board_list";
+import boardList from "@/components/studyView/board_study/board_list";
 
 export default {
   data() {

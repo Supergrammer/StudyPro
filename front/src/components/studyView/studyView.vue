@@ -1,5 +1,5 @@
 <template>
-  <v-content id="study">
+  <v-content id="study" class="pa-0">
     <v-navigation-drawer absolute permanent expand-on-hover>
       <v-list>
         <v-list-item class>
@@ -14,6 +14,12 @@
             <v-icon medium>{{ menu.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-title>{{ menu.title }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="toWorkspace">
+          <v-list-item-icon>
+            <v-icon medium>developer_board</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>WorkSpace</v-list-item-title>
         </v-list-item>
       </v-list>
       <v-divider class="mx-3" />
@@ -47,6 +53,7 @@
 
 <script>
 export default {
+  props: [ "study_id" ],
   data() {
     return {
       menus: [
@@ -61,7 +68,7 @@ export default {
           icon: "date_range",
           title: "일정 관리",
           route: {
-            routes: "study_calendar"
+            routes: "study_schedule"
           }
         },
         {
@@ -73,8 +80,13 @@ export default {
           }
         },
         { icon: "group", title: "스터디 멤버" },
-        { icon: "developer_board", title: "WorkSpace" }
       ]
+    };
+  },
+
+  created() {
+    window.closechild = () => {
+      this.workspace.close();
     };
   },
 
@@ -87,6 +99,10 @@ export default {
   methods: {
     routeTo(route) {
       this.$router.push({ name: route.routes, params: route.params });
+    },
+    toWorkspace() {
+      let workspace = this.$router.resolve({ name: "workspace", params: { study_id: this.study_id } });
+      window.open(workspace.href, 'WORKSPACE', 'a');
     }
   }
 };

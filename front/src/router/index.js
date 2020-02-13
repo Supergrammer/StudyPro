@@ -22,9 +22,9 @@ import signupSuccess from '@/components/user/SignupSuccess'
 import mypage from '@/components/user/Mypage'
 
 // 스터디페이지
-import study from '@/views/Study'
+import studySearch from '@/views/Study'
 import search from '@/components/study/StudyMain'
-import studydetail from '@/components/studydetail/MainStudyDetail'
+// import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
 
 //쪽지함 접근(임시)
@@ -35,190 +35,183 @@ import calendar from '@/views/Calendar'
 import mycal from '@/components/calendar/MyCalendar'
 
 // test
-import studyView from '@/components/ViewTest/studyView'
-import studyHome from '@/components/ViewTest/studyHome'
-import studyCalendar from '@/components/ViewTest/studyCalendar'
-import studyBoard from '@/components/ViewTest/board_study/board'
-import studyRegister from '@/components/ViewTest/board_study/post_register'
-import studyModify from '@/components/ViewTest/board_study/post_modify'
-import boardContents from '@/components/ViewTest/board_study/post_content'
+import studyView from '@/components/studyView/studyView'
+import studyHome from '@/components/studyView/studyHome'
+import studySchedule from '@/components/studyView/studySchedule'
+import studyBoard from '@/components/studyView/board_study/board'
+import studyRegister from '@/components/studyView/board_study/post_register'
+import studyModify from '@/components/studyView/board_study/post_modify'
+import boardContents from '@/components/studyView/board_study/post_content'
 
 Vue.use(VueRouter)
 
-const routes = [{
-    path: '/test/:study_id',
-    name: 'study_main',
-    components: {
-        header: appHeader,
-        default: studyView,
-        footer: appFooter,
+const routes = [
+    {
+        path: '/',
+        name: 'intro',
+        components: {
+            header: null,
+            default: intro,
+            footer: null
+        }
     },
-    props: true,
-    children: [{
-        path: 'home',
-        name: 'study_home',
-        component: studyHome,
+
+    {
+        path: '/home',
+        name: 'home',
+        components: {
+            header: appHeader,
+            default: home,
+            footer: appFooter,
+        }
     },
     {
-        path: 'calendar',
-        name: 'study_calendar',
-        component: studyCalendar,
+        path: '/study',
+        name: 'study',
+        components: {
+            header: appHeader,
+            default: studySearch,
+            footer: appFooter
+        },
+        children: [{
+            path: 'search',
+            name: 'search',
+            component: search,
+        },
+        {
+            path: ':study_id',
+            name: 'study_main',
+            component: studyView,
+            props: true,
+            children: [{
+                path: 'home',
+                name: 'study_home',
+                component: studyHome,
+            },
+            {
+                path: 'schedule',
+                name: 'study_schedule',
+                component: studySchedule,
+            },
+            {
+                path: 'board/register',
+                name: 'study_register',
+                component: studyRegister,
+                props: true,
+            },
+            {
+                path: 'board/modify',
+                name: 'study_modify',
+                component: studyModify,
+                props: true,
+            },
+            {
+                path: 'board/:board_name',
+                name: 'study_board',
+                component: studyBoard,
+                props: true,
+                children: [{
+                    path: '?post_id=:post_id',
+                    name: 'board_contents',
+                    component: boardContents,
+                    props: true,
+                }]
+            }]
+
+        },
+        ]
     },
     {
-        path: 'board/register',
-        name: 'study_register',
-        component: studyRegister,
+        path: '/workspace/:study_id',
+        name: 'workspace',
+        components: {
+            header: null,
+            default: workspace,
+            footer: null
+        }
+    },
+    {
+        path: '/board/register',
+        name: 'post_register',
+        components: {
+            header: appHeader,
+            default: postRegister,
+            footer: appFooter
+        },
+    },
+    {
+        path: '/board/modify',
+        name: 'post_modify',
+        components: {
+            header: appHeader,
+            default: postModify,
+            footer: appFooter
+        },
         props: true,
     },
     {
-        path: 'board/modify',
-        name: 'study_modify',
-        component: studyModify,
-        props: true,
-    },
-    {
-        path: 'board/:board_name',
-        name: 'study_board',
-        component: studyBoard,
+        path: '/board/:board',
+        name: 'board',
+        components: {
+            header: appHeader,
+            default: board,
+            footer: appFooter,
+        },
         props: true,
         children: [{
-            path: '?post_id=:post_id',
-            name: 'board_contents',
-            component: boardContents,
+            path: '?id=:post_id',
+            name: 'post_id',
+            component: postContent,
             props: true,
         }]
-    }]
-},
-{
-    path: '/',
-    name: 'intro',
-    components: {
-        header: null,
-        default: intro,
-        footer: null
-    }
-},
+    },
+    {
+        path: '/user',
+        name: 'user',
+        components: {
+            header: appHeader,
+            default: user,
+            footer: appFooter
+        },
+        children: [{
+            path: 'mypage',
+            component: mypage
+        },
+        {
+            path: 'signup',
+            name: 'signup',
+            component: signup
+        },
+        {
+            path: 'signup/success',
+            component: signupSuccess
+        },
+        ]
+    },
+    {
+        path: '/msgbox',
+        name: 'msgbox',
+        components: {
+            header: appHeader,
+            default: msgbox,
+            footer: appFooter
+        }
+    },
 
-{
-    path: '/home',
-    name: 'home',
-    components: {
-        header: appHeader,
-        default: home,
-        footer: appFooter,
-    }
-},
-{
-    path: '/study',
-    name: 'study',
-    components: {
-        header: appHeader,
-        default: study,
-        footer: appFooter
-    },
-    children: [{
-        path: 'search',
-        name: 'search',
-        component: search,
-    },
     {
-        path: ':id',
-        name: 'studydetail',
-        component: studydetail,
-    },
-    ]
-},
-{
-    path: '/workspace/:id',
-    name: 'workspace',
-    components: {
-        header: null,
-        default: workspace,
-        footer: null
-    }
-},
-{
-    path: '/board/register',
-    name: 'post_register',
-    components: {
-        header: appHeader,
-        default: postRegister,
-        footer: appFooter
-    },
-},
-{
-    path: '/board/modify',
-    name: 'post_modify',
-    components: {
-        header: appHeader,
-        default: postModify,
-        footer: appFooter
-    },
-    props: true,
-},
-{
-    path: '/board/:board',
-    name: 'board',
-    components: {
-        header: appHeader,
-        default: board,
-        footer: appFooter,
-    },
-    props: true,
-    children: [{
-        path: '?id=:post_id',
-        name: 'post_id',
-        component: postContent,
-        props: true,
+        path: '/calendar',
+        name: 'calendar',
+        components: {
+            header: appHeader,
+            default: calendar,
+            footer: appFooter
+        },
+        children: [{
+            path: 'mycal',
+            name: 'mycal',
+            component: mycal,
+        }]
     }]
-},
-{
-    path: '/user',
-    name: 'user',
-    components: {
-        header: appHeader,
-        default: user,
-        footer: appFooter
-    },
-    children: [{
-        path: 'mypage',
-        component: mypage
-    },
-    {
-        path: 'signup',
-        name: 'signup',
-        component: signup
-    },
-    {
-        path: 'signup/success',
-        component: signupSuccess
-    },
-    ]
-},
-{
-    path: '/msgbox',
-    name: 'msgbox',
-    components: {
-        header: appHeader,
-        default: msgbox,
-        footer: appFooter
-    }
-},
-
-{
-    path: '/calendar',
-    name: 'calendar',
-    components: {
-        header: appHeader,
-        default: calendar,
-        footer: appFooter
-    },
-    children: [{
-        path: 'mycal',
-        name: 'mycal',
-        component: mycal,
-    }]
-}]
 
 const router = new VueRouter({
     mode: 'history',

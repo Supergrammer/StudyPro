@@ -19,11 +19,11 @@
 export default {
   components: {
     StudyMiniBoard: () =>
-      import("@/components/studydetail/groupHome/StudyMiniBoard"),
+      import("@/components/studyView/module/StudyMiniBoard"),
     // StudyTodoList: () =>
     //   import("@/components/studydetail/groupHome/StudyTodoList"),
     StudyProfile: () =>
-      import("@/components/studydetail/groupHome/StudyProfile")
+      import("@/components/studyView/module/StudyProfile")
   }
 };
 </script>

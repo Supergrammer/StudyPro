@@ -75,7 +75,7 @@ export default {
   methods: {
     clicked(event) {
       console.log(event);
-      this.$router.push({ name: "studydetail", params: { id: event.id } });
+      this.$router.push({ name: "study_home", params: { study_id: event.id } });
     }
   }
 };
