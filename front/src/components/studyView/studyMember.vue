@@ -4,25 +4,6 @@
       <v-toolbar elevation="0" style="border-bottom: 5px solid #736C70;">
         <v-toolbar-title>가입 요청 목록</v-toolbar-title>
       </v-toolbar>
-      <!-- <v-list-item>
-      <v-row style="border-bottom: 5px solid #1C6EA4;">
-        <v-col align="center" cols="1">
-          <span>사진</span>
-        </v-col>
-
-        <v-col align="center" cols="3">
-          <span>닉네임</span>
-        </v-col>
-
-        <v-col align="center" cols="2">
-          <span>성별</span>
-        </v-col>
-
-        <v-col align="center" cols="6">
-          <span>이메일 주소</span>
-        </v-col>
-      </v-row>
-    </v-list-item> -->
 
       <v-list-item v-for="newbie in newbieList" :key="newbie.id">
         <v-row style="border-bottom: 1px solid #E5C1D4;">
@@ -40,7 +21,7 @@
 
           <v-col align="center" cols="1">
             <p style="font-size:14px" class="ma-0 pt-2">
-              {{ newbie.user.gender }}
+              {{ newbie.user.gender == "M" ? "남성" : "여성" }}
             </p>
           </v-col>
 
@@ -51,7 +32,7 @@
           </v-col>
 
           <v-col align="center" cols="1">
-            <v-icon @click="viewGreeting(newbie.user)" color="black"
+            <v-icon @click="viewGreeting(newbie)" color="black"
               >more_horiz</v-icon
             >
           </v-col>
@@ -114,7 +95,7 @@
 
           <v-col align="center" cols="1">
             <p style="font-size:14px" class="ma-0 pt-2">
-              {{ member.gender }}
+              {{ member.gender == "M" ? "남성" : "여성" }}
             </p>
           </v-col>
 
@@ -125,9 +106,9 @@
           </v-col>
 
           <v-col align="center" cols="3">
-            <v-icon @click="viewGreeting(member)" color="black"
+            <!-- <v-icon @click="viewGreeting(member)" color="black"
               >more_horiz</v-icon
-            >
+            > -->
           </v-col>
         </v-row>
       </v-list-item>
@@ -188,6 +169,7 @@ export default {
       StudyService.getApplyList({ study_id: this.study_id }).then(
         newbieList => {
           this.newbieList = newbieList.data;
+          console.log(newbieList)
         }
       );
     },
@@ -195,9 +177,10 @@ export default {
       StudyService.getjoinedUser({ study_id: this.study_id }).then(
         memberList => {
           this.memberList = memberList.data;
+          console.log(memberList)
         }
       );
-    }
+    },
   }
 };
 </script>
