@@ -72,7 +72,6 @@ export default {
   methods: {
     clicked(event) {
       this.$router.push({ name: "study_home", params: { study_id: event.id } });
-      this.$router.push({ name: "studydetail", params: { id: event.id } });
     },
     getTime(start, end) {
       var s_hour = Math.floor(start / 100);
