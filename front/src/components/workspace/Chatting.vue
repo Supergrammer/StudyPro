@@ -14,12 +14,11 @@
         </v-list>
       </v-card>
       <v-text-field
-        class="mt-3 mb-2"
+        class="mt-3 mb-2 ml-1"
         outlined
         dense
         v-model="message"
         append-outer-icon="mdi-send"
-        :prepend-icon="icon"
         clear-icon="mdi-close-circle"
         clearable
         hide-details
@@ -46,23 +45,6 @@ export default {
       message: "",
       messages: [],
       length: 0,
-      iconIndex: 0,
-      icons: [
-        "mdi-emoticon",
-        "mdi-emoticon-cool",
-        "mdi-emoticon-dead",
-        "mdi-emoticon-devil",
-        "mdi-emoticon-excited",
-        "mdi-emoticon-happy",
-        "mdi-emoticon-neutral",
-        "mdi-emoticon-poop",
-        "mdi-emoticon-sad",
-        "mdi-emoticon-tongue",
-        "mdi-heart",
-        "mdi-star",
-        "mdi-cached",
-        "mdi-thumb-up"
-      ]
     };
   },
   methods: {
@@ -115,7 +97,7 @@ export default {
     })
     this.socket.on("leave", data => {
       this.prvUsr = '공지'
-      const message = data.user_id === this.user.user_id ? '스터디룸에 입장하였습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
+      const message = data.user_id === this.user.user_id ? '스터디룸을 나갔습니다' : `${data.user_nickname} 님이 퇴장하였습니다`
       this.messages.push(['', [message]])
     })
   }
@@ -132,8 +114,6 @@ export default {
   }
   .chat {
     margin-top: 5px;
-    /* padding-top: 3px;
-    padding-bottom: 3px; */
     padding: 4px 6px 4px 6px;
   }
 </style>

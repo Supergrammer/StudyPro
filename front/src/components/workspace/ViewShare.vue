@@ -114,7 +114,6 @@ export default {
       t_img.style.zIndex = 1;
       t_img.style.top = i ? "10%" :"30%"
       t_img.style.left = i ? "23%" : "30%"
-      console.log(i)
       if (i != 0) {t_img.style.width = "50%"}
       return t_img;
     }
@@ -182,11 +181,7 @@ export default {
                 from: this.user.user_id,
                 to: user_id
               });
-            },
-            e => {
-              console.log(e);
-            }
-          );
+            }, e => console.log(e));
         });
       }, 1000);
     });

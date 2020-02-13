@@ -1,7 +1,7 @@
 <template>
   <v-content id="boardRegister">
     <v-row justify="center">
-      <v-col cols="12" md="10">
+      <v-col cols="11">
         <v-card class="pa-5">
           <v-flex class="ma-2 mb-5">
             <v-icon large class="mr-2" color="black">edit</v-icon>새 글 작성
@@ -145,21 +145,23 @@ Vue.use(TiptapVuetifyPlugin, {
 });
 
 export default {
+  props: [ "study_id" ],
   components: {
     TiptapVuetify,
     requestSignin: () => import("@/components/base/RequestSignin")
   },
   data() {
     return {
-      items: ["share", "free"],
+      items: ["study", "free"],
       dialog: false,
 
       postData: {
-        type: "common",
+        type: "study",
+        study_id: "",
         writer: "",
         title: "",
         content: "",
-        board: "share"
+        board: "study"
       },
 
       files: [],
@@ -193,6 +195,7 @@ export default {
       ]
     };
   },
+
   computed: {
     isAuth() {
       return this.$store.getters["auth/isAuth"];
@@ -200,7 +203,15 @@ export default {
   },
 
   methods: {
+    async getPost() {
+      const post = await PostService.getPostContents({
+        type: "study",
+        post_id: this.post_id
+      });
+      this.postData = post.data;
+    },
     create() {
+      this.postData.study_id = this.study_id;
       this.postData.writer = this.getUser().uid;
       PostService.createPost(this.postData);
       this.$router.go(-1);

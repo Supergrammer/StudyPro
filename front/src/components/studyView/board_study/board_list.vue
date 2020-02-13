@@ -5,7 +5,7 @@
       {{ menuText }}
       <v-btn
         style="float: right;"
-        to="/board/register"
+        @click="register"
         class="mx-1 green white--text"
         v-show="showBtn"
       >
@@ -69,7 +69,7 @@
         <v-pagination v-model="page" :length="lastpage" :total-visible="10"></v-pagination>
         <v-btn
           style="float: right;"
-          to="/board/register"
+          @click="register"
           class="mx-1 green white--text"
           v-show="showBtn"
         >
@@ -84,12 +84,11 @@
 import PostService from "@/services/post.service";
 
 export default {
-  props: ["board"],
+  props: [ "board_name", "study_id" ],
   data() {
     return {
-      board_name: "share",
       menuIcon: "menu_book",
-      menuText: "정보 공유",
+      menuText: "스터디 게시판",
 
       page: 1,
       lastpage: 1,
@@ -97,7 +96,7 @@ export default {
       post_list: [],
 
       menus: [
-        { icon: "menu_book", text: "정보 공유", route: "share" },
+        { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
         { icon: "notifications_none", text: "공지사항", route: "notice" }
       ]
@@ -106,8 +105,7 @@ export default {
 
   created() {
     this.postUpdate();
-    this.board_name = this.board;
-
+    this.board = this.board;
     if (this.$router.params && this.$router.params.post_id) {
       this.routeTo(this.$router.params.post_id);
     }
@@ -116,8 +114,8 @@ export default {
     page() {
       this.postUpdate();
     },
-    board() {
-      this.board_name = this.board;
+    board_name() {
+      this.postUpdate();
       for (let i = 0; i < this.menus.length; i++) {
         if (this.menus[i].route === this.board_name) {
           this.menuIcon = this.menus[i].icon;
@@ -125,12 +123,6 @@ export default {
         }
       }
       this.page = 1;
-    },
-    board_name() {
-      this.postUpdate();
-    },
-    $route() {
-      this.postUpdate();
     }
   },
   computed: {
@@ -147,27 +139,33 @@ export default {
   methods: {
     async postUpdate() {
       const post_num = await PostService.getPostNumber({
-        type: "common",
+        type: "study",
         board: this.board_name,
+        study_id: this.study_id,
       });
       this.lastpage =
         parseInt(post_num.data.post_number / 10) +
         (post_num.data.post_number % 10 === 0 ? 0 : 1);
-      
-      if (this.lastpage === 0) this.lastpage = 1;
 
       const post_list = await PostService.getAllPost({
-        type: "common",
+        type: "study",
         board: this.board_name,
+        study_id: this.study_id,
         offset: (this.page - 1) * 10
       });
       this.post_list = post_list.data;
     },
     routeTo(post_id) {
       this.$router.push({
-        name: "post_id",
-        params: { post_id: post_id, board: this.board }
+        name: "board_contents",
+        params: { post_id: post_id }
       });
+    },
+    register() {
+      this.$router.push({
+        name: "study_register",
+        params: { study_id: this.study_id },
+      })
     }
   }
 };

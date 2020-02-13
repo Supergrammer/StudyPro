@@ -29,7 +29,7 @@
             </v-col>
             <v-col>
               <v-card class="ma-2">
-                <boardList :board="boardList" />
+                <boardList :board_name="boardList" :study_id="$route.params.study_id" />
               </v-card>
             </v-col>
           </v-row>
@@ -40,15 +40,12 @@
 </template>
 
 <script>
-import boardList from "@/components/board/board_list";
+import boardList from "@/components/studyView/board_study/board_list";
 
 export default {
-  name: "board",
   data() {
     return {
-      defaultRoute: "/board/",
       board_list: "study",
-
       menus: [
         { icon: "menu_book", text: "스터디 게시판", route: "study" },
         { icon: "style", text: "자유 게시판", route: "free" },
@@ -58,8 +55,8 @@ export default {
   },
 
   created() {
-    if (this.$route.params.board) {
-      this.board_list = this.$route.params.board;
+    if (this.$route.params.board_name) {
+      this.board_list = this.$route.params.board_name;
     }
   },
 
@@ -71,15 +68,15 @@ export default {
 
   watch: {
     $route() {
-      if (this.$route.params.board !== null) {
-        this.board_list = this.$route.params.board;
+      if (this.$route.params.board_name !== null) {
+        this.board_list = this.$route.params.board_name;
       }
     }
   },
 
   methods: {
     routeTo(route) {
-      this.$router.push({ name: "board", params: { board: route } });
+      this.$router.push({ name: "study_board", params: { board_name: route } });
     }
   },
 

@@ -79,6 +79,7 @@ export default {
   },
   methods: {
     redrawing(e) {
+
       let temp_btn = e.target
       let i = temp_btn.id[14]
 
@@ -114,8 +115,6 @@ export default {
         this.video_streamings[i] = !this.video_streamings[i]
         temp_btn.src = this.video_streamings[i] ? this.camera_on_img : this.camera_off_img
       }
-
-
     },
 
     mute(e) {
@@ -125,7 +124,6 @@ export default {
       temp_btn.src = this.video_mutes[i] ? this.mute_img : this.volume_img
       this.remote_videos[i].childNodes[0].muted = this.video_mutes[i]
     },
-    // FaceTalk
 
     sendMessage(message) {
       this.socket.emit("message", message);
@@ -142,7 +140,6 @@ export default {
       if (!this.connected_users[i]) return
 
       this.show_profile_id = this.connected_users[i]
-      console.log(this.show_profile_id)
       this.profile.showProfile = false;
       this.profile.x = e.clientX;
       this.profile.y = e.clientY;
@@ -221,9 +218,7 @@ export default {
 
 
         const remote_block = this.remote_videos[video_num]
-      
         while(remote_block.firstChild) remote_block.removeChild(remote_block.lastChild)
-
         remote_block.appendChild(remote_video)
         remote_block.appendChild(mute_button)
         remote_block.appendChild(camera_button)
@@ -231,8 +226,8 @@ export default {
         mute_button.onclick = this.mute
       }
 
-
       t_pc.addStream(this.local_stream);
+
       return t_pc;
     },
 
@@ -261,18 +256,16 @@ export default {
       eye.style.zIndex = "3"
       eye.style.opacity = "0.4"
 
-
       return eye
     }
   },
 
   created() {
-    console.log("내아이디 : ", this.user.user_id, '내 닉네임');
+    console.log("내아이디 : ", this.user.user_id, '내 닉네임 : ', this.user.user_nickname);
     this.mute_img = require("../../assets/images/mute.png")
     this.volume_img = require("../../assets/images/volume.png")
     this.camera_off_img = require("../../assets/images/camera_off.png")
     this.camera_on_img = require("../../assets/images/camera_on.png")
-    // this.no_signal_img = require('../../assets/images/no_signal.jpg')
     this.no_signal_img = 'http://15.164.245.201:8000/images/profile_default.png'
     this.user_profiles[0] = this.user.user_profile_url
   },
@@ -325,8 +318,8 @@ export default {
           }, e => {console.log(e)})
         })      
       }, (1000));
-
     })
+
     this.socket.on('leave', message => {
       const video_num = this.connected_users.indexOf(message.user_id)
       this.deleteBorder(video_num, this.sharing_id)

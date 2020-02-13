@@ -22,9 +22,9 @@ import signupSuccess from '@/components/user/SignupSuccess'
 import mypage from '@/components/user/Mypage'
 
 // 스터디페이지
-import study from '@/views/Study'
+import studySearch from '@/views/Study'
 import search from '@/components/study/StudyMain'
-import studydetail from '@/components/studydetail/MainStudyDetail'
+// import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
 
 //쪽지함 접근(임시)
@@ -34,9 +34,23 @@ import msgbox from '@/components/user/messenger/MessageHome'
 import calendar from '@/views/Calendar'
 import mycal from '@/components/calendar/MyCalendar'
 
+// test
+import studyView from '@/components/studyView/studyView'
+import studyHome from '@/components/studyView/studyHome'
+import studySchedule from '@/components/studyView/studySchedule'
+import studyMember from '@/components/studyView/studyMember'
+import studyBoard from '@/components/studyView/board_study/board'
+import studyRegister from '@/components/studyView/board_study/post_register'
+import studyModify from '@/components/studyView/board_study/post_modify'
+import boardContents from '@/components/studyView/board_study/post_content'
+
+// 에러 페이지
+import NotFound from '@/views/NotFound'
+
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+    {
         path: '/',
         name: 'intro',
         components: {
@@ -59,27 +73,65 @@ const routes = [{
         name: 'study',
         components: {
             header: appHeader,
-            default: study,
+            default: studySearch,
             footer: appFooter
         },
         children: [{
-                path: 'search',
-                name: 'search',
-                component: search,
+            path: 'search',
+            name: 'search',
+            component: search,
+        },
+        {
+            path: ':study_id',
+            name: 'study_main',
+            component: studyView,
+            props: true,
+            children: [{
+                path: 'home',
+                name: 'study_home',
+                component: studyHome,
             },
             {
-                path: 'mygroups',
-                name: 'mygroups',
-                component: search,
-            }, {
-                path: ':id',
-                name: 'studydetail',
-                component: studydetail,
+                path: 'schedule',
+                name: 'study_schedule',
+                component: studySchedule,
             },
+            {
+                path: 'member',
+                name: 'study_member',
+                component: studyMember,
+                props: true,
+            },
+            {
+                path: 'board/register',
+                name: 'study_register',
+                component: studyRegister,
+                props: true,
+            },
+            {
+                path: 'board/modify',
+                name: 'study_modify',
+                component: studyModify,
+                props: true,
+            },
+            {
+                path: 'board/:board_name',
+                name: 'study_board',
+                component: studyBoard,
+                props: true,
+                children: [{
+                    path: '?post_id=:post_id',
+                    name: 'board_contents',
+                    component: boardContents,
+                    props: true,
+                }]
+            }]
+
+        },
         ]
     },
     {
-        path: '/workspace/:id',
+        path: '/workspace/:study_id',
         name: 'workspace',
         components: {
             header: null,
@@ -131,18 +183,18 @@ const routes = [{
             footer: appFooter
         },
         children: [{
-                path: 'mypage',
-                component: mypage
-            },
-            {
-                path: 'signup',
-                name: 'signup',
-                component: signup
-            },
-            {
-                path: 'signup/success',
-                component: signupSuccess
-            },
+            path: 'mypage',
+            component: mypage
+        },
+        {
+            path: 'signup',
+            name: 'signup',
+            component: signup
+        },
+        {
+            path: 'signup/success',
+            component: signupSuccess
+        },
         ]
     },
     {
@@ -154,7 +206,6 @@ const routes = [{
             footer: appFooter
         }
     },
-
     {
         path: '/calendar',
         name: 'calendar',
@@ -168,6 +219,15 @@ const routes = [{
             name: 'mycal',
             component: mycal,
         }]
+    },
+    {
+        path: '*',
+        name: 'not_found',
+        components: {
+            header: appHeader,
+            default: NotFound,
+            footer: appFooter,
+        }
     }
 ]
 

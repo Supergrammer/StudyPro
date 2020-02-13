@@ -246,7 +246,7 @@ export default {
     delOpen: false
   }),
   components: {
-    studyCalModal: () => import("./StudyCalModal"),
+    studyCalModal: () => import("@/components/studyView/studyCalModal"),
     requestSignin: () => import("@/components/base/RequestSignin")
   },
   computed: {
