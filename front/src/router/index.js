@@ -38,10 +38,14 @@ import mycal from '@/components/calendar/MyCalendar'
 import studyView from '@/components/studyView/studyView'
 import studyHome from '@/components/studyView/studyHome'
 import studySchedule from '@/components/studyView/studySchedule'
+import studyMember from '@/components/studyView/studyMember'
 import studyBoard from '@/components/studyView/board_study/board'
 import studyRegister from '@/components/studyView/board_study/post_register'
 import studyModify from '@/components/studyView/board_study/post_modify'
 import boardContents from '@/components/studyView/board_study/post_content'
+
+// 에러 페이지
+import NotFound from '@/views/NotFound'
 
 Vue.use(VueRouter)
 
@@ -55,7 +59,6 @@ const routes = [
             footer: null
         }
     },
-
     {
         path: '/home',
         name: 'home',
@@ -94,9 +97,9 @@ const routes = [
                 component: studySchedule,
             },
             {
-                path: 'mygroups',
-                name: 'mygroups',
-                component: search,
+                path: 'member',
+                name: 'study_member',
+                component: studyMember,
             },
             {
                 path: 'board/register',
@@ -202,7 +205,6 @@ const routes = [
             footer: appFooter
         }
     },
-
     {
         path: '/calendar',
         name: 'calendar',
@@ -216,7 +218,17 @@ const routes = [
             name: 'mycal',
             component: mycal,
         }]
-    }]
+    },
+    {
+        path: '*',
+        name: 'not_found',
+        components: {
+            header: appHeader,
+            default: NotFound,
+            footer: appFooter,
+        }
+    }
+]
 
 const router = new VueRouter({
     mode: 'history',
