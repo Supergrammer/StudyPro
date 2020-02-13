@@ -29,18 +29,19 @@
 
     <!-- <v-img src="@/assets/images/back11.jpg" aspect-ratio="9"/> -->
     <!-- <v-container class="mx-10"> -->
-
     <v-row justify="center">
-      <v-col cols="12" lg="9" md="12" sm="12">
+      
+      <v-col cols="11" lg="9" md="11" sm="11" class="pt-1">
         <!-- <v-card class="pa-1" outlined tile> -->
-        <top-left />
+        <top-left class="pa-0"/>
         <!-- </v-card> -->
       </v-col>
       <v-col lg="3" class="d-none d-lg-block">
-        <v-card class="pa-1" outlined tile>
+        <v-card class="pa-1 pt-9" outlined tile>
           <top-right />
         </v-card>
       </v-col>
+      
     </v-row>
 
     <v-row>
