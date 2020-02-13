@@ -1,19 +1,20 @@
 <template>
   <!-- <v-container fluid ma-0 pa-0 fill-height> -->
-  <v-card id="workspace_card" class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
+  <v-card @keyup="help" id="workspace_card" class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
     <v-row class="my-0 py-0">
       <v-col :cols="talk ? 9 : 12" id="col" class="py-1 pr-1">
         <v-tabs height="95" grow icons-and-text centered dark color="cyan">
           <v-tabs-slider color="red"></v-tabs-slider>
-          <v-tab href="#Board">
+
+          <v-tab href="#Board" @click="change_current('board')">
             WhiteBoard
             <v-icon>color_lens</v-icon>
           </v-tab>
-          <v-tab href="#ViewShare">
+          <v-tab href="#ViewShare" @click="change_current('viewshare')">
             Share View
             <v-icon>computer</v-icon>
           </v-tab>
-          <v-tab href="#NotePad">
+          <v-tab href="#NotePad" @click="change_current('notepad')">
             NotePad
             <v-icon>event_note</v-icon>
           </v-tab>
@@ -32,13 +33,6 @@
               <v-card outlined>
                 <Board :socket="socket" :study_id="study_id" />
               </v-card>
-            </v-row>
-
-            <v-row>
-              <v-card>
-                <!-- <v-img src="@assets/images/back7.jpg"></v-img> -->
-              </v-card>
-
             </v-row>
           </v-tab-item>
           <v-tab-item id="NotePad">
@@ -81,6 +75,49 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <v-overlay :value="overlay" opacity=0.15 @click="help" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+      <v-img
+      @keyup="help"
+        v-show="current==='board'"
+        id="help_img"
+        src="@/assets/images/help_board.png"
+        width="1505"
+        height="758"
+      >
+        <div class="text-end">
+          <v-btn  right icon @click="help">
+            <v-icon x-large>mdi-close</v-icon>
+          </v-btn>
+        </div>
+      </v-img>
+      <v-img
+        v-show="current==='viewshare'"
+        id="help_img"
+        src="@/assets/images/help_viewshare.png"
+        width="1505"
+        height="758"
+      >
+        <div class="text-end" >
+          <v-btn  right icon @click="help">
+            <v-icon x-large>mdi-close</v-icon>
+          </v-btn>
+        </div>
+      </v-img>
+      <v-img
+        v-show="current==='notepad'"
+        id="help_img"
+        src="@/assets/images/help_notepad.png"
+        width="1505"
+        height="758"
+      >
+        <div class="text-end" >
+          <v-btn  right icon @click="help">
+            <v-icon x-large>mdi-close</v-icon>
+          </v-btn>
+        </div>
+      </v-img>
+    </v-overlay>
   </v-card>
   <!-- </v-container> -->
 </template>
@@ -96,14 +133,14 @@ import Chatting from "@/components/workspace/Chatting";
 export default {
   data() {
     return {
-      imgs: "back7.jpg",
-      img: "../../assets/images/back7.jpg",
       tabs: null,
       socket: "",
       connected_users: [],
       sharing_id: "no one",
       debuging: true,
-      talk: true
+      talk: true,
+      current: "board",
+      overlay: false
     };
   },
 
@@ -118,27 +155,38 @@ export default {
     //   if (!window.opener) {this.$router.push({name : 'home'})}
   },
   created() {
-    //   if (!window.opener) return
-    this.user = this.debuging ? { 
-      user_id: `${Math.ceil(40 + Math.random() * 40)}`,
-      user_nickname: `${Math.ceil(Math.random() * 100000)}`,
-      user_profile_url: 'http://15.164.245.201:8000/images/profile_default.png',
-
-    } : {
-      user_id: this.$store.getters['auth/getUser'].uid,
-      user_nickname: this.$store.getters['auth/getUser'].nickname,
-      user_profile_url: this.$store.getters['auth/getUser'].profile_url,
-    }
-    this.study_id = window.location.href.split('workspace/')[1]
-    this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
-      // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+    this.user = this.debuging
+      ? {
+          user_id: `${Math.ceil(40 + Math.random() * 40)}`,
+          user_nickname: `${Math.ceil(Math.random() * 100000)}`,
+          user_profile_url:
+            "http://15.164.245.201:8000/images/profile_default.png"
+        }
+      : {
+          user_id: this.$store.getters["auth/getUser"].uid,
+          user_nickname: this.$store.getters["auth/getUser"].nickname,
+          user_profile_url: this.$store.getters["auth/getUser"].profile_url
+        };
+    console.log(this.$store.getters["auth/getUser"]);
+    this.study_id = window.location.href.split("workspace/")[1];
+    // this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`, {
+    this.socket = io.connect(
+      `http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+      {
+        // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
         // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-          transports: ["websocket"],
-      secure: true,
-    });
+        transports: ["websocket"],
+        secure: true
+      }
+    );
+    // this.socket.emit("join", { study_id: this.study_id, user_id: this.user.user_id });
   },
   mounted() {
-      // if (!window.opener) return
+    window.onkeyup = (event)=>{
+      if(event.keyCode==27){
+        this.overlay = false;
+      }
+    }
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
 
@@ -159,9 +207,11 @@ export default {
     changeView(change_id) {
       this.sharing_id = change_id;
     },
-
+    change_current(page) {
+      this.current = page;
+    },
     help() {
-      this.talk = !this.talk;
+      this.overlay = !this.overlay;
     },
 
     exit() {
