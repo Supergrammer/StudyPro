@@ -34,8 +34,6 @@
                 <Board :socket="socket" :study_id="study_id" />
               </v-card>
             </v-row>
-<<<<<<< HEAD
-=======
 
             <v-row>
               <v-card>
@@ -43,7 +41,6 @@
               </v-card>
 
             </v-row>
->>>>>>> bc02defd5561161dd08ee90d7407be45a802eaf3
           </v-tab-item>
           <v-tab-item id="NotePad">
             <v-card outlined>
