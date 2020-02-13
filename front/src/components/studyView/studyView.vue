@@ -111,7 +111,7 @@ export default {
         name: "workspace",
         params: { study_id: this.study_id }
       });
-      window.open(workspace.href, "WORKSPACE", "a");
+      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
     }
   }
 };

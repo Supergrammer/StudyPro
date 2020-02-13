@@ -100,6 +100,7 @@ const routes = [
                 path: 'member',
                 name: 'study_member',
                 component: studyMember,
+                props: true,
             },
             {
                 path: 'board/register',
