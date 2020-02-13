@@ -36,7 +36,7 @@
 
             <v-row>
               <v-card>
-                <!-- <v-img src="@assets/images/back7.jpg"></v-img> -->
+                <v-img src="@/assets/images/back7.jpg"></v-img>
               </v-card>
 
             </v-row>
