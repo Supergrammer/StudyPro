@@ -353,6 +353,8 @@ export default {
       this.validation();
     },
     starttime() {
+      console.log(this.starttime)
+      console.log(this.starttime.split(':')[0] + this.starttime.split(':')[1])
       this.validation();
     },
     endtime() {
@@ -442,13 +444,13 @@ export default {
       formData.append(
         "start_time",
         this.starttime
-          ? this.starttime.getHours() * 100 + this.starttime.getMinutes()
+          ? this.starttime.split(':')[0] + this.starttime.split(':')[1]
           : "0000"
       );
       formData.append(
         "end_time",
         this.endtime
-          ? this.endtime.getHours() * 100 + this.endtime.getMinutes()
+          ? this.endtime.split(':')[0] + this.endtime.split(':')[1]
           : "0000"
       );
       formData.append("status", this.status);

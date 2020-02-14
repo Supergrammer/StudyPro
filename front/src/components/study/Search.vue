@@ -600,8 +600,6 @@ export default {
       for (var input_day of input) {
         var notMatching = true;
         for (var item_day of item) {
-          console.log('input_day',input_day)
-          console.log('item_day',item_day.day)
           if (input_day == item_day.day) {
             notMatching = false;
             break;
@@ -674,7 +672,6 @@ export default {
     }
 
     await this.loadDeaultList();
-    console.log(this.items);
   }
 };
 </script>
