@@ -1,6 +1,6 @@
 <template>
   <v-content id="study" class="pa-0">
-    <v-navigation-drawer absolute permanent expand-on-hover>
+    <v-navigation-drawer absolute permanent expand-on-hover v-if="isAuth">
       <v-list>
         <v-list-item class>
           <v-list-item-avatar>
@@ -9,7 +9,11 @@
           <v-list-item-title>{{ currentUser.nickname }}</v-list-item-title>
         </v-list-item>
         <v-divider class="ma-3 mb-0" />
-        <v-list-item v-for="(menu, index) in menus" :key="index" @click="routeTo(menu.route)">
+        <v-list-item
+          v-for="(menu, index) in menus"
+          :key="index"
+          @click="routeTo(menu.route)"
+        >
           <v-list-item-icon>
             <v-icon medium>{{ menu.icon }}</v-icon>
           </v-list-item-icon>
@@ -61,7 +65,7 @@ export default {
           title: "홈으로",
           route: {
             routes: "study_home",
-            params: { study_id: this.study_id },
+            params: { study_id: this.study_id }
           }
         },
         {
@@ -96,7 +100,16 @@ export default {
     };
   },
 
+  mounted() {
+    if (!this.isAuth) {
+      this.$router.push({ name: "home" });
+    }
+  },
+
   computed: {
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
+    },
     currentUser() {
       return this.$store.getters["auth/getUser"];
     }
