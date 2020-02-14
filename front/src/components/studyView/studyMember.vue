@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-list v-if="thisUser === thisCaptain">
+    <v-list v-if="isCaptain">
       <v-toolbar elevation="0" style="border-bottom: 5px solid #736C70;">
         <v-toolbar-title>가입 요청 목록</v-toolbar-title>
       </v-toolbar>
@@ -144,7 +144,7 @@
               </v-col>
               <v-col cols="6">
                 <v-icon
-                  v-if="thisUser === thisCaptain && member.level != 'captain'"
+                  v-if="isCaptain && member.level != 'captain'"
                   @click="confirmDelete(member)"
                   color="red"
                   >close</v-icon
@@ -185,14 +185,28 @@ export default {
     newbie: {},
     member: {},
     newbieList: [],
-    memberList: []
+    memberList: [],
+    studyInfo: {},
   }),
 
-  created() {
-    this.getCaptain();
-    this.getWhoIam();
-    this.getApplyList();
+  async created() {
+    await this.loadStudyInfo();
+    if(this.isCaptain) this.getApplyList();
     this.getjoinedUser();
+
+  },
+
+  computed:{
+    currentUser(){
+      return this.$store.getters['auth/getUser']
+    },
+
+    isCaptain(){
+      if(this.currentUser.id == this.studyInfo.captain){
+        return true;
+      }
+      return false;
+    }
   },
 
   components: {
@@ -206,14 +220,6 @@ export default {
       import("@/components/studydetail/memberModal/DeleteModal")
   },
   methods: {
-    getUser() {
-      return this.$store.getters["auth/getUser"];
-    },
-
-    getWhoIam() {
-      this.thisUser = this.getUser().uid;
-    },
-
     changeLevel(member) {
       console.log(member.level);
       console.log(member.id);
@@ -259,12 +265,8 @@ export default {
       );
     },
 
-    getCaptain() {
-      StudyService.getStudyInfo({ study_id: this.study_id }).then(
-        thisCaptain => {
-          this.thisCaptain = thisCaptain.data.captain;
-        }
-      );
+    loadStudyInfo(){
+      this.studyInfo = StudyService.getStudyInfo({ study_id: this.study_id })
     }
   }
 };
