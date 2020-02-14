@@ -113,7 +113,8 @@
             <v-col cols="6">
 
               <v-img v-if="member.level=='captain'" src="@/assets/images/crown.png" height="25px" width="25px"/>
-              <v-img v-else-if="member.level=='silver'" @click="something()" src="@/assets/images/silverlevel.png" height="25px" width="25px"/>
+              <button v-else-if="member.level=='silver'" v-on:click="something()" ><img src="@/assets/images/silverlevel.png" height="25px" width="25px" /></button>
+              <!-- <v-btn v-else-if="member.level=='silver'" @click="something()" src="@/assets/images/silverlevel.png" height="25px" width="25px"/> -->
 
 
            
