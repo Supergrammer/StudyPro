@@ -1,5 +1,6 @@
 <template>
   <v-dialog id="modal" v-model="open" max-width="400px">
+    <slot name="toolbar"></slot>
     <v-card flat max-width="500px">
       <v-col class="px-5 pt-5 pb-0">
         <slot name="text"> </slot>

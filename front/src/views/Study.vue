@@ -9,3 +9,9 @@ export default {
   name: "study",
 };
 </script>
+
+<style>
+#study{
+  height: 100%;
+}
+</style>
