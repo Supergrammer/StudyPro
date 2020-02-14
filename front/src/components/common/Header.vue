@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container id="header">
     <v-app-bar fixed prominent max-height="56px" height="56px">
       <v-row style="height:56px; width:100%">
         <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">

@@ -85,7 +85,6 @@ export default {
 
     async loadItems() {
       var items = await UserService.getMyGroups();
-
       //리스트 정제
       this.items = [];
       for (var item of items) {
@@ -106,43 +105,19 @@ export default {
 
     getDays(process_days) {
       var days = "";
-      var days_tmp = "";
-      for (var i = 0; i < process_days.length; i++) {
-        if (process_days[i].day == "," || i == process_days.length - 1) {
-          if (i == process_days.length - 1) days_tmp += process_days[i].day;
-          switch (days_tmp) {
-            case "Mon":
-              days += "월";
-              break;
-            case "Tue":
-              days += "화";
-              break;
-            case "Wed":
-              days += "수";
-              break;
-            case "Thu":
-              days += "목";
-              break;
-            case "Fri":
-              days += "금";
-              break;
-            case "Sat":
-              days += "토";
-              break;
-            case "Sun":
-              days += "일";
-              break;
-            default:
-              days += "???";
-          }
-          if (i != process_days.length - 1) {
-            days += ", ";
-          }
-          days_tmp = "";
-        } else {
-          days_tmp += process_days[i].day;
-        }
+      var weekofdays = {
+        Mon: "월",
+        Tue: "화",
+        Wed: "수",
+        Thu: "목",
+        Fri: "금",
+        Sat: "토",
+        Sun: "일"
+      };
+      for(var d of process_days){
+        days += weekofdays[d.day] + ' '
       }
+      console.log(days)
       return days;
     },
 
