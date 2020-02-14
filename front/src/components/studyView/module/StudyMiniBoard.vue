@@ -181,8 +181,8 @@ export default {
     },
     routeTo(post_id) {
       this.$router.push({
-        name: "post_id",
-        params: { post_id: post_id, board: this.board }
+        name: "board_contents",
+        params: { post_id: post_id, board_name: this.board }
       });
     }
   }
