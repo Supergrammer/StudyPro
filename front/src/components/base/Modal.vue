@@ -1,0 +1,32 @@
+<template>
+  <v-dialog id="modal" v-model="open" max-width="400px">
+    <v-card flat max-width="500px">
+        <v-col class="px-5 pt-5 pb-0">
+          <slot name="text"> </slot>
+        </v-col>
+        <div class="text-end pr-3 pb-3">
+        <v-btn text @click="open = false">확인</v-btn>
+        </div>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script>
+export default {
+  name: "modal",
+  data: () => ({
+    open: false
+  }),
+  props: ["openModal"],
+  watch: {
+    openModal() {
+      this.open = this.openModal;
+    },
+    open() {
+      if (!this.open) {
+        this.$emit("close");
+      }
+    }
+  }
+};
+</script>
