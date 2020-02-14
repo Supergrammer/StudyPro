@@ -41,7 +41,9 @@
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">
-                  {{studyInfo.num_joined_student}}/{{(studyInfo.user_limit == 0)?'-':studyInfo.user_limit}}
+                  {{ studyInfo.num_joined_student }}/{{
+                    studyInfo.user_limit == 0 ? "-" : studyInfo.user_limit
+                  }}
                 </v-content>
               </v-col>
             </v-row>
@@ -59,23 +61,23 @@
             <v-row class="pb-1">
               <v-col cols="3" class="py-0">
                 <v-content text class="py-0 font-weight-bold"
-                  >스터디 소개</v-content
-                >
-              </v-col>
-              <v-col class="py-0">
-                <v-content text class="py-0">{{
-                  (studyInfo.description == '')?'-':studyInfo.description
-                }}</v-content>
-              </v-col>
-            </v-row>
-            <v-row class="pb-1">
-              <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold"
                   >스터디 목표</v-content
                 >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">{{ studyInfo.goal }}</v-content>
+              </v-col>
+            </v-row>
+            <v-row class="pb-1">
+              <v-col cols="3" class="py-0">
+                <v-content text class="py-0 font-weight-bold"
+                  >스터디 소개</v-content
+                >
+              </v-col>
+              <v-col class="py-0">
+                <v-content text class="py-0">{{
+                  studyInfo.description == "" ? "-" : studyInfo.description
+                }}</v-content>
               </v-col>
             </v-row>
             <v-row class="pb-1">
@@ -137,30 +139,21 @@
 
             <v-row>
               <v-col cols="3" class="py-0">
-                <v-content text class="py-0 font-weight-bold">그룹장 소개글</v-content>
+                <v-content text class="py-0 font-weight-bold"
+                  >그룹장 소개글</v-content
+                >
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">{{
-                  (studyInfo.captain.about == 'null')?'-':studyInfo.captain.about
+                  studyInfo.captain.about == "null"
+                    ? "-"
+                    : studyInfo.captain.about
                 }}</v-content>
-              </v-col>
-            </v-row>
-
-            <v-row class="pt-6">
-              <v-col cols="12" class="py-0">
-                <!-- <v-content text class="pt-0 pb-3 font-weight-bold">가입양식</v-content> -->
-                <v-textarea
-                  label="가입인사"
-                  outlined
-                  height="150px"
-                  v-model="greetComment"
-                  single-line
-                ></v-textarea>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions class="pt-0 pr-5">
+        <v-card-actions class="pt-3 pr-5">
           <v-spacer></v-spacer>
           <v-btn
             color="error--text lighten-1 transparent"
@@ -172,7 +165,7 @@
             color="primary--text transparent"
             elevation="0"
             @click="regGroup"
-            >가입신청</v-btn
+            >가입하러가기</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -181,12 +174,11 @@
 </template>
 
 <script>
-import StudyService from "@/services/study.service"
 export default {
   name: "groupmodal",
   data: () => ({
-    open: false,
-    greetComment: ""
+    greetComment: "",
+    open: false
   }),
   props: ["groupModal", "studyInfo"],
   watch: {
@@ -194,32 +186,24 @@ export default {
       this.open = this.groupModal;
     },
     open() {
-      if (this.open == false) {
+      if (!this.open) {
         this.$emit("close");
       }
     }
   },
   methods: {
     regGroup() {
-      //console.log(this.studyInfo.id);
-      
-      StudyService.applyStudy({
-        study_id:this.studyInfo.id,
-        comment:this.greetComment,
-      }).then(res => {
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA", res)
-      })
+      this.$router.push({name: 'study_home', params:{study_id: this.studyInfo.id}})
     }
   },
   filters: {
     getTime(value) {
       var hour = Math.floor(value / 100);
       var minute = value % 100;
-      if (hour == 0) {
-        return "00:" + minute;
-      } else {
-        return hour + ":" + minute;
-      }
+      if (hour < 10) hour = "0" + hour;
+      if (minute < 10) minute = "0" + minute;
+
+      return hour +':' +minute
     }
   }
 };

@@ -7,20 +7,20 @@
       <v-col cols="12" lg="9" md="12" sm="12" class='pt-0'>
         <top-left />
       </v-col>
-      <v-col lg="3" class="d-none d-lg-block">
+      <!-- <v-col lg="3" class="d-none d-lg-block">
         <v-card class="pa-1 pt-9" outlined tile>
           <top-right />
         </v-card>
-      </v-col>
+      </v-col> -->
       
     </v-row>
 
     <v-row>
-      <v-col cols="12">
+      <!-- <v-col cols="12">
         <v-card class="pa-1 transparent" outlined tile>
           <middle />
         </v-card>
-      </v-col>
+      </v-col> -->
     </v-row>
   </v-content>
 </template>
@@ -52,8 +52,8 @@ export default {
 
   components: {
     TopLeft: () => import("@/components/home/TopLeft"),
-    TopRight: () => import("@/components/home/TopRight"),
-    Middle: () => import("@/components/home/Middle")
+    // TopRight: () => import("@/components/home/TopRight"),
+    // Middle: () => import("@/components/home/Middle")
   }
 };
 </script>
