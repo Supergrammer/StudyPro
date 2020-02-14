@@ -1,110 +1,197 @@
 <template>
-  <div class="tabs">
-    <p class="pt-5 pl-5" style="font-size:25px">최근 게시글</p>
-    <v-tabs>
-      <v-tab @click="tabSwitch('ng')">학습 게시판</v-tab>
-      <v-tab @click="tabSwitch('np')">자유 게시판</v-tab>
-      <v-tab v-if="isAuth">My Groups</v-tab>
-    </v-tabs>
+  <v-content class="pa-0">
+    <v-card flat>
+      <v-card-title class="pb-0">
+        <v-row no-gutters>
+          <v-col cols="8">
+            <v-icon class="black--text pl-1" x-large>notifications_none</v-icon>
+            <span class="Hline ml-2">공지사항</span>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-actions>
+        <v-row>
+          <v-col>
+            <v-card outlined class="px-3 py-2 mx-3">
+              <v-row>
+                <v-col align="center" cols="1" class="pa-1 px-3">No.</v-col>
+                <v-divider class="my-2" vertical />
+                <v-col cols="6" class="pa-2 pl-5">제목</v-col>
+                <v-spacer />
+                <v-divider class="my-2" vertical />
+                <v-col align="center" cols="2" class="pa-2 px-3">작성자</v-col>
+                <v-col align="center" cols="1" class="pa-2 px-3">조회</v-col>
+                <v-col align="center" cols="1" class="pa-2 px-3">추천</v-col>
+              </v-row>
+              <v-divider class="ma-2" />
 
-    <v-list three-line v-if="current === 'ng'">
-      <template v-for="(item, index) in items">
-        <v-subheader
-          v-if="item.header"
-          :key="item.header"
-          v-text="item.header"
-        ></v-subheader>
+              <v-card
+                flat
+                v-for="(post, index) in notice_list"
+                :key="index"
+                @click="routeTo(post.id)"
+              >
+                <v-row>
+                  <v-col align="center" cols="1" class="pa-2 px-3">
+                    {{
+                    post.id
+                    }}
+                  </v-col>
+                  <v-divider class="my-2" vertical />
+                  <v-col cols="6" class="pa-2 pl-5">{{ post.title }}</v-col>
+                  <v-spacer />
 
-        <v-divider
-          v-else-if="item.divider"
-          :key="index"
-          :inset="item.inset"
-        ></v-divider>
+                  <v-divider class="my-2" vertical />
+                  <v-col align="center" cols="2" class="pa-2 px-3">
+                    {{
+                    post.writer
+                    }}
+                  </v-col>
+                  <v-col align="center" cols="1" class="pa-2 px-3">
+                    {{
+                    post.view
+                    }}
+                  </v-col>
+                  <v-col align="center" cols="1" class="pa-2 px-3">{{post.num_like}}</v-col>
+                </v-row>
+              </v-card>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+    <v-divider class="mx-5" />
+    <v-card flat>
+      <v-card-title class="pb-0">
+        <v-row no-gutters>
+          <v-col cols="8">
+            <v-icon class="black--text pl-1" x-large>subject</v-icon>
+            <span class="Hline ml-2">최근 게시물</span>
+          </v-col>
+          <v-col>
+            <v-select v-model="board_name" :items="boards" dense class="pt-0 pr-3"></v-select>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-actions>
+        <v-row>
+          <v-col>
+            <v-card outlined class="px-3 py-2 mx-3">
+              <v-row>
+                <v-col align="center" cols="1" class="pa-1 px-3">No.</v-col>
+                <v-divider class="my-2" vertical />
+                <v-col cols="6" class="pa-2 pl-5">제목</v-col>
+                <v-spacer />
+                <v-divider class="my-2" vertical />
+                <v-col align="center" cols="2" class="pa-2 px-3">작성자</v-col>
+                <v-col align="center" cols="1" class="pa-2 px-3">조회</v-col>
+                <v-col align="center" cols="1" class="pa-2 px-3">추천</v-col>
+              </v-row>
+              <v-divider class="ma-2" />
 
-        <v-list-item v-else :key="item.title">
-          <v-list-item-avatar>
-            <v-img :src="item.avatar"></v-img>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title v-html="item.title"></v-list-item-title>
-            <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-    </v-list>
+              <v-card
+                flat
+                v-for="(post, index) in post_list"
+                :key="index"
+                @click="routeTo(post.id)"
+              >
+                <v-row>
+                  <v-col align="center" cols="1" class="pa-2 px-3">
+                    {{
+                    post.id
+                    }}
+                  </v-col>
+                  <v-divider class="my-2" vertical />
+                  <v-col cols="6" class="pa-2 pl-5">{{ post.title }}</v-col>
+                  <v-spacer />
 
-    <!-- <v-list three-line v-else-if="current === 'np'">
-      <template v-for="(item, index) in items">
-        <v-subheader
-          v-if="item.header"
-          :key="item.header"
-          v-text="item.header"
-        ></v-subheader>
-
-        <v-divider
-          v-else-if="item.divider"
-          :key="index"
-          :inset="item.inset"
-        ></v-divider>
-
-        <v-list-item v-else :key="item.title">
-          <v-list-item-avatar>
-            <v-img :src="item.avatar"></v-img>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title v-html="item.title"></v-list-item-title>
-            <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-    </v-list> -->
-
-  </div>
+                  <v-divider class="my-2" vertical />
+                  <v-col align="center" cols="2" class="pa-2 px-3">
+                    {{
+                    post.writer
+                    }}
+                  </v-col>
+                  <v-col align="center" cols="1" class="pa-2 px-3">
+                    {{
+                    post.view
+                    }}
+                  </v-col>
+                  <v-col align="center" cols="1" class="pa-2 px-3">{{post.num_like}}</v-col>
+                </v-row>
+              </v-card>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+  </v-content>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import PostService from "@/services/post.service";
 
 export default {
-  name: "tabs",
+  props: ["study_id"],
   data: () => ({
-    current: "ng",
-    items: [
-      { header: "Today" },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "아니근데",
-        subtitle:
-          "<span class='text--primary'>펭수</span> &mdash; 참치가 최고야"
-      },
-      { divider: true, inset: true },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: "ㄴ 2222",
-        subtitle:
-          "<span class='text--primary'>뚝딱이</span> &mdash; 참치 JMT ㅇㅈㅇㅈ"
-      },
-      { divider: true, inset: true },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "쉽지 않네..",
-        subtitle:
-          "<span class='text--primary'>뽀로로</span> &mdash; vue 되는게 없네.."
-      },
-      { divider: true, inset: true },
-      
-    ]
+    items: [],
+    board_name: "스터디 게시판",
+    board: "study",
+    boards: [
+      { text: "스터디 게시판", board: "study" },
+      { text: "자유 게시판", board: "free" }
+    ],
+    post_list: [],
+    notice_list: []
   }),
+  created() {
+    this.postUpdate();
+  },
+  watch: {
+    board_name() {
+      for (let i = 0; i < this.boards.length; i++) {
+        if (this.boards[i].text === this.board_name) {
+          this.board = this.boards[i].board;
+        }
+      }
+      this.postUpdate();
+    }
+  },
   computed: {
     ...mapState(["isAuth"])
   },
   methods: {
-    studyEnter() {
-      console.log("Clicked...");
+    async noticePost() {
+      const notice_list = await PostService.getAllPost({
+        type: "study",
+        study_id: this.study_id,
+        board: "notice",
+        offset: 0
+      });
+      this.notice_list = notice_list.data;
     },
-    tabSwitch(target) {
-      this.current = target;
+    async postUpdate() {
+      const post_list = await PostService.getAllPost({
+        type: "study",
+        study_id: this.study_id,
+        board: this.board,
+        offset: 0
+      });
+      this.post_list = post_list.data;
+    },
+    routeTo(post_id) {
+      this.$router.push({
+        name: "board_contents",
+        params: { post_id: post_id, board_name: this.board }
+      });
     }
   }
 };
 </script>
+
+<style scoped>
+.Hline {
+  font-size: 25px !important;
+  font-weight: bold !important;
+}
+</style>

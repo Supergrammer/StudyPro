@@ -53,11 +53,11 @@ export default {
           // check whether the upload is an image
           this.errorDialog = true;
           this.errorText = "Please choose an image file";
-        } else if (size > 1) {
+        } else if (size > 10) {
           // check whether the size is greater than the size limit
           this.errorDialog = true;
           this.errorText =
-            "Your file is too big! Please select an image under 1MB";
+            "Your file is too big! Please select an image under 10MB";
         } else {
           // Append file into FormData and turn file into image URL
           let imageURL = URL.createObjectURL(imageFile);

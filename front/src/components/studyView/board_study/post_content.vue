@@ -129,7 +129,7 @@
 import PostService from "@/services/post.service";
 
 export default {
-  props: [ "post_id", "board_name"],
+  props: [ "post_id", "board_name" ],
   data() {
     return {
       dialog: false,
