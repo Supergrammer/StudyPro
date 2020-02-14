@@ -95,6 +95,7 @@ const routes = [
                 path: 'schedule',
                 name: 'study_schedule',
                 component: studySchedule,
+                props:true
             },
             {
                 path: 'member',
