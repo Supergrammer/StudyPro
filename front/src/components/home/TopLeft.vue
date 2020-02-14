@@ -111,9 +111,18 @@ export default {
     groupModal: false,
     myStudyList: [],
   }),
+  watch:{
+    async isAuth(){
+      if(this.isAuth){
+        this.myStudyList = await UserService.getMyGroups();
+      }else{
+        this.myStudyList = [];
+      }
+    }
+  },
   async created() {
     this.studyList = [];
-    if(this.$store.getters['auth/isAuth']){
+    if(this.isAuth){
       this.myStudyList = await UserService.getMyGroups();
     }
     var list = await StudyService.getAllStudy();
@@ -148,6 +157,9 @@ export default {
     },
   },
   computed:{
+    isAuth(){
+      return this.$store.getters['auth/isAuth']
+    },
     isExistMyGroup(){
       if(this.myStudyList.length > 0){
         return true;

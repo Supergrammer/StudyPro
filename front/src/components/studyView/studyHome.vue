@@ -1,6 +1,6 @@
 <template>
-  <v-card outlined>
-    <v-row no-gutters class="pt-3">
+  <v-card flat class="pa-0">
+    <v-row no-gutters class="pt-2">
       <v-spacer />
       <v-col cols="8">
         <v-card outlined>
