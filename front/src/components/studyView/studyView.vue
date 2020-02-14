@@ -60,7 +60,8 @@ export default {
           icon: "home",
           title: "홈으로",
           route: {
-            routes: "study_home"
+            routes: "study_home",
+            params: { study_id: this.study_id },
           }
         },
         {

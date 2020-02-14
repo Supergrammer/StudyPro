@@ -90,11 +90,13 @@ const routes = [
                 path: 'home',
                 name: 'study_home',
                 component: studyHome,
+                props: true,
             },
             {
                 path: 'schedule',
                 name: 'study_schedule',
                 component: studySchedule,
+                props: true,
             },
             {
                 path: 'member',

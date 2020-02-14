@@ -82,7 +82,7 @@ class StudyService {
     }
 
     getStudyInfo(payload) {
-        return axios.get(URL + "studies/detail", {
+        return axios.get(URL + "detail", {
             params: {
                 study_id: payload.study_id
             }
