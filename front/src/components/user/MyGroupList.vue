@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-4" tile min-height="450px" elevation="0">
     <v-card-title>
-      가입한 그룹목록
+      내 스터디 보기
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="그룹명으로 검색" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>

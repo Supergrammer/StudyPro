@@ -64,15 +64,15 @@ export default {
     titles: [
       {
         icon: "mdi-magnify",
-        title: "스터디검색"
+        title: "스터디 검색"
       },
       {
         icon: "list",
-        title: "가입스터디 목록"
+        title: "내 스터디 보기"
       },
       {
         icon: "mdi-book-open-variant",
-        title: "스터디생성"
+        title: "스터디 생성"
       }
     ],
     created: 0,
