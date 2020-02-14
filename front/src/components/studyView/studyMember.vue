@@ -110,26 +110,59 @@
               >more_horiz</v-icon
             > -->
             <v-row>
-            <v-col cols="6">
+              <v-col cols="6">
+                <v-img
+                  v-if="member.level == 'captain'"
+                  src="@/assets/images/crown.png"
+                  height="25px"
+                  width="25px"
+                />
 
-              <v-img v-if="member.level=='captain'" src="@/assets/images/crown.png" height="25px" width="25px"/>
-              <button v-else-if="member.level=='silver'" v-on:click="something()" ><img src="@/assets/images/silverlevel.png" height="25px" width="25px" /></button>
-              <!-- <v-btn v-else-if="member.level=='silver'" @click="something()" src="@/assets/images/silverlevel.png" height="25px" width="25px"/> -->
+                <v-btn
+                  v-else-if="member.level == 'gold'"
+                  @click="changeLevel(member)"
+                  fab
+                  dark
+                  color="orange"
+                  height="30px"
+                  width="30px"
+                >
+                  <v-icon style="font-size:20px" class="mb-2" dark>G</v-icon>
+                </v-btn>
 
-
-           
-
-            </v-col>
-            <v-col cols="6">
-                <v-icon v-if="member.level !='captain'" @click="something()" color="red">close</v-icon>
-            </v-col>
+                <v-btn
+                  v-else-if="member.level == 'silver'"
+                  @click="changeLevel(member)"
+                  fab
+                  dark
+                  color="grey"
+                  height="30px"
+                  width="30px"
+                >
+                  <v-icon style="font-size:20px" class="mb-2" dark>S</v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-icon
+                  v-if="member.level != 'captain'"
+                  @click="confirmDelete(member)"
+                  color="red"
+                  >close</v-icon
+                >
+              </v-col>
             </v-row>
-
-
-
           </v-col>
         </v-row>
       </v-list-item>
+
+      <template>
+        <delete-modal
+          :delete-modal="deleteModal"
+          :member="member"
+          :study_id="study_id"
+          v-on:close="modalClose"
+        />
+      </template>
     </v-list>
   </v-container>
 </template>
@@ -145,6 +178,7 @@ export default {
     acceptModal: false,
     declineModal: false,
     greetingModal: false,
+    deleteModal: false,
     newbie: {},
     member: {},
     newbieList: [],
@@ -161,10 +195,20 @@ export default {
     declineModal: () =>
       import("@/components/studydetail/memberModal/DeclineModal"),
     greetingModal: () =>
-      import("@/components/studydetail/memberModal/GreetingModal")
+      import("@/components/studydetail/memberModal/GreetingModal"),
+    deleteModal: () =>
+      import("@/components/studydetail/memberModal/DeleteModal")
   },
   methods: {
-    something() {},
+
+    changeLevel(member) {
+      console.log(member.level);
+      console.log(member.id);
+      console.log("clicked..!");
+
+      this.getjoinedUser();
+    },
+
     confirmAccept(newbie) {
       this.acceptModal = true;
       this.newbie = newbie;
@@ -177,17 +221,23 @@ export default {
       this.greetingModal = true;
       this.newbie = newbie;
     },
+    confirmDelete(member) {
+      this.deleteModal = true;
+      this.member = member;
+    },
     modalClose() {
       this.acceptModal = false;
       this.declineModal = false;
       this.greetingModal = false;
+      this.deleteModal = false;
       this.getApplyList();
+      this.getjoinedUser();
     },
     getApplyList() {
       StudyService.getApplyList({ study_id: this.study_id }).then(
         newbieList => {
           this.newbieList = newbieList.data;
-          console.log(newbieList)
+          console.log(newbieList);
         }
       );
     },
@@ -195,10 +245,10 @@ export default {
       StudyService.getjoinedUser({ study_id: this.study_id }).then(
         memberList => {
           this.memberList = memberList.data;
-          console.log(memberList)
+          console.log(memberList);
         }
       );
-    },
+    }
   }
 };
 </script>
