@@ -8,8 +8,8 @@ class StudyService {
         AuthHeader.changeHeadersToken()
         return axios.get(URL)
             .then(res => {
-                    return Promise.resolve(res.data)
-                },
+                return Promise.resolve(res.data)
+            },
                 error => {
                     return Promise.reject(error.data)
                 })
@@ -41,8 +41,8 @@ class StudyService {
         // } = payload;
         AuthHeader.changeHeadersToken()
         return axios.post(URL,
-                payload
-            )
+            payload
+        )
             .then(res => {
                 return Promise.resolve(res.data)
             })
@@ -51,34 +51,56 @@ class StudyService {
 
     applyStudy(payload) {
         return axios.post(URL + "apply", {
-            study_id:payload.study_id,
-            comment:payload.comment
+            study_id: payload.study_id,
+            comment: payload.comment
         })
     }
 
-    getApplyList(payload){
-        console.log(payload)
-        return axios.get(URL+"apply", {
-            params:{
-                study_id:payload.study_id
+    getApplyList(payload) {
+        return axios.get(URL + "apply", {
+            params: {
+                study_id: payload.study_id
             }
         })
     }
 
-    joinStudy(payload){
+    joinStudy(payload) {
         //accept ==> true/false
-        return axios.post(URL+"join", {
-            apply_id:payload.apply_id,
-            accept:payload.accept
+        return axios.post(URL + "join", {
+            apply_id: payload.apply_id,
+            accept: payload.accept
         })
     }
 
-    getjoinedUser(payload){
+    getjoinedUser(payload) {
         return axios.get(URL + "join", {
-            params:{
-            study_id:payload.study_id}
+            params: {
+                study_id: payload.study_id
+            }
         })
     }
+
+    getStudyInfo(payload) {
+        return axios.get(URL + "detail", {
+            params: {
+                study_id: payload.study_id
+            }
+        })
+    }
+
+    deleteUser(payload) {
+        return axios.delete(URL + "join", {
+            data:{
+            study_id: payload.study_id,
+            user_id: payload.user_id}
+        
+        })
+    }
+
+
+
+
+
 }
 
 export default new StudyService()

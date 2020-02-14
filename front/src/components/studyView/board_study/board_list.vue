@@ -21,7 +21,7 @@
     <v-divider class="mx-3 mb-3" />
     <v-row justify="center">
       <v-col>
-        <v-card outlined class="px-3 py-2 mx-3" elevation="3">
+        <v-card outlined class="px-3 py-2 mx-3">
           <v-row>
             <v-col align="center" cols="1" class="pa-1 px-3">No.</v-col>
             <v-divider class="my-2" vertical />
@@ -158,7 +158,7 @@ export default {
     routeTo(post_id) {
       this.$router.push({
         name: "board_contents",
-        params: { post_id: post_id }
+        params: { post_id: post_id, board_name: this.board_name }
       });
     },
     register() {

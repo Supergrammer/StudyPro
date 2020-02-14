@@ -8,12 +8,9 @@
         </div>
         <div class="mt-4">
           <slot name="text"></slot>
-          <v-btn text class="mr-4" color="primary" @click="signinModal = true"
-            >로그인</v-btn
-          >
-          <v-btn text color="green lighten-2" @click="moveSignup"
-            >회원가입</v-btn
-          >
+          <v-btn text class="mr-4" color="primary" @click="signinModal = true">로그인</v-btn>
+          <v-btn text color="green lighten-2" @click="moveSignup">회원가입</v-btn>
+          <v-btn text color="error" @click="goBack">이전으로</v-btn>
         </div>
       </v-col>
     </v-row>
@@ -36,6 +33,9 @@ export default {
     },
     moveSignup() {
       this.$router.push({ name: "signup" });
+    },
+    goBack() {
+      this.$router.go(-1);
     }
   },
   mounted() {

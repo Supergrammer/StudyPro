@@ -40,7 +40,6 @@
     </v-navigation-drawer>
 
     <v-card flat>
-      <span>안녕하세요</span>
       <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7"></v-img>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
@@ -61,7 +60,8 @@ export default {
           icon: "home",
           title: "홈으로",
           route: {
-            routes: "study_home"
+            routes: "study_home",
+            params: { study_id: this.study_id },
           }
         },
         {

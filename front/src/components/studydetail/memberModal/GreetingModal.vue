@@ -6,8 +6,8 @@
           가입인사
         </v-card-text>
 
-        <v-card-text style="font-size:15px" class="pa-5">
-          {{ newbie.about }}
+        <v-card-text class="pa-5">
+          <p style="font-size:15px" v-html="newbie.comment"></p>
         </v-card-text>
 
         <v-card-actions class="pt-0 pr-5">
@@ -29,12 +29,15 @@
 export default {
   name: "greetingmodal",
   data: () => ({
-    open: false
+    open: false,
   }),
   props: ["greetingModal", "newbie"],
   watch: {
     greetingModal() {
       this.open = this.greetingModal;
+    },
+    newbie(){
+      this.newbie.comment = this.newbie.comment.replace(/(?:\r\n|\r|\n)/g, '<br />')
     }
   },
   methods: {
