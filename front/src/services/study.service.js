@@ -57,7 +57,6 @@ class StudyService {
     }
 
     getApplyList(payload) {
-        console.log(payload)
         return axios.get(URL + "apply", {
             params: {
                 study_id: payload.study_id
@@ -88,6 +87,20 @@ class StudyService {
             }
         })
     }
+
+    deleteUser(payload) {
+        return axios.delete(URL + "join", {
+            data:{
+            study_id: payload.study_id,
+            user_id: payload.user_id}
+        
+        })
+    }
+
+
+
+
+
 }
 
 export default new StudyService()
