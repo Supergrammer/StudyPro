@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-list v-if="thisUser===thisCaptain">
+    <v-list v-if="thisUser === thisCaptain">
       <v-toolbar elevation="0" style="border-bottom: 5px solid #736C70;">
         <v-toolbar-title>가입 요청 목록</v-toolbar-title>
       </v-toolbar>
@@ -144,7 +144,7 @@
               </v-col>
               <v-col cols="6">
                 <v-icon
-                  v-if="member.level != 'captain'"
+                  v-if="thisUser === thisCaptain && member.level != 'captain'"
                   @click="confirmDelete(member)"
                   color="red"
                   >close</v-icon
@@ -174,9 +174,8 @@ export default {
   props: ["study_id"],
 
   data: () => ({
-    thisUser:"",
-    thisCaptain:"",
-
+    thisUser: "",
+    thisCaptain: "",
 
     flag: false,
     acceptModal: false,
@@ -190,15 +189,10 @@ export default {
   }),
 
   created() {
-    
     this.getCaptain();
-    this.something();
-      console.log(this.thisCaptain);
-      console.log(this.thisUser);
-
-this.getApplyList();
+    this.getWhoIam();
+    this.getApplyList();
     this.getjoinedUser();
-
   },
 
   components: {
@@ -212,41 +206,18 @@ this.getApplyList();
       import("@/components/studydetail/memberModal/DeleteModal")
   },
   methods: {
-
-
-
-     getUser() {
+    getUser() {
       return this.$store.getters["auth/getUser"];
     },
 
-    something() {
+    getWhoIam() {
       this.thisUser = this.getUser().uid;
-
     },
 
     changeLevel(member) {
-
-      // this.something();
-      // console.log(this.cur);
-
-
-      // console.log(this.memberList);
-      // console.log(this.newbieList);
-      // this.getCaptain();
-      console.log(this.thisCaptain);
-console.log(this.thisUser);
-
-      
-
-
-
-
-
       console.log(member.level);
-      // console.log(member.id);
-      // console.log("clicked..!");
-
-      this.getjoinedUser();
+      console.log(member.id);
+      console.log("clicked..!");
     },
 
     confirmAccept(newbie) {
@@ -288,19 +259,13 @@ console.log(this.thisUser);
       );
     },
 
-    getCaptain(){
+    getCaptain() {
       StudyService.getStudyInfo({ study_id: this.study_id }).then(
         thisCaptain => {
           this.thisCaptain = thisCaptain.data.captain;
         }
       );
-    },
-
-
-
-
-
-
+    }
   }
 };
 </script>
