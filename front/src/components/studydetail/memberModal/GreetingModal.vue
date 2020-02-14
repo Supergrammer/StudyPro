@@ -6,8 +6,8 @@
           가입인사
         </v-card-text>
 
-        <v-card-text style="font-size:15px" class="pa-5">
-          <p v-html="newbie.comment"></p>
+        <v-card-text class="pa-5">
+          <p style="font-size:15px" v-html="newbie.comment"></p>
         </v-card-text>
 
         <v-card-actions class="pt-0 pr-5">

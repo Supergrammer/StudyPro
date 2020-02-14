@@ -3,8 +3,7 @@
     <v-dialog v-model="open" persistent max-width="40%">
       <v-card v-if="member" class="px-0 pt-0">
         <v-card-text style="font-size:15px" align="center" class="pa-5">
-          {{ member.nickname }}님을 탈퇴시키겠습니까?
-          {{ member.id }} / {{ study_id }}
+          {{ member.nickname }}님을 탈퇴시키겠습니까?{{member.id}}
         </v-card-text>
 
         <v-card-actions class="pt-0 pr-5">
@@ -47,7 +46,7 @@
 </template>
 
 <script>
-// import StudyService from "@/services/study.service";
+import StudyService from "@/services/study.service";
 
 export default {
   name: "deletemodal",
@@ -72,7 +71,7 @@ export default {
     async clickYes() {
       this.subalert = true;
       this.$emit("close");
-    //   await StudyService.joinStudy({ apply_id: this.newbie.id, accept: false });
+      await StudyService.deleteUser({ study_id: this.study_id, user_id:this.member.id });
     }
   }
 };

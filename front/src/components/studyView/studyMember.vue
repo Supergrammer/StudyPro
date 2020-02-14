@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-list v-if="flag === false">
+    <v-list v-if="thisUser===thisCaptain">
       <v-toolbar elevation="0" style="border-bottom: 5px solid #736C70;">
         <v-toolbar-title>가입 요청 목록</v-toolbar-title>
       </v-toolbar>
@@ -81,26 +81,26 @@
 
       <v-list-item v-for="member in memberList" :key="member.id">
         <v-row style="border-bottom: 1px solid #E5C1D4;">
-          <v-col cols="1" align="center">
+          <v-col align-self="center" align="center" cols="1">
             <v-avatar size="40px" class="ma-0">
               <img :src="member.profile_url" />
             </v-avatar>
           </v-col>
 
-          <v-col align="center" cols="2">
-            <p style="font-size:14px" class="ma-0 pt-2">
+          <v-col align-self="center" align="center" cols="2">
+            <p style="font-size:14px" class="ma-0">
               {{ member.nickname }}
             </p>
           </v-col>
 
-          <v-col align="center" cols="1">
-            <p style="font-size:14px" class="ma-0 pt-2">
+          <v-col align-self="center" align="center" cols="1">
+            <p style="font-size:14px" class="ma-0">
               {{ member.gender == "M" ? "남성" : "여성" }}
             </p>
           </v-col>
 
-          <v-col align="center" cols="5">
-            <p style="font-size:14px" class="ma-0 pt-2">
+          <v-col align-self="center" align="center" cols="5">
+            <p style="font-size:14px" class="ma-0">
               {{ member.email }}
             </p>
           </v-col>
@@ -114,8 +114,8 @@
                 <v-img
                   v-if="member.level == 'captain'"
                   src="@/assets/images/crown.png"
-                  height="25px"
-                  width="25px"
+                  height="30px"
+                  width="30px"
                 />
 
                 <v-btn
@@ -174,6 +174,10 @@ export default {
   props: ["study_id"],
 
   data: () => ({
+    thisUser:"",
+    thisCaptain:"",
+
+
     flag: false,
     acceptModal: false,
     declineModal: false,
@@ -186,9 +190,17 @@ export default {
   }),
 
   created() {
-    this.getApplyList();
+    
+    this.getCaptain();
+    this.something();
+      console.log(this.thisCaptain);
+      console.log(this.thisUser);
+
+this.getApplyList();
     this.getjoinedUser();
+
   },
+
   components: {
     acceptModal: () =>
       import("@/components/studydetail/memberModal/AcceptModal"),
@@ -201,10 +213,38 @@ export default {
   },
   methods: {
 
+
+
+     getUser() {
+      return this.$store.getters["auth/getUser"];
+    },
+
+    something() {
+      this.thisUser = this.getUser().uid;
+
+    },
+
     changeLevel(member) {
+
+      // this.something();
+      // console.log(this.cur);
+
+
+      // console.log(this.memberList);
+      // console.log(this.newbieList);
+      // this.getCaptain();
+      console.log(this.thisCaptain);
+console.log(this.thisUser);
+
+      
+
+
+
+
+
       console.log(member.level);
-      console.log(member.id);
-      console.log("clicked..!");
+      // console.log(member.id);
+      // console.log("clicked..!");
 
       this.getjoinedUser();
     },
@@ -237,7 +277,6 @@ export default {
       StudyService.getApplyList({ study_id: this.study_id }).then(
         newbieList => {
           this.newbieList = newbieList.data;
-          console.log(newbieList);
         }
       );
     },
@@ -245,10 +284,23 @@ export default {
       StudyService.getjoinedUser({ study_id: this.study_id }).then(
         memberList => {
           this.memberList = memberList.data;
-          console.log(memberList);
         }
       );
-    }
+    },
+
+    getCaptain(){
+      StudyService.getStudyInfo({ study_id: this.study_id }).then(
+        thisCaptain => {
+          this.thisCaptain = thisCaptain.data.captain;
+        }
+      );
+    },
+
+
+
+
+
+
   }
 };
 </script>
