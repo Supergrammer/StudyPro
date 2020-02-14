@@ -12,9 +12,9 @@
     >
       <v-icon class="white--text">fa-arrow-up</v-icon>
     </v-btn>
-    <v-footer class="customTheme" padless>
+    <v-footer class="customTheme" padless style="opacity:.7;">
       <v-row justify="center" no-gutters>
-        <v-btn
+        <!-- <v-btn
           v-for="link in links"
           :key="link"
           color="white"
@@ -22,7 +22,7 @@
           rounded
           class="my-2"
           >{{ link }}</v-btn
-        >
+        > -->
         <v-col
           class="customTheme lighten-1 py-3 text-center white--text"
           cols="12"
