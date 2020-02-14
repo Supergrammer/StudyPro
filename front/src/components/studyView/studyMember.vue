@@ -109,6 +109,23 @@
             <!-- <v-icon @click="viewGreeting(member)" color="black"
               >more_horiz</v-icon
             > -->
+            <v-row>
+            <v-col cols="6">
+
+              <v-img v-if="member.level=='captain'" src="@/assets/images/crown.png" height="25px" width="25px"/>
+              <v-img v-else-if="member.level=='silver'" @click="something()" src="@/assets/images/silverlevel.png" height="25px" width="25px"/>
+
+
+           
+
+            </v-col>
+            <v-col cols="6">
+                <v-icon v-if="member.level !='captain'" @click="something()" color="red">close</v-icon>
+            </v-col>
+            </v-row>
+
+
+
           </v-col>
         </v-row>
       </v-list-item>
