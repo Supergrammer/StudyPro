@@ -70,7 +70,7 @@ export default {
     },
     async clickYes() {
       this.subalert = true;
-      this.$emit("close");
+      this.$emit("deleted");
       await StudyService.deleteUser({ study_id: this.study_id, user_id:this.member.id });
     }
   }

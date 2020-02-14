@@ -32,46 +32,38 @@
           </v-col>
 
           <v-col align="center" cols="1">
-            <v-icon @click="viewGreeting(newbie)" color="black"
+            <v-icon
+              @click="
+                (modalType = 'greeting'),
+                  (selectedUser = newbie),
+                  (modal = true)
+              "
+              color="black"
               >more_horiz</v-icon
             >
           </v-col>
 
           <v-col align="center" cols="1">
-            <v-icon @click="confirmAccept(newbie)" color="green">check</v-icon>
+            <v-icon
+              @click="
+                (modalType = 'accept'), (selectedUser = newbie), (modal = true)
+              "
+              color="green"
+              >check</v-icon
+            >
           </v-col>
 
           <v-col align="center" cols="1">
-            <v-icon @click="confirmDecline(newbie)" color="red">close</v-icon>
+            <v-icon
+              @click="
+                (modalType = 'decline'), (selectedUser = newbie), (modal = true)
+              "
+              color="red"
+              >close</v-icon
+            >
           </v-col>
         </v-row>
       </v-list-item>
-
-      <template>
-        <accept-modal
-          :accept-modal="acceptModal"
-          :newbie="newbie"
-          :study_id="study_id"
-          v-on:close="modalClose"
-        />
-      </template>
-
-      <template>
-        <decline-modal
-          :decline-modal="declineModal"
-          :newbie="newbie"
-          :study_id="study_id"
-          v-on:close="modalClose"
-        />
-      </template>
-
-      <template>
-        <greeting-modal
-          :greeting-modal="greetingModal"
-          :newbie="newbie"
-          v-on:close="modalClose"
-        />
-      </template>
     </v-list>
 
     <v-list>
@@ -145,7 +137,11 @@
               <v-col cols="6">
                 <v-icon
                   v-if="isCaptain && member.level != 'captain'"
-                  @click="confirmDelete(member)"
+                  @click="
+                    (modalType = 'delete'),
+                      (selectedUser = member),
+                      (modal = true)
+                  "
                   color="red"
                   >close</v-icon
                 >
@@ -155,14 +151,57 @@
         </v-row>
       </v-list-item>
 
-      <template>
-        <delete-modal
-          :delete-modal="deleteModal"
-          :member="member"
-          :study_id="study_id"
-          v-on:close="modalClose"
-        />
-      </template>
+      <modal :open-modal="modal" :close="modalClose">
+        <template v-slot:text>
+          <span v-if="modalType == 'delete'">{{
+            selectedUser.nickname
+          }}</span>
+          <span v-if="modalType != 'delete' && modalType != 'error'">{{
+            selectedUser.user.nickname
+          }}</span>
+          {{ modalText[modalType] }}
+          <p v-if="modalType == 'greeting'">{{ selectedUser.comment }}</p>
+        </template>
+        <template v-slot:btn>
+          <div class="text-end pr-3 pb-3">
+            <v-btn
+              text
+              @click="acceptMember"
+              class="primary--text"
+              v-show="modalType == 'accept'"
+              >예</v-btn
+            >
+            <v-btn
+              text
+              @click="declineMember"
+              class="primary--text"
+              v-show="modalType == 'decline'"
+              >예</v-btn
+            >
+            <v-btn
+              text
+              @click="deleteMember"
+              class="primary--text"
+              v-show="modalType == 'delete'"
+              >예</v-btn
+            >
+            <v-btn
+              text
+              @click="modal = false"
+              class="error--text"
+              v-show="modalType != 'error' && modalType != 'greeting'"
+              >아니오</v-btn
+            >
+            <v-btn
+              text
+              @click="modal = false"
+              class="error--text"
+              v-show="modalType == 'error' || modalType == 'greeting'"
+              >확인</v-btn
+            >
+          </div>
+        </template>
+      </modal>
     </v-list>
   </v-container>
 </template>
@@ -178,46 +217,53 @@ export default {
     thisCaptain: "",
 
     flag: false,
-    acceptModal: false,
-    declineModal: false,
-    greetingModal: false,
-    deleteModal: false,
-    newbie: {},
+    modal: false,
+    modalType: "",
     member: {},
     newbieList: [],
     memberList: [],
     studyInfo: {},
+    isCaptain: false,
+    selectedUser: {
+      user: {
+        nickname: ""
+      }
+    },
+    modalText: {
+      greeting: "님의 가입인사",
+      accept: "님의 가입 요청을 승인하시겠습니까?",
+      decline: "님의 가입 요청을 거절하시겠습니까?",
+      delete: "님을 탈퇴시키겠습니까?",
+      error: "오류가 발생했습니다"
+    }
   }),
 
   async created() {
     await this.loadStudyInfo();
-    if(this.isCaptain) this.getApplyList();
+    if (this.isCaptain) this.getApplyList();
     this.getjoinedUser();
-
   },
 
-  computed:{
-    currentUser(){
-      return this.$store.getters['auth/getUser']
-    },
+  watch: {
+    studyInfo() {
+      if (
+        this.studyInfo &&
+        this.currentUser &&
+        this.currentUser.uid == this.studyInfo.captain
+      ) {
+        this.isCaptain = true;
+      } else this.isCaptain = false;
+    }
+  },
 
-    isCaptain(){
-      if(this.currentUser.id == this.studyInfo.captain){
-        return true;
-      }
-      return false;
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/getUser"];
     }
   },
 
   components: {
-    acceptModal: () =>
-      import("@/components/studydetail/memberModal/AcceptModal"),
-    declineModal: () =>
-      import("@/components/studydetail/memberModal/DeclineModal"),
-    greetingModal: () =>
-      import("@/components/studydetail/memberModal/GreetingModal"),
-    deleteModal: () =>
-      import("@/components/studydetail/memberModal/DeleteModal")
+    modal: () => import("@/components/base/Modal")
   },
   methods: {
     changeLevel(member) {
@@ -242,14 +288,7 @@ export default {
       this.deleteModal = true;
       this.member = member;
     },
-    modalClose() {
-      this.acceptModal = false;
-      this.declineModal = false;
-      this.greetingModal = false;
-      this.deleteModal = false;
-      this.getApplyList();
-      this.getjoinedUser();
-    },
+
     getApplyList() {
       StudyService.getApplyList({ study_id: this.study_id }).then(
         newbieList => {
@@ -265,8 +304,58 @@ export default {
       );
     },
 
-    loadStudyInfo(){
-      this.studyInfo = StudyService.getStudyInfo({ study_id: this.study_id })
+    async loadStudyInfo() {
+      this.studyInfo = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      }).then(res => {
+        return res.data;
+      });
+    },
+
+    async acceptMember() {
+      var res = await StudyService.joinStudy({
+        apply_id: this.selectedUser.id,
+        accept: true
+      }).then(res => {
+        return res.data;
+      });
+      if (res.state == "success") {
+        this.getApplyList();
+        this.getjoinedUser();
+        this.modal = false;
+      } else {
+        this.modalType = "error";
+      }
+    },
+
+    async declineMember() {
+      console.log(this.selectedUser);
+      var res = await StudyService.joinStudy({
+        apply_id: this.selectedUser.id,
+        accept: false
+      }).then(res => {
+        return res.data;
+      });
+      if (res.state == "success") {
+        this.getApplyList();
+        this.getjoinedUser();
+        this.modal = false;
+      } else {
+        this.modalType = "error";
+      }
+    },
+
+    async deleteMember() {
+      await StudyService.deleteUser({
+        study_id: this.study_id,
+        user_id: this.selectedUser.id
+      });
+      
+      this.modal = false;
+    },
+
+    modalClose() {
+      this.modal = false;
     }
   }
 };
