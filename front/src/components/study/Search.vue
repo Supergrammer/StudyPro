@@ -1,9 +1,9 @@
 <template>
   <v-content id="contents" class="py-5">
     <v-row class="justify-center">
-      <v-col class="pa-2 col-10 col-md-9">
+      <v-col cols="10">
         <!-- 검색 창 -->
-        <v-autocomplete
+        <v-autocomplete outlined
           :items="recommendItems"
           :loading="isLoading"
           :search-input.sync="searchInput"
@@ -44,7 +44,7 @@
 
     <!-- 상세 검색 -->
     <v-row class="justify-center">
-      <v-col cols="10" class="pa-0">
+      <v-col cols="10" class="px-3 pt-0">
         <v-expansion-panels>
           <v-expansion-panel hover>
             <v-expansion-panel-header>상세검색</v-expansion-panel-header>

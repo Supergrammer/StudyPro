@@ -20,8 +20,10 @@
 </template>
 
 <script>
-// import StudyService from "@/services/study.service";
+import StudyService from "@/services/study.service";
+
 export default {
+  props: [ "study_id" ],
   data() {
     return {
       study_info: [],
@@ -30,7 +32,10 @@ export default {
 
   methods: {
     async getStudyInfo() {
-      // const tmp = StudyService.
+      const tmp = await StudyService.getStudyInfo({
+        study_id: this.study_id,
+      })
+      this.study_info = tmp.data;
     }
   },
 }
