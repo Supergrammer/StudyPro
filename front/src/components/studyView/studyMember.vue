@@ -358,10 +358,14 @@ export default {
     modal: () => import("@/components/base/Modal")
   },
   methods: {
-    changeLevel(member) {
-      console.log(member.level);
-      console.log(member.id);
-      console.log("clicked..!");
+    async changeLevel(member) {
+      if (!this.isCaptain) {
+        window.alert("스터디장이 아닙니다")
+        return
+      }
+      const level = member.level === 'silver' ? 'gold' : 'silver'
+      await StudyService.changeUserLevel({study_id: this.study_id, user_id: member.id, level: level})
+      location.reload()
     },
 
     confirmAccept(newbie) {
