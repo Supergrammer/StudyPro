@@ -26,6 +26,7 @@ import studySearch from '@/views/Study'
 import search from '@/components/study/StudyMain'
 // import studydetail from '@/components/studydetail/MainStudyDetail'
 import workspace from '@/components/workspace/WorkSpace'
+import MyGroupList from '@/components/user/MyGroupList'
 
 //쪽지함 접근(임시)
 import msgbox from '@/components/user/messenger/MessageHome'
@@ -80,6 +81,11 @@ const routes = [
             path: 'search',
             name: 'search',
             component: search,
+        },
+        {
+            path: 'mygroups',
+            name: 'mygroups',
+            component: MyGroupList,
         },
         {
             path: ':study_id',

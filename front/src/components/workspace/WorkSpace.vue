@@ -126,6 +126,7 @@
         </div>
       </v-img>
     </v-overlay>
+
   </v-card>
 </template>
 
@@ -144,7 +145,7 @@ export default {
       socket: "",
       connected_users: [],
       sharing_id: "no one",
-      debuging: false,
+      debuging: true,
       talk: true,
       current: "board",
       overlay: false
@@ -159,16 +160,16 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
-      if (!window.opener) {this.$router.push({name : 'home'})}
+      // if (!window.opener) {this.$router.push({name : 'home'})}
   },
   created() {
-    if (!window.opener) return
+    // if (!window.opener) return
     this.user = this.debuging
       ? {
         user_id: `${Math.ceil(40 + Math.random() * 40)}`,
           user_nickname: `${Math.ceil(Math.random() * 100000)}`,
           user_profile_url:
-            "https://15.164.245.201:8000/images/profile_default.png"
+            "http://15.164.245.201:8000/images/profile_default.png"
         }
       : {
         user_id: this.$store.getters["auth/getUser"].uid,
@@ -191,7 +192,7 @@ export default {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
     
-    if (!window.opener) return
+    // if (!window.opener) return
     window.onkeyup = (event)=>{
       if(event.keyCode==27){
         this.overlay = false;

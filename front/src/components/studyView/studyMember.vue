@@ -91,12 +91,18 @@
             </p>
           </v-col>
 
-          <v-col align-self="center" align="center" cols="5">
+          <v-col align-self="center" align="center" cols="4">
             <p style="font-size:14px" class="ma-0">
               {{ member.email }}
             </p>
           </v-col>
 
+          <v-col align-self="center" align="center" cols="1">
+            <a>
+            <img src="@/assets/images/post_img.png" v-if="member.id !== currentUser.uid" style="font-size:14px" class="ma-0" @click="viewDetail(member)">
+            </a>
+          </v-col>
+        
           <v-col align="center" cols="3">
             <!-- <v-icon @click="viewGreeting(member)" color="black"
               >more_horiz</v-icon
@@ -166,6 +172,13 @@
           </v-col>
         </v-row>
       </v-list-item>
+        <template>
+          <group-modal
+            :group-modal="groupModal"
+            :user="user"
+            v-on:close="modalClose"
+          />
+        </template>
 
       <modal :open-modal="modal" :close="modalClose">
         <template v-slot:text>
@@ -258,6 +271,7 @@
         </div>
       </v-col>
     </v-row>
+    
 
     <modal :open-modal="modal" v-on:close="modalClose">
       <template v-slot:toolbar v-if="reg_message == ''">
@@ -293,6 +307,8 @@ export default {
   data: () => ({
     comment: "",
     reg_message: "",
+    groupModal: false,
+
 
     modal: false,
     modalType: "",
@@ -355,9 +371,19 @@ export default {
   },
 
   components: {
-    modal: () => import("@/components/base/Modal")
+    modal: () => import("@/components/base/Modal"),
+    GroupModal: () => import("@/components/user/messenger/MsgSendModal")
   },
   methods: {
+    modalClose() {
+      this.groupModal = false;
+    },
+
+    viewDetail(user) {
+      this.groupModal = true;
+      this.user = user;
+    },
+
     async changeLevel(member) {
       if (!this.isCaptain) {
         window.alert("스터디장이 아닙니다")
@@ -461,9 +487,6 @@ export default {
       this.modal = true;
     },
 
-    modalClose() {
-      this.modal = false;
-    },
     // clickBack() {
     //   this.$router.go(-1);
     // },
