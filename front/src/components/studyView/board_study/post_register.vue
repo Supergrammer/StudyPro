@@ -145,7 +145,7 @@ Vue.use(TiptapVuetifyPlugin, {
 });
 
 export default {
-  props: [ "study_id" ],
+  props: ["study_id"],
   components: {
     TiptapVuetify,
     requestSignin: () => import("@/components/base/RequestSignin")
@@ -199,7 +199,7 @@ export default {
   computed: {
     isAuth() {
       return this.$store.getters["auth/isAuth"];
-    },
+    }
   },
 
   methods: {
@@ -211,9 +211,20 @@ export default {
       this.postData = post.data;
     },
     create() {
-      this.postData.study_id = this.study_id;
+      console.log("AAAAAAAAAAAAAAAA")
+      let formData = new FormData();
       this.postData.writer = this.getUser().uid;
-      PostService.createPost(this.postData);
+      for (var i = 0; i < this.files.length; i++) {
+        let file = this.files[i];
+        formData.append("post_file", file);
+      }
+      console.log("A", this.files)
+      formData.append("type", this.postData.type);
+      formData.append("study_id", this.study_id);
+      formData.append("title", this.postData.title);
+      formData.append("content", this.postData.content);
+      formData.append("board", this.postData.board);
+      PostService.createPost(formData);
       this.$router.go(-1);
     },
     clickBack() {
