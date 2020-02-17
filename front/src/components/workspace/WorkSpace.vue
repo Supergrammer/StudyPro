@@ -2,7 +2,7 @@
   <v-card
     id="workspace_card"
     flat
-    class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2"
+    class="customTheme lighten-2"
   >
     <v-row align="center" justify="center">
       <!-- 상단 탭 버튼 -->
