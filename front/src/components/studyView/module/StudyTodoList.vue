@@ -10,17 +10,16 @@
         </v-row>
       </v-card-title>
 
-      <v-card flat v-show="this.items.length === 0">
+      <v-card flat v-show="items.length === 0">
         <v-row no-gutters style="height:100%" align="center" justify="center">
           <v-col cols="12">
-            <v-card flat align="center" style="width: 100%; height: 100%">
-              <p class="calAlarm">오늘의 일정이 없습니다.</p>
-              <p class="calAlarm">일정을 등록해 주십시오.</p>
+            <v-card flat align="center" style="width: 100%; height: 100%" class="mb-7">
+              <span class="calAlarm">오늘의 일정이 없습니다.</span>
             </v-card>
           </v-col>
         </v-row>
       </v-card>
-      <v-list two-line v-show="!(this.items.length === 0)">
+      <v-list two-line v-show="!(items.length === 0)">
         <v-row no-gutters>
           <v-col cols="6">
             <v-card outlined min-height="300" class="mx-2">
@@ -39,7 +38,7 @@
                       </v-list-item-action>
                     </template>
                   </v-list-item>
-                  <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
+                  <v-divider class="mx-2" v-if="index + 1 < items.length" :key="index"></v-divider>
                 </template>
               </v-list-item-group>
             </v-card>
@@ -61,7 +60,7 @@
                       </v-list-item-action>
                     </template>
                   </v-list-item>
-                  <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
+                  <v-divider class="mx-2" v-if="index + 1 < items.length" :key="index"></v-divider>
                 </template>
               </v-list-item-group>
             </v-card>
@@ -113,7 +112,7 @@ export default {
   font-weight: bold !important;
 }
 .calAlarm {
-  font-size: 20px !important;
-  font-weight: bold !important;
+  font-size: 18px !important;
+  color: #808080 !important;
 }
 </style>

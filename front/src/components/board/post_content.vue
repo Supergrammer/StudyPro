@@ -21,7 +21,7 @@
           <div v-for="file in post_contents.files" :key="file.id">
             <v-btn @click="fileDownload(file)" elevation="0" color="white">
               <v-icon style="color:black">attachment</v-icon>
-              <span :class="ml-2">{{file.file_name}}</span>
+              <span :class="ml-3">{{file.file_name}}</span>
             </v-btn>
           </div>
         </v-row>
@@ -79,7 +79,7 @@
               </v-avatar>
               <p style="font-size:14px" class="ma-0 pt-2">{{ currentUser.nickname }}</p>
             </v-col>
-            <v-divider vertical class="my-1 mr-3"/>
+            <v-divider vertical class="my-1 mr-3" />
             <v-col cols="7" class="ma-3 mb-0">
               <v-textarea
                 @keydown.enter="createComment"
@@ -171,22 +171,21 @@ export default {
     },
     isWriter() {
       if (this.$store.getters["auth/getUser"]) {
-    return (
-        this.post_contents.writer ===
-        this.$store.getters["auth/getUser"].nickname
-      );
+        return (
+          this.post_contents.writer ===
+          this.$store.getters["auth/getUser"].nickname
+        );
       } else {
-        return false
+        return false;
       }
-      
     },
     post_like() {
       return this.post_contents.like;
-    },
+    }
   },
 
   methods: {
-     fileDownload(file) {
+    fileDownload(file) {
       FileService.downloadFile(file.file_url).then(response => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
@@ -212,9 +211,9 @@ export default {
         type: "common",
         post_id: this.post_id
       });
-      var path = this.$route.path.split('/')
-      
-      this.$router.push({path:"/"+path[1]+"/"+path[2]})
+      var path = this.$route.path.split("/");
+
+      this.$router.push({ path: "/" + path[1] + "/" + path[2] });
     },
 
     async getComment() {

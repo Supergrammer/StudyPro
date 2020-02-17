@@ -3,7 +3,7 @@
     <v-row no-gutters class="pt-2">
       <v-spacer />
       <v-col cols="8">
-        <v-card outlined>
+        <v-card flat>
           <study-mini-board :study_id="this.study_id" />
           <v-divider class="mx-5"/>
           <v-card flat>

@@ -21,7 +21,14 @@
         </v-card>
       </v-col>
     </v-row>
-    <profile :profile="profile" :show_profile_id="show_profile_id"></profile>
+    <profile :user="user" :profile="profile" :show_profile_id="show_profile_id" @msgModal="msgModal"></profile>    
+    <template>
+      <group-modal
+        :group-modal="groupModal"
+        :user="msg_user"
+        v-on:close="modalClose"
+      />
+    </template>
   </v-card>
 </template>
 
@@ -40,6 +47,9 @@ export default {
   props: ["socket", "user", "study_id", "sharing_id", "debuging"],
   data() {
     return {
+      groupModal: false,
+      msg_user: {},
+
       // FaceTalk
       post_img: null,
       local_video: null,
@@ -74,9 +84,18 @@ export default {
     }
   },
   components: {
-    profile: profile
+    profile: profile,
+    
+    GroupModal: () => import("@/components/user/messenger/MsgSendModal")
   },
   methods: {
+    modalClose() {
+      this.groupModal = false;
+    },
+    msgModal(data) {
+      this.groupModal = data.groupModal
+      this.msg_user = data.msg_user
+    },
     redrawing(e) {
 
       let temp_btn = e.target
@@ -262,7 +281,7 @@ export default {
     this.volume_img = require("../../assets/images/volume.png")
     this.camera_off_img = require("../../assets/images/camera_off.png")
     this.camera_on_img = require("../../assets/images/camera_on.png")
-    this.no_signal_img = 'https://15.164.245.201:8000/images/profile_default.png'
+    this.no_signal_img = 'http://15.164.245.201:8000/images/profile_default.png'
     this.user_profiles[0] = this.user.user_profile_url
   },
   mounted() {

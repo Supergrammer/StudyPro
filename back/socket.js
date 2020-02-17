@@ -56,6 +56,7 @@ export const connect = () => {
                 user_num = 1;
             }
             console.log(room.members);
+            console.log(room.sockets.length)
             
             socket.join(study_id);
 

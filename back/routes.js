@@ -13,8 +13,9 @@ const UPDATE_PASSWORD = "/pass"
 const JOINED_STUDY = "/joined-study";
 const LEAVE_STUDY = "/leave-study"
 
-// Images
+// Images & Files
 const IMAGES = "/images"
+const FILES = "/files"
 
 // Study
 const STUDIES = "/studies";
@@ -52,8 +53,7 @@ const APPLY_DETAIL = "/detail";
 const ALARMS = "/alarms";
 const ALARM = "/create";
 const ALARM_DETAIL = "/detail";
-const ALARM_NUMBER = "/number"
-
+const ALARM_NUMBER = "/number";
 
 //email
 const EMAIL = "/email"
@@ -76,6 +76,7 @@ const routes = {
     leave_study : LEAVE_STUDY,
     
     images : IMAGES,
+    files : FILES,
     
     studies : STUDIES,
     study : STUDY,
