@@ -1,188 +1,160 @@
 <template>
   <div id="mycal">
-    <div v-if="isAuth">
-      <v-row class="fill-height" justify="center">
-        <v-col cols="12" md="11" class="mx-2">
-          <v-card>
-            <v-toolbar flat color="customTheme" dark>
-              <v-toolbar-title class="ml-5">내 일정관리</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn
-                class="primary mr-2 pa-0 d-flex d-sm-none"
-                elevation="0"
-                @click="loadAddModal()"
+    <v-img src="@/assets/images/banner/calendar.png" />
+    <div id="cal-content" v-if="isAuth">
+      <v-card flat>
+        <!-- 달력 -->
+        <v-row class="fill-height">
+          <v-col>
+            <v-sheet height="64">
+              <v-toolbar flat color="white">
+                <v-btn
+                  outlined
+                  class="mr-4"
+                  color="grey darken-2"
+                  @click="setToday"
+                >
+                  오늘날짜로
+                </v-btn>
+                <v-btn fab text small color="grey darken-2" @click="prev">
+                  <v-icon small>mdi-chevron-left</v-icon>
+                </v-btn>
+                <v-btn fab text small color="grey darken-2" @click="next">
+                  <v-icon small>mdi-chevron-right</v-icon>
+                </v-btn>
+                <v-toolbar-title>{{ title }}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn
+                  class="primary mr-2 pa-0"
+                  elevation="0"
+                  @click="loadAddModal()"
+                >
+                  <span class="white--text px-2">+</span>
+                  <span class="pr-2 d-none d-sm-flex">일정추가</span>
+                </v-btn>
+                <v-menu bottom right>
+                  <template v-slot:activator="{ on }">
+                    <v-btn outlined color="grey darken-2" v-on="on">
+                      <span>{{ typeToLabel[type] }}</span>
+                      <v-icon right>mdi-menu-down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="type = 'day'">
+                      <v-list-item-title>일</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="type = 'week'">
+                      <v-list-item-title>주</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="type = 'month'">
+                      <v-list-item-title>월</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="type = '4day'">
+                      <v-list-item-title>4일</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-toolbar>
+            </v-sheet>
+
+            <!-- 달력 메인 -->
+            <v-sheet height="600">
+              <v-calendar
+                ref="calendar"
+                v-model="focus"
+                color="primary"
+                :events="events"
+                :event-color="getEventColor"
+                :now="today"
+                :type="type"
+                @click:event="showEvent"
+                @click:more="viewDay"
+                @click:date="viewDay"
+                @change="updateRange"
+              ></v-calendar>
+              <v-menu
+                v-model="selectedOpen"
+                :close-on-content-click="false"
+                :activator="selectedElement"
+                offset-y
+                :nudge-right="30"
+                max-width="500px"
+                min-width="350px"
               >
-                <span class="white--text px-2">+</span>
-                <span class="pr-2">일정추가</span>
-              </v-btn>
-            </v-toolbar>
-
-            <!-- 달력 -->
-            <v-row class="fill-height">
-              <v-col>
-                <v-sheet height="64">
-                  <v-toolbar flat color="white">
-                    <v-btn
-                      outlined
-                      class="mr-4"
-                      color="grey darken-2"
-                      @click="setToday"
-                    >
-                      오늘날짜로
-                    </v-btn>
-                    <v-btn fab text small color="grey darken-2" @click="prev">
-                      <v-icon small>mdi-chevron-left</v-icon>
-                    </v-btn>
-                    <v-btn fab text small color="grey darken-2" @click="next">
-                      <v-icon small>mdi-chevron-right</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>{{ title }}</v-toolbar-title>
+                <v-card color="grey lighten-4" flat>
+                  <v-toolbar :color="selectedEvent.color" dark>
+                    <v-toolbar-title
+                      v-html="selectedEvent.name"
+                    ></v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-btn
-                      class="primary mr-2 pa-0 d-none d-sm-flex"
-                      elevation="0"
-                      @click="loadAddModal()"
+                    <div>
+                      <v-btn icon class="dropPanel" @click="detail = !detail">
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                      <div
+                        :class="{ menu: detail }"
+                        class="detaildrop"
+                        style="position:absolute"
+                      >
+                        <ul class="pl-0">
+                          <li v-for="item in detailMenus" :key="item.title">
+                            <v-btn
+                              text
+                              @click="
+                                clickDetailMenu(item.value, selectedEvent)
+                              "
+                            >
+                              <span style="color:black">{{ item.title }}</span>
+                            </v-btn>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <v-dialog
+                      v-model="delOpen"
+                      max-width="400px"
+                      style="overflow:hidden"
                     >
-                      <span class="white--text px-2">+</span>
-                      <span class="pr-2">일정추가</span>
-                    </v-btn>
-                    <v-menu bottom right>
-                      <template v-slot:activator="{ on }">
-                        <v-btn outlined color="grey darken-2" v-on="on">
-                          <span>{{ typeToLabel[type] }}</span>
-                          <v-icon right>mdi-menu-down</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item @click="type = 'day'">
-                          <v-list-item-title>일</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="type = 'week'">
-                          <v-list-item-title>주</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="type = 'month'">
-                          <v-list-item-title>월</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="type = '4day'">
-                          <v-list-item-title>4일</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-toolbar>
-                </v-sheet>
-
-                <!-- 달력 메인 -->
-                <v-sheet height="600">
-                  <v-calendar
-                    ref="calendar"
-                    v-model="focus"
-                    color="primary"
-                    :events="events"
-                    :event-color="getEventColor"
-                    :now="today"
-                    :type="type"
-                    @click:event="showEvent"
-                    @click:more="viewDay"
-                    @click:date="viewDay"
-                    @change="updateRange"
-                  ></v-calendar>
-                  <v-menu
-                    v-model="selectedOpen"
-                    :close-on-content-click="false"
-                    :activator="selectedElement"
-                    offset-y
-                    :nudge-right="30"
-                    max-width="500px"
-                    min-width="350px"
-                  >
-                    <v-card color="grey lighten-4" flat>
-                      <v-toolbar :color="selectedEvent.color" dark>
-                        <v-toolbar-title
-                          v-html="selectedEvent.name"
-                        ></v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <div>
+                      <v-card class="py-2 px-3">
+                        <p>정말 삭제하시겠습니까?</p>
+                        <v-row justify="end">
                           <v-btn
-                            icon
-                            class="dropPanel"
-                            @click="detail = !detail"
+                            text
+                            color="dark lighten-2"
+                            @click="delOpen = false"
                           >
-                            <v-icon>mdi-dots-vertical</v-icon>
+                            Cancel
                           </v-btn>
-                          <div
-                            :class="{ menu: detail }"
-                            class="detaildrop"
-                            style="position:absolute"
+                          <v-btn
+                            text
+                            color="error"
+                            @click="eventDelete(selectedEvent)"
                           >
-                            <ul class="pl-0">
-                              <li v-for="item in detailMenus" :key="item.title">
-                                <v-btn
-                                  text
-                                  @click="
-                                    clickDetailMenu(item.value, selectedEvent)
-                                  "
-                                >
-                                  <span style="color:black">{{
-                                    item.title
-                                  }}</span>
-                                </v-btn>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <v-dialog
-                          v-model="delOpen"
-                          max-width="400px"
-                          style="overflow:hidden"
-                        >
-                          <v-card class="py-2 px-3">
-                            <p>정말 삭제하시겠습니까?</p>
-                            <v-row justify="end">
-                              <v-btn
-                                text
-                                color="dark lighten-2"
-                                @click="delOpen = false"
-                              >
-                                Cancel
-                              </v-btn>
-                              <v-btn
-                                text
-                                color="error"
-                                @click="eventDelete(selectedEvent)"
-                              >
-                                Ok
-                              </v-btn>
-                            </v-row>
-                          </v-card>
-                        </v-dialog>
-                      </v-toolbar>
-                      <v-card-text>
-                        <p
-                          v-text="
-                            selectedEvent.start + ' ~ ' + selectedEvent.end
-                          "
-                          class="text-center"
-                        ></p>
-                        <span v-html="selectedEvent.content"></span>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          color="secondary"
-                          @click="selectedOpen = false"
-                        >
-                          Cancel
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-menu>
-                </v-sheet>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
-      </v-row>
+                            Ok
+                          </v-btn>
+                        </v-row>
+                      </v-card>
+                    </v-dialog>
+                  </v-toolbar>
+                  <v-card-text>
+                    <p
+                      v-text="selectedEvent.start + ' ~ ' + selectedEvent.end"
+                      class="text-center"
+                    ></p>
+                    <span v-html="selectedEvent.content"></span>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="secondary" @click="selectedOpen = false">
+                      Cancel
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-menu>
+            </v-sheet>
+          </v-col>
+        </v-row>
+      </v-card>
       <add-modal
         :add-modal="addModal"
         :is-update="isUpdate"
@@ -197,7 +169,7 @@
 
 <script>
 import { format } from "date-fns";
-import WorkService from "@/services/work.service"
+import WorkService from "@/services/work.service";
 
 export default {
   name: "mycal",
@@ -290,17 +262,18 @@ export default {
     }
   },
   mounted() {
-    WorkService.getWorks({type:"personal"})
-      .then(works =>{
-        works.data.map(work=>{
-          work.name = "[" + work.status + "]" + work.name
-          work.color = work.color ? work.color : "primary"/* 빨리 여기를 수정해야 한다. */ 
-          work.start = work.start_date
-          work.end = work.end_date
-        })
-        
-        this.events = works.data;
-      })
+    WorkService.getWorks({ type: "personal" }).then(works => {
+      works.data.map(work => {
+        work.name = "[" + work.status + "]" + work.name;
+        work.color = work.color
+          ? work.color
+          : "primary"; /* 빨리 여기를 수정해야 한다. */
+        work.start = work.start_date;
+        work.end = work.end_date;
+      });
+
+      this.events = works.data;
+    });
     // 마운트시 내 일정 엑시오스 요청
   },
   methods: {
@@ -400,20 +373,20 @@ export default {
       // };
       // //테스트라인
       // this.events.push(newEvent);
-      WorkService.getWorks({type:"personal"})
-      .then(works =>{
-        works.data.map(work=>{
-          work.name = "[" + work.status + "]" + work.name
-          work.color = work.color ? work.color : "primary"/* 빨리 여기를 수정해야 한다. */ 
-          work.start = work.start_date
-          work.end = work.end_date
-        })
-        
+      WorkService.getWorks({ type: "personal" }).then(works => {
+        works.data.map(work => {
+          work.name = "[" + work.status + "]" + work.name;
+          work.color = work.color
+            ? work.color
+            : "primary"; /* 빨리 여기를 수정해야 한다. */
+          work.start = work.start_date;
+          work.end = work.end_date;
+        });
+
         this.events = works.data;
         this.$refs.calendar.checkChange();
-      })
+      });
       // 일정목록 리로드
-      
     },
 
     clickDetailMenu(value, event) {
@@ -432,11 +405,11 @@ export default {
     },
 
     eventDelete(event) {
-      WorkService.deleteWork({type:"personal", work_id:event.id});
+      WorkService.deleteWork({ type: "personal", work_id: event.id });
       //console.log("eventDelete in MyCalendar.vue", event);
-      const eventsIdx = this.events.indexOf(event)
+      const eventsIdx = this.events.indexOf(event);
       //삭제 엑시오스 요청
-      this.events.splice(eventsIdx, 1)
+      this.events.splice(eventsIdx, 1);
       this.delOpen = false;
       this.selectedOpen = false;
       this.$refs.calendar.checkChange();
