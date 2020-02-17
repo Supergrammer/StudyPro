@@ -1,5 +1,7 @@
 <template>
   <div id="studymain">
+    <v-img src="@/assets/images/banner/study.png" />
+    <div id="study-content">
     <v-card elevation="0">
       <v-tabs vertical v-model="tabIndex">
         <v-tab class="study-tabs" v-for="item in titles" :key="item.title">
@@ -34,6 +36,7 @@
         </v-tab-item>
       </v-tabs>
     </v-card>
+    </div>
   </div>
 </template>
 

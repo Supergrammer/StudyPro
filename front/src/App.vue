@@ -7,6 +7,7 @@
         <router-view name="footer" />
       </v-col>
     </v-row>
+    <router-view name="submain" />
   </v-app>
 </template>
 
