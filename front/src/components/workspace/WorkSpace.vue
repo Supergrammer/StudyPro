@@ -1,5 +1,5 @@
 <template>
-  <v-card @keyup="help" id="workspace_card" class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
+  <v-card id="workspace_card" class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
     <v-row class="my-0 py-0">
       <v-col :cols="talk ? 9 : 12" id="col" class="py-1 pr-1">
         <v-tabs height="95" grow icons-and-text centered dark color="cyan">
@@ -82,17 +82,17 @@
       </v-col>
     </v-row>
 
-    <v-overlay :value="overlay" opacity=0.15 @click="help" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+    <v-overlay :value="overlay" opacity=0.15  oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
       <v-img
-      @keyup="help"
         v-show="current==='board'"
         id="help_img"
         src="@/assets/images/help_board.png"
         width="1505"
         height="758"
+        @click="help"
       >
         <div class="text-end">
-          <v-btn  right icon @click="help">
+          <v-btn  right icon >
             <v-icon x-large>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -103,9 +103,10 @@
         src="@/assets/images/help_viewshare.png"
         width="1505"
         height="758"
+        @click="help"
       >
         <div class="text-end" >
-          <v-btn  right icon @click="help">
+          <v-btn  right icon >
             <v-icon x-large>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -116,9 +117,10 @@
         src="@/assets/images/help_notepad.png"
         width="1505"
         height="758"
+        @click="help"
       >
         <div class="text-end" >
-          <v-btn  right icon @click="help">
+          <v-btn  right icon >
             <v-icon x-large>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -186,14 +188,15 @@ export default {
     );
   },
   mounted() {
+    window.moveTo(0, 0);
+    window.resizeTo(screen.availWidth, screen.availHeight + 100);
+    
     if (!window.opener) return
     window.onkeyup = (event)=>{
       if(event.keyCode==27){
         this.overlay = false;
       }
     }
-    window.moveTo(0, 0);
-    window.resizeTo(screen.availWidth, screen.availHeight + 100);
 
     window.onbeforeunload = () => {
       this.socket.emit("leave", {
@@ -215,7 +218,8 @@ export default {
     change_current(page) {
       this.current = page;
     },
-    help() {
+    help(event) {
+      event.preventDefault();
       this.overlay = !this.overlay;
     },
 
