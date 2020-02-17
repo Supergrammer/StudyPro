@@ -1,5 +1,5 @@
 <template>
-  <v-card @keyup="help" id="workspace_card" class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
+  <v-card id="workspace_card" class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2">
     <v-row class="my-0 py-0">
       <v-col :cols="talk ? 9 : 12" id="col" class="py-1 pr-1">
         <v-tabs height="95" grow icons-and-text centered dark color="cyan">
@@ -82,17 +82,17 @@
       </v-col>
     </v-row>
 
-    <v-overlay :value="overlay" opacity=0.15 @click="help" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+    <v-overlay :value="overlay" opacity=0.15  oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
       <v-img
-      @keyup="help"
         v-show="current==='board'"
         id="help_img"
         src="@/assets/images/help_board.png"
         width="1505"
         height="758"
+        @click="help"
       >
         <div class="text-end">
-          <v-btn  right icon @click="help">
+          <v-btn  right icon >
             <v-icon x-large>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -103,9 +103,10 @@
         src="@/assets/images/help_viewshare.png"
         width="1505"
         height="758"
+        @click="help"
       >
         <div class="text-end" >
-          <v-btn  right icon @click="help">
+          <v-btn  right icon >
             <v-icon x-large>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -116,9 +117,10 @@
         src="@/assets/images/help_notepad.png"
         width="1505"
         height="758"
+        @click="help"
       >
         <div class="text-end" >
-          <v-btn  right icon @click="help">
+          <v-btn  right icon >
             <v-icon x-large>mdi-close</v-icon>
           </v-btn>
         </div>
@@ -142,7 +144,7 @@ export default {
       socket: "",
       connected_users: [],
       sharing_id: "no one",
-      debuging: true,
+      debuging: false,
       talk: true,
       current: "board",
       overlay: false
@@ -157,42 +159,44 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
-    //   if (!window.opener) {this.$router.push({name : 'home'})}
+      if (!window.opener) {this.$router.push({name : 'home'})}
   },
   created() {
+    if (!window.opener) return
     this.user = this.debuging
       ? {
-          user_id: `${Math.ceil(40 + Math.random() * 40)}`,
+        user_id: `${Math.ceil(40 + Math.random() * 40)}`,
           user_nickname: `${Math.ceil(Math.random() * 100000)}`,
           user_profile_url:
-            "http://15.164.245.201:8000/images/profile_default.png"
+            "https://15.164.245.201:8000/images/profile_default.png"
         }
       : {
-          user_id: this.$store.getters["auth/getUser"].uid,
+        user_id: this.$store.getters["auth/getUser"].uid,
           user_nickname: this.$store.getters["auth/getUser"].nickname,
           user_profile_url: this.$store.getters["auth/getUser"].profile_url
         };
     this.study_id = window.location.href.split("workspace/")[1];
     this.socket = io.connect(`http://70.12.247.73:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
     // this.socket = io.connect(
-    //   `http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
+      //   `http://70.12.246.89:8210/?study_id=${this.study_id}&user_id=${this.user.user_id}&user_nickname=${this.user.user_nickname}`,
       {
         // this.socket = io.connect(`https://15.164.245.201:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-        // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
-        transports: ["websocket"],
+          // this.socket = io.connect(`https://i02a106.p.ssafy.io:8210/?study_id=${this.study_id}&user_id=${this.user_id}`, {
+            transports: ["websocket"],
         secure: true
       }
     );
-    // this.socket.emit("join", { study_id: this.study_id, user_id: this.user.user_id });
   },
   mounted() {
+    window.moveTo(0, 0);
+    window.resizeTo(screen.availWidth, screen.availHeight + 100);
+    
+    if (!window.opener) return
     window.onkeyup = (event)=>{
       if(event.keyCode==27){
         this.overlay = false;
       }
     }
-    window.moveTo(0, 0);
-    window.resizeTo(screen.availWidth, screen.availHeight + 100);
 
     window.onbeforeunload = () => {
       this.socket.emit("leave", {
@@ -214,7 +218,8 @@ export default {
     change_current(page) {
       this.current = page;
     },
-    help() {
+    help(event) {
+      event.preventDefault();
       this.overlay = !this.overlay;
     },
 
@@ -235,7 +240,6 @@ export default {
   height: 100vh !important;
 }
 
-/* @media only screen and (min-width: 960px) */
 #workspace_card {
   max-width: 1530px;
   min-width: 1530px;

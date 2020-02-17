@@ -185,7 +185,6 @@ export default {
       };
       image.src = data.image_data;
     });
-    console.log(document.getElementById("slider"));
 
     // window.onresize = () => {
     //   console.log(document.getElementById("canvas_card").offsetHeight);
