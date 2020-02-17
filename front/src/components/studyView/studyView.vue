@@ -23,7 +23,7 @@
           <v-list-item-icon>
             <v-icon medium>developer_board</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>WorkSpace</v-list-item-title>
+          <v-list-item-title>스터디 룸</v-list-item-title>
         </v-list-item>
       </v-list>
       <v-divider class="mx-3" />

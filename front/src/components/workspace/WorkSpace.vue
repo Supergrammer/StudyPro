@@ -142,6 +142,7 @@
         </div>
       </v-img>
     </v-overlay>
+
   </v-card>
 </template>
 
@@ -160,7 +161,7 @@ export default {
       socket: "",
       connected_users: [],
       sharing_id: "no one",
-      debuging: false,
+      debuging: true,
       talk: true,
       current: "board",
       overlay: false
@@ -175,18 +176,25 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
+<<<<<<< HEAD
     if (!window.opener) {
       this.$router.push({ name: "home" });
     }
   },
   created() {
     if (!window.opener) return;
+=======
+      // if (!window.opener) {this.$router.push({name : 'home'})}
+  },
+  created() {
+    // if (!window.opener) return
+>>>>>>> 7dda99c615654520c1ce6c8d12e47799df951bd6
     this.user = this.debuging
       ? {
           user_id: `${Math.ceil(40 + Math.random() * 40)}`,
           user_nickname: `${Math.ceil(Math.random() * 100000)}`,
           user_profile_url:
-            "https://15.164.245.201:8000/images/profile_default.png"
+            "http://15.164.245.201:8000/images/profile_default.png"
         }
       : {
           user_id: this.$store.getters["auth/getUser"].uid,
@@ -209,10 +217,17 @@ export default {
   mounted() {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
+<<<<<<< HEAD
 
     if (!window.opener) return;
     window.onkeyup = event => {
       if (event.keyCode == 27) {
+=======
+    
+    // if (!window.opener) return
+    window.onkeyup = (event)=>{
+      if(event.keyCode==27){
+>>>>>>> 7dda99c615654520c1ce6c8d12e47799df951bd6
         this.overlay = false;
       }
     };
