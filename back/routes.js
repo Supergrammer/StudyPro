@@ -50,6 +50,13 @@ const ALARMS = "/alarms";
 const ALARM = "/create";
 const ALARM_DETAIL = "/detail";
 
+
+//email
+const EMAIL = "/email"
+const AUTH = "/auth"
+const NOTICE_APPLY = "/notice_apply"
+const RESULT_APPLY = "/result_apply"
+
 const routes = {
     home : HOME,
 
@@ -92,5 +99,11 @@ const routes = {
     alarms : ALARMS,
     alarm : ALARM,
     alarm_detail : ALARM_DETAIL,
+
+    email:EMAIL,
+    auth:AUTH,
+    notice_apply : NOTICE_APPLY,
+    result_apply : RESULT_APPLY,
+
 }
 export default routes;

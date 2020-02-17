@@ -60,7 +60,7 @@ export const social_signin = async function(req, res) {
 
 }
 
-// ¼¼¼Ç À¯Áö È®ÀÎÀ» À§ÇÑ ÅäÅ« È®ÀÎ + È®ÀÎ ÈÄ À¯Àú Á¤º¸ Àü¼Û
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å« È®ï¿½ï¿½ + È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 export const check_token = async function(req, res) {
     try{
         const accessToken = req.header('Authorization')
