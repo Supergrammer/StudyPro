@@ -21,7 +21,14 @@
         </v-card>
       </v-col>
     </v-row>
-    <profile :profile="profile" :show_profile_id="show_profile_id" :debuging="debuging"></profile>
+    <profile :user="user" :profile="profile" :show_profile_id="show_profile_id" @msgModal="msgModal"></profile>    
+    <template>
+      <group-modal
+        :group-modal="groupModal"
+        :user="msg_user"
+        v-on:close="modalClose"
+      />
+    </template>
   </v-card>
 </template>
 
@@ -40,6 +47,9 @@ export default {
   props: ["socket", "user", "study_id", "sharing_id", "debuging"],
   data() {
     return {
+      groupModal: false,
+      msg_user: {},
+
       // FaceTalk
       post_img: null,
       local_video: null,
@@ -57,7 +67,6 @@ export default {
       remote_streams: [null, null, null, null, null, null],
       show_profile_id: this.user.user_id,
       profile : {
-        fav: false,
         showProfile: false,
         x: 0,
         y: 0,
@@ -75,9 +84,18 @@ export default {
     }
   },
   components: {
-    profile: profile
+    profile: profile,
+    
+    GroupModal: () => import("@/components/user/messenger/MsgSendModal")
   },
   methods: {
+    modalClose() {
+      this.groupModal = false;
+    },
+    msgModal(data) {
+      this.groupModal = data.groupModal
+      this.msg_user = data.msg_user
+    },
     redrawing(e) {
 
       let temp_btn = e.target
@@ -203,8 +221,8 @@ export default {
         mute_button.style.zIndex = "5";
         mute_button.style.width = "20px";
         mute_button.style.height = "20px";
-        mute_button.style.right = '5px'
-        mute_button.style.bottom = '5px'
+        mute_button.style.right = '5px';
+        mute_button.style.bottom = '5px';
 
         const camera_button = document.createElement('img')
         camera_button.src = this.camera_on_img
@@ -213,8 +231,8 @@ export default {
         camera_button.style.zIndex = "5";
         camera_button.style.width = "20px";
         camera_button.style.height = "20px";
-        camera_button.style.right = '30px'
-        camera_button.style.bottom = '5px'
+        camera_button.style.right = '30px';
+        camera_button.style.bottom = '5px';
 
 
         const remote_block = this.remote_videos[video_num]
@@ -238,8 +256,6 @@ export default {
       this.remote_videos[video_num].appendChild(this.createEye())
       this.remote_videos[video_num].lastChild.style.left = "25%"
       this.remote_videos[video_num].lastChild.style.top = "25%"
-
-
     },
 
     deleteBorder(video_num, before_id) {
@@ -261,7 +277,6 @@ export default {
   },
 
   created() {
-    console.log("내아이디 : ", this.user.user_id, '내 닉네임 : ', this.user.user_nickname);
     this.mute_img = require("../../assets/images/mute.png")
     this.volume_img = require("../../assets/images/volume.png")
     this.camera_off_img = require("../../assets/images/camera_off.png")

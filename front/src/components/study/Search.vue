@@ -1,10 +1,9 @@
 <template>
-  <v-content id="contents" class="py-5">
+  <div id="contents">
     <v-row class="justify-center">
-      <v-col cols="10">
+      <v-col cols="12" sm="10">
         <!-- 검색 창 -->
         <v-autocomplete
-          outlined
           :items="recommendItems"
           :loading="isLoading"
           :search-input.sync="searchInput"
@@ -15,6 +14,7 @@
           label="이름으로 검색"
           solo
           @keyup.enter="searchEnter()"
+          id="study-search"
         >
           <template v-slot:no-data>
             <v-list-item>
@@ -45,7 +45,7 @@
 
     <!-- 상세 검색 -->
     <v-row class="justify-center">
-      <v-col cols="10" class="px-3 pt-0">
+      <v-col cols="12" sm="10" class="px-3 pt-0">
         <v-expansion-panels>
           <v-expansion-panel hover>
             <v-expansion-panel-header>상세검색</v-expansion-panel-header>
@@ -235,7 +235,7 @@
     </v-row>
 
     <!-- 결과 테이블 -->
-    <v-card class="col-10 offset-1">
+    <v-card class="col-12 col-sm-10 offset-sm-1">
       <v-toolbar color="customTheme" dark>
         <v-toolbar-title>Search Results</v-toolbar-title>
       </v-toolbar>
@@ -363,7 +363,7 @@
         </v-list-group>
       </v-list>
     </v-card>
-  </v-content>
+  </div>
 </template>
 
 <script>

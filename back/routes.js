@@ -13,8 +13,9 @@ const UPDATE_PASSWORD = "/pass"
 const JOINED_STUDY = "/joined-study";
 const LEAVE_STUDY = "/leave-study"
 
-// Images
+// Images & Files
 const IMAGES = "/images"
+const FILES = "/files"
 
 // Study
 const STUDIES = "/studies";
@@ -24,6 +25,8 @@ const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
 const STUDY_APPLY = "/apply"
 const STUDY_JOIN = "/join"
+const CHECK_ATTNEDENCE = "/check_attendence"
+const ATTNEDENCE = "/attendence"
 
 // Post
 const POSTS = "/posts"
@@ -50,7 +53,13 @@ const APPLY_DETAIL = "/detail";
 const ALARMS = "/alarms";
 const ALARM = "/create";
 const ALARM_DETAIL = "/detail";
-const ALARM_NUMBER = "/number"
+const ALARM_NUMBER = "/number";
+
+//email
+const EMAIL = "/email"
+const AUTH = "/auth"
+const NOTICE_APPLY = "/notice_apply"
+const RESULT_APPLY = "/result_apply"
 
 const routes = {
     home : HOME,
@@ -65,8 +74,9 @@ const routes = {
     update_password: UPDATE_PASSWORD,
     joined_study : JOINED_STUDY,
     leave_study : LEAVE_STUDY,
-
+    
     images : IMAGES,
+    files : FILES,
     
     studies : STUDIES,
     study : STUDY,
@@ -75,7 +85,9 @@ const routes = {
     study_mark : STUDY_MARK,
     study_apply: STUDY_APPLY,
     study_join : STUDY_JOIN,
-
+    check_attendence : CHECK_ATTNEDENCE,
+    attendence : ATTNEDENCE,
+    
     posts : POSTS,
     post_number: POST_NUMBER,
     post_list : POST_LIST,
@@ -96,6 +108,15 @@ const routes = {
     alarms : ALARMS,
     alarm : ALARM,
     alarm_detail : ALARM_DETAIL,
+
+    email:EMAIL,
+    auth:AUTH,
+    notice_apply : NOTICE_APPLY,
+    result_apply : RESULT_APPLY,
+
     alarm_number : ALARM_NUMBER
 }
+
+
+
 export default routes;

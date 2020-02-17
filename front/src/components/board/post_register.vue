@@ -207,8 +207,8 @@ export default {
         let file = this.files[i];
         formData.append("post_file", file);
       }
+      console.log("hello")
       formData.append("type", this.postData.type);
-      formData.append("writer", this.postData.writer);
       formData.append("title", this.postData.title);
       formData.append("content", this.postData.content);
       formData.append("board", this.postData.board);

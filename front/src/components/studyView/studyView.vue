@@ -2,7 +2,7 @@
   <v-content id="study" class="pa-0">
     <v-navigation-drawer absolute permanent expand-on-hover v-if="isAuth">
       <v-list>
-        <v-list-item class>
+        <v-list-item class="mt-2">
           <v-list-item-avatar>
             <v-img :src="currentUser.profile_url"></v-img>
           </v-list-item-avatar>
@@ -23,11 +23,11 @@
           <v-list-item-icon>
             <v-icon medium>developer_board</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>WorkSpace</v-list-item-title>
+          <v-list-item-title>스터디 룸</v-list-item-title>
         </v-list-item>
       </v-list>
       <v-divider class="mx-3" />
-      <v-list>
+      <!-- <v-list>
         <v-list-item @click="routeTo()">
           <v-list-item-icon>
             <v-icon medium>check</v-icon>
@@ -40,7 +40,7 @@
           </v-list-item-icon>
           <v-list-item-title>관리자 메뉴</v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-navigation-drawer>
 
     <v-card flat>

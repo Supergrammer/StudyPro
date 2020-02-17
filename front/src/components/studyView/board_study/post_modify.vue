@@ -220,6 +220,7 @@ export default {
 
   methods: {
     async modify() {
+      console.log("modify")
       this.modified.type = "study";
       this.modified.post_id = this.post_id;
       this.modified.title = this.postData.title;
