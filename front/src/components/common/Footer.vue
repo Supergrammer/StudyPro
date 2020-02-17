@@ -21,6 +21,7 @@
           text
           rounded
           class="my-2"
+          @click="effect(link)"
           >{{ link }}</v-btn
         > -->
         <v-col
@@ -41,10 +42,26 @@ export default {
   data() {
     return {
       toTopBtn: false,
-      links: ["Home", "About Us", "Services", "Blog", "Contact Us"]
+      links: ["Home", "About Us", "Services", "Blog", "Contact Us"],
+      effects: {
+        aboutUs: false
+      }
     };
   },
   methods: {
+    effect(link) {
+      switch (link) {
+        case "About Us":
+          this.effects.aboutUs = !this.effects.aboutUs
+          setTimeout(() => {
+              window.scrollTo(0, document.body.scrollHeight)
+            }, 0.01);
+          break;
+      
+        default:
+          break;
+      }
+    },
     onScroll(scr) {
       if (typeof window === "undefined") return;
       const top = window.pageYOffset || scr.target.scrollTop || 0;
