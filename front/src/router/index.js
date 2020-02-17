@@ -77,43 +77,14 @@ const routes = [{
             footer: appFooter
         },
         children: [{
-            path: 'search',
-            name: 'search',
-            component: search,
-        },
-        {
-            path: 'mygroups',
-            name: 'mygroups',
-            component: MyGroupList,
-        },
-        {
-            path: ':study_id',
-            name: 'study_main',
-            component: studyView,
-            props: true,
-            children: [{
-                path: 'home',
-                name: 'study_home',
-                component: studyHome,
-                props: true,
+                path: 'search',
+                name: 'search',
+                component: search,
             },
             {
-                path: 'schedule',
-                name: 'study_schedule',
-                component: studySchedule,
-                props: true,
-            },
-            {
-                path: 'member',
-                name: 'study_member',
-                component: studyMember,
-                props: true,
-            },
-            {
-                path: 'board/register',
-                name: 'study_register',
-                component: studyRegister,
-                props: true,
+                path: 'mygroups',
+                name: 'mygroups',
+                component: MyGroupList,
             },
             {
                 path: ':study_id',
