@@ -1,5 +1,5 @@
 <template>
-  <v-content app class="pa-0">
+  <div id="footer">
     <v-btn
       v-scroll="onScroll"
       v-show="toTopBtn"
@@ -7,13 +7,13 @@
       fixed
       bottom
       right
-      class="red pa-0"
+      class="red"
       @click="toTop"
     >
       <v-icon class="white--text">fa-arrow-up</v-icon>
     </v-btn>
-    <v-footer class="customTheme" padless style="opacity:.7;">
-      <v-row justify="center" no-gutters>
+    <v-footer class="customTheme" padless>
+      <v-row justify="center">
         <!-- <v-btn
           v-for="link in links"
           :key="link"
@@ -25,7 +25,7 @@
           >{{ link }}</v-btn
         > -->
         <v-col
-          class="customTheme lighten-1 py-3 text-center white--text"
+          class="customTheme lighten-1 text-center white--text"
           cols="12"
         >
           <span class="font-weight-light">StudyPRO</span>
@@ -34,7 +34,7 @@
         </v-col>
       </v-row>
     </v-footer>
-  </v-content>
+  </div>
 </template>
 
 <script>
