@@ -8,10 +8,7 @@
         <v-card-text class="py-0 px-7">
           <v-container class="pb-0">
             <v-row class="justify-center">
-              <v-avatar size="140" color="white">
-                <!-- <v-icon size="140">mdi-account-circle</v-icon> -->
-                <v-img :src="studyInfo.captain.profile_url"></v-img>
-              </v-avatar>
+              <v-img :src="studyInfo.image_url" max-height="400px"></v-img>
             </v-row>
             <v-row class="pt-4 pb-1">
               <v-col cols="3" class="py-0">
@@ -121,7 +118,7 @@
               </v-col>
               <v-col class="py-0">
                 <v-content text class="py-0">{{
-                  studyInfo.start_time
+                  studyInfo.process_days | getDays
                 }}</v-content>
               </v-col>
             </v-row>
@@ -186,6 +183,7 @@ export default {
       this.open = this.groupModal;
     },
     open() {
+      console.log(this.studyInfo)
       if (!this.open) {
         this.$emit("close");
       }
@@ -204,6 +202,23 @@ export default {
       if (minute < 10) minute = "0" + minute;
 
       return hour +':' +minute
+    },
+    getDays(value){
+      var days = "";
+      var weekofdays = {
+        Mon: "월",
+        Tue: "화",
+        Wed: "수",
+        Thu: "목",
+        Fri: "금",
+        Sat: "토",
+        Sun: "일"
+      };
+      for (var i = 0; i < value.length; i++) {
+        days += weekofdays[value[i].day]+ ' '
+      }
+
+      return days;
     }
   }
 };

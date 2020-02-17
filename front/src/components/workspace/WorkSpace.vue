@@ -184,7 +184,6 @@ export default {
         secure: true
       }
     );
-    // this.socket.emit("join", { study_id: this.study_id, user_id: this.user.user_id });
   },
   mounted() {
     if (!window.opener) return
@@ -237,7 +236,6 @@ export default {
   height: 100vh !important;
 }
 
-/* @media only screen and (min-width: 960px) */
 #workspace_card {
   max-width: 1530px;
   min-width: 1530px;

@@ -6,11 +6,7 @@
           <v-card class="py-0">
             <v-toolbar flat class="d-block d-sm-none">
               <v-spacer></v-spacer>
-              <v-btn
-                class="customTheme mr-2 pa-0"
-                elevation="0"
-                @click="loadAddModal()"
-              >
+              <v-btn class="customTheme mr-2 pa-0" elevation="0" @click="loadAddModal()">
                 <span class="white--text px-2">+</span>
                 <span class="white--text pr-2">일정추가</span>
               </v-btn>
@@ -21,14 +17,7 @@
               <v-col class="pt-0">
                 <v-sheet height="64">
                   <v-toolbar flat color="white">
-                    <v-btn
-                      outlined
-                      class="mr-4"
-                      color="grey darken-2"
-                      @click="setToday"
-                    >
-                      오늘날짜로
-                    </v-btn>
+                    <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">오늘날짜로</v-btn>
                     <v-btn fab text small color="grey darken-2" @click="prev">
                       <v-icon small>mdi-chevron-left</v-icon>
                     </v-btn>
@@ -96,16 +85,10 @@
                   >
                     <v-card color="grey lighten-4" flat>
                       <v-toolbar :color="selectedEvent.color" dark>
-                        <v-toolbar-title
-                          v-html="selectedEvent.name"
-                        ></v-toolbar-title>
+                        <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                         <v-spacer></v-spacer>
                         <div>
-                          <v-btn
-                            icon
-                            class="dropPanel"
-                            @click="detail = !detail"
-                          >
+                          <v-btn icon class="dropPanel" @click="detail = !detail">
                             <v-icon>mdi-dots-vertical</v-icon>
                           </v-btn>
                           <div
@@ -121,36 +104,30 @@
                                     clickDetailMenu(item.value, selectedEvent)
                                   "
                                 >
-                                  <span style="color:black">{{
+                                  <span style="color:black">
+                                    {{
                                     item.title
-                                  }}</span>
+                                    }}
+                                  </span>
                                 </v-btn>
                               </li>
                             </ul>
                           </div>
                         </div>
-                        <v-dialog
-                          v-model="delOpen"
-                          max-width="400px"
-                          style="overflow:hidden"
-                        >
+                        <v-dialog v-model="delOpen" max-width="400px" style="overflow:hidden">
                           <v-card class="py-2 px-3">
                             <p>정말 삭제하시겠습니까?</p>
                             <v-row justify="end">
-                            <v-btn
-                              text
-                              color="dark lighten-2"
-                              @click="delOpen = false"
-                            >
-                              Cancel
-                            </v-btn>
-                            <v-btn
-                              text
-                              color="error"
-                              @click="eventDelete(selectedEvent)"
-                            >
-                              Ok
-                            </v-btn>
+                              <v-btn text color="dark lighten-2" @click="delOpen = false">Cancel</v-btn>
+                              <v-btn text color="error" @click="eventDelete(selectedEvent)">Ok</v-btn>
+                            </v-row>
+                          </v-card>
+                        </v-dialog>
+                        <v-dialog v-model="userOpen" max-width="400px" style="overflow:hidden">
+                          <v-card class="py-2 px-3">
+                            <p>내 일정에 추가했습니다.</p>
+                            <v-row justify="end">
+                              <v-btn text color="dark lighten-2" @click="putUserSchedule()">확인</v-btn>
                             </v-row>
                           </v-card>
                         </v-dialog>
@@ -166,13 +143,7 @@
                       </v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          color="secondary"
-                          @click="selectedOpen = false"
-                        >
-                          Cancel
-                        </v-btn>
+                        <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-menu>
@@ -186,6 +157,7 @@
         :add-modal="addModal"
         :is-update="isUpdate"
         :prop-event="propEvent"
+        :study_id="study_id"
         v-on:close="addModal = false"
         v-on:reload="reload"
       />
@@ -196,8 +168,9 @@
 
 <script>
 import { format } from "date-fns";
-
+import WorkService from "@/services/work.service";
 export default {
+  props: ["study_id"],
   name: "mycal",
   data: () => ({
     today: format(new Date(), "yyyy-MM-dd hh:mm:ss"),
@@ -213,6 +186,7 @@ export default {
     end: null,
     selectedEvent: {},
     selectedElement: null,
+    userOpen: false,
     selectedOpen: false,
     events: [],
     colors: [
@@ -239,8 +213,8 @@ export default {
     addModal: false,
     detail: false,
     detailMenus: [
-      { title: "가져오기", value: "movemycal" },
-      { title: "일정수정", value: "update" },
+      { title: "내 일정에 추가", value: "movemycal" },
+      { title: "일정 수정", value: "update" },
       { title: "삭제", value: "delete" }
     ],
     delOpen: false
@@ -289,20 +263,23 @@ export default {
     }
   },
   mounted() {
+    //console.log("studySChedule.vue", this.study_id)
     //   임시 더미 입력
-    this.events.push({
-      name: "테스트",
-      content: "테스트내용",
-      start: "2020-02-09 10:00",
-      end: "2020-02-13 18:00",
-      group: "테스트그룹",
-      color: "pink",
-      event_id: 0,
-      group_id: 0
-    });
-
     // 마운트시 내 일정 엑시오스 요청
+    WorkService.getWorks({ type: "study", study_id: this.study_id }).then(
+      works => {
+        works.data.map(work => {
+          work.name = "[" + work.status + "]" + work.name;
+          work.color = work.color
+            ? work.color
+            : "primary"; /* 빨리 여기를 수정해야 한다. */
+          work.start = work.start_date;
+          work.end = work.end_date;
+        });
 
+        this.events = works.data;
+      }
+    );
     this.$refs.calendar.checkChange();
   },
   methods: {
@@ -311,7 +288,13 @@ export default {
       this.type = "day";
     },
     getEventColor(event) {
-      return event.color;
+      let color;
+      if (event.status === "그룹할일") {
+        color = "light green";
+      } else {
+        color = "purple";
+      }
+      return color;
     },
     setToday() {
       this.focus = this.today;
@@ -386,26 +369,41 @@ export default {
       }
     },
 
-    reload(event) {
+    reload(/*event*/) {
       // 추가할 데이터 // 테스트용
-      var newEvent = {
-        name:
-          event.group == "empty"
-            ? event.name
-            : "[" + event.group + "]" + event.name,
-        content: event.content,
-        start: event.start,
-        end: event.end,
-        group: event.group,
-        color: event.color,
-        event_id: 0,
-        group_id: 0
-      };
-      //테스트라인
-      this.events.push(newEvent);
+      // var newEvent = {
+      //   name:
+      //     event.group == "empty"
+      //       ? event.name
+      //       : "[" + event.group + "]" + event.name,
+      //   content: event.content,
+      //   start: event.start,
+      //   end: event.end,
+      //   group: event.group,
+      //   color: event.color,
+      //   event_id: 0,
+      //   group_id: 0
+      // };
+      // //테스트라인
+      // this.events.push(newEvent);
 
-      // 일정목록 리로드
-      this.$refs.calendar.checkChange();
+      // // 일정목록 리로드
+      // this.$refs.calendar.checkChange();
+      WorkService.getWorks({ type: "study", study_id: this.study_id }).then(
+        async works => {
+          await works.data.map(work => {
+            work.name = "[" + work.status + "]" + work.name;
+            work.color = work.color
+              ? work.color
+              : "primary"; /* 빨리 여기를 수정해야 한다. */
+            work.start = work.start_date;
+            work.end = work.end_date;
+          });
+
+          this.events = works.data;
+          this.$refs.calendar.checkChange();
+        }
+      );
     },
 
     clickDetailMenu(value, event) {
@@ -427,20 +425,34 @@ export default {
     },
 
     eventDelete(event) {
-      console.log("eventDelete in MyCalendar.vue", event);
+      WorkService.deleteWork({ type: "study", work_id: event.id });
+      const eventsIdx = this.events.indexOf(event);
+      this.events.splice(eventsIdx, 1);
 
-      //삭제 엑시오스 요청
-
-      this.delOpen = false
+      this.delOpen = false;
+      this.selectedOpen = false;
       this.$refs.calendar.checkChange();
     },
 
     moveMyCal(event) {
-      console.log(event);
+      const name_arr = event.name.split("]");
+      const name = name_arr.length == 2 ? name_arr[1] : name_arr[0];
 
-      // 엑시오스 요청
-
-      this.$refs.calendar.checkChange();
+      WorkService.createWork({
+        type: "personal",
+        study_id: event.study_id,
+        group: "study " + event.status,
+        name: name,
+        content: event.content,
+        start: event.start_date,
+        end: event.end_date,
+        color: event.color
+      });
+      this.userOpen = true;
+    },
+    putUserSchedule() {
+      this.selectedOpen = false;
+      this.userOpen = false;
     }
   }
 };
