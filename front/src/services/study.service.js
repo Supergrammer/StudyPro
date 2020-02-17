@@ -97,6 +97,14 @@ class StudyService {
         })
     }
 
+    changeUserLevel(payload) {
+        return axios.post(URL + "change-level", {
+            study_id: payload.study_id,
+            user_id: payload.user_id,
+            level: payload.level,
+        })
+    }
+
 
 
 

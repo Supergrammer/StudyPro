@@ -262,7 +262,7 @@ export default {
     this.volume_img = require("../../assets/images/volume.png")
     this.camera_off_img = require("../../assets/images/camera_off.png")
     this.camera_on_img = require("../../assets/images/camera_on.png")
-    this.no_signal_img = 'http://15.164.245.201:8000/images/profile_default.png'
+    this.no_signal_img = 'https://15.164.245.201:8000/images/profile_default.png'
     this.user_profiles[0] = this.user.user_profile_url
   },
   mounted() {
