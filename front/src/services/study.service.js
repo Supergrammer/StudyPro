@@ -104,10 +104,25 @@ class StudyService {
             level: payload.level,
         })
     }
+    
+    checkAttendence(payload) {
+        return axios.post(URL + "check_attendence", {
+            study_id: payload.study_id,
+            user_id: payload.user_id,
+            date: payload.date,
+        })
+    }
 
-
-
-
+    attendence(payload) {
+        console.log(URL + "attendence");
+        
+        return axios.post(URL + "attendence", {
+            study_id: payload.study_id,
+            user_id: payload.user_id,
+        })
+    }
+    
+    
 
 }
 
