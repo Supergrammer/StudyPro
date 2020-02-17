@@ -66,7 +66,7 @@ export const social_signin = async function (req, res) {
 
 }
 
-// ���� ���� Ȯ���� ���� ��ū Ȯ�� + Ȯ�� �� ���� ���� ����
+// 토큰값으로 유저 정보 확인
 export const check_token = async function (req, res) {
     try {
         const accessToken = req.header('Authorization')
@@ -232,12 +232,8 @@ export const get_joined_study = function (req, res) {
         if (user) {
             users_and_studies.findAll({ where: { user_id: user.id } })
                 .map(async (joined) => {
-<<<<<<< HEAD
                     
                     const joined_study = await studies.findOne({where:{id:joined.dataValues.study_id}})
-=======
-                    const joined_study = await studies.findOne({ where: { id: joined.dataValues.study_id } })
->>>>>>> aa0f174cb309f29fa95fcc4c6b9367f5e5959c46
                     joined_study.dataValues.membership_level = joined.dataValues.level
                     
                     const captain = await users.findOne({where:{id:joined_study.dataValues.captain}})

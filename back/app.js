@@ -14,12 +14,7 @@ import postRouter from "./routers/postRouter"
 import applyRouter from "./routers/applyRouter"
 import alarmRouter from "./routers/alarmRouter"
 import classRouter from "./routers/classRouter"
-<<<<<<< HEAD
 //import emailRouter from "/routers/emailRouter"
-=======
-import emailRouter from "./routers/emailRouter"
-
->>>>>>> aa0f174cb309f29fa95fcc4c6b9367f5e5959c46
 import routes from "./routes"
 import path from "path"
 

@@ -25,12 +25,8 @@ const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
 const STUDY_APPLY = "/apply"
 const STUDY_JOIN = "/join"
-<<<<<<< HEAD
-const CHANGE_LEVEL = "/change-level"
-=======
 const CHECK_ATTNEDENCE = "/check_attendence"
 const ATTNEDENCE = "/attendence"
->>>>>>> aa0f174cb309f29fa95fcc4c6b9367f5e5959c46
 
 // Post
 const POSTS = "/posts"
@@ -96,14 +92,9 @@ const routes = {
     study_mark : STUDY_MARK,
     study_apply: STUDY_APPLY,
     study_join : STUDY_JOIN,
-<<<<<<< HEAD
-    change_level : CHANGE_LEVEL,
-
-=======
     check_attendence : CHECK_ATTNEDENCE,
     attendence : ATTNEDENCE,
     
->>>>>>> aa0f174cb309f29fa95fcc4c6b9367f5e5959c46
     posts : POSTS,
     post_number: POST_NUMBER,
     post_list : POST_LIST,
@@ -124,20 +115,13 @@ const routes = {
     alarms : ALARMS,
     alarm : ALARM,
     alarm_detail : ALARM_DETAIL,
-<<<<<<< HEAD
-    alarm_number : ALARM_NUMBER,
-=======
->>>>>>> aa0f174cb309f29fa95fcc4c6b9367f5e5959c46
 
     email:EMAIL,
     auth:AUTH,
     notice_apply : NOTICE_APPLY,
     result_apply : RESULT_APPLY,
-<<<<<<< HEAD
-=======
 
     alarm_number : ALARM_NUMBER
->>>>>>> aa0f174cb309f29fa95fcc4c6b9367f5e5959c46
 }
 
 
