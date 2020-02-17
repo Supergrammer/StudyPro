@@ -1,12 +1,6 @@
-// .v-application--wrap {
-//     background-color: rgba(21, 21, 22, 0.699);
-// }
+// 공통
 $black: #212529;
 $white: #ffffff;
-.theme--light.v-application {
-    background-color: #fff;
-}
-
 .dropPanel {
     display: block;
     text-decoration: none;
@@ -65,15 +59,6 @@ ul {
     list-style-type: none;
 }
 
-input[type="number"] {
-    -moz-appearance: textfield;
-}
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-}
-
 .theme--light.v-btn--active:before {
     opacity: 0;
 }
@@ -86,54 +71,12 @@ input[type="number"]::-webkit-inner-spin-button {
     display: inline-block;
 }
 
-.pointer {
-    cursor: pointer;
-}
-
-.align-center {
-    display: flex;
-    align-items: center;
-}
-
-.justify-center {
-    display: flex;
-    justify-content: center;
-}
-
-.justify-start {
-    display: flex;
-    justify-content: flex-start;
-}
-
-.justify-end {
-    display: flex;
-    justify-content: flex-end;
-}
-
 a {
     text-decoration: none;
 }
 
-.ellipsis {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-wrap: normal;
-    overflow: hidden;
-}
-
-.ellipsis-multi {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    /* 라인수 */
-    -webkit-box-orient: vertical;
-    word-wrap: break-word;
-    line-height: 1.2em;
-    height: 3.6em;
-    /* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
-}
-
+// 메인 페이지
+// 메인 카드
 .card-title {
     font-size: 20px;
     margin-bottom: 0px !important;
@@ -142,22 +85,6 @@ a {
 .card-text {
     font-size: 16px;
     padding: 0 0 0 8px;
-}
-
-.studyCardImg {
-    height: auto;
-    max-height: 130px;
-    width: 100%;
-}
-
-.card {
-    border: 2px !important;
-    height: 255px !important;
-    max-width: 300px;
-}
-
-.card-img-container {
-    height: 130px;
 }
 
 .card-tail-container {
@@ -183,6 +110,8 @@ a {
     height: 100%;
     transform: translate(0, 0);
     color: white;
+    align-items: center;
+    bottom: 0;
 }
 
 .newstudy-card-overlap {

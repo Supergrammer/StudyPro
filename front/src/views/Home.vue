@@ -1,22 +1,8 @@
 <template>
-  <v-content app id="home" class="pa-0">
-    <v-row justify="center">
-      <v-col cols="12" lg="9" md="12" sm="12" class="pt-0">
-        <div class="bannerContainer">
-          <v-img class="banner" src="@/assets/images/banner/main.png" />
-        </div>
-        <top-left />
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <!-- <v-col cols="12">
-        <v-card class="pa-1 transparent" outlined tile>
-          <middle />
-        </v-card>
-      </v-col> -->
-    </v-row>
-  </v-content>
+  <div id="home">
+    <v-img src="@/assets/images/banner/main.png" />
+    <top class="px-4 py-10"/>
+  </div>
 </template>
 
 <script>
@@ -45,7 +31,7 @@ export default {
   },
 
   components: {
-    TopLeft: () => import("@/components/home/TopLeft")
+    Top: () => import("@/components/home/Top")
     // TopRight: () => import("@/components/home/TopRight"),
     // Middle: () => import("@/components/home/Middle")
   }

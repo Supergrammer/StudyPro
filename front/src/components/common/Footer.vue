@@ -1,5 +1,5 @@
 <template>
-  <v-content app class="pa-0">
+  <div id="footer">
     <v-btn
       v-scroll="onScroll"
       v-show="toTopBtn"
@@ -12,7 +12,7 @@
     >
       <v-icon class="white--text">fa-arrow-up</v-icon>
     </v-btn>
-    <v-footer class="customTheme" padless style="opacity:.7;">
+    <v-footer class="customTheme" absolute padless style="opacity:.7;">
       <v-row justify="center" no-gutters>
         <!-- <v-btn
           v-for="link in links"
@@ -33,7 +33,7 @@
         </v-col>
       </v-row>
     </v-footer>
-  </v-content>
+  </div>
 </template>
 
 <script>

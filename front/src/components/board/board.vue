@@ -1,42 +1,39 @@
 <template>
-  <v-content id="board" class="pa-0">
-    <v-row justify="center">
-      <v-col cols="12" md="11" lg="10">
-        <v-card class="mx-1">
-          <v-toolbar flat color="customTheme" dark>
-            <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
-          </v-toolbar>
-          <v-row no-gutters>
-            <v-col style="max-width: 200px;">
-              <v-card flat>
-                <v-list flat>
-                  <v-list-item-group>
-                    <v-list-item
-                      v-for="(menu, index) in menus"
-                      :key="index"
-                      @click="routeTo(menu.route)"
-                    >
-                      <v-list-item-icon>
-                        <v-icon>{{ menu.icon }}</v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title>{{ menu.text }}</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-card>
-            </v-col>
-            <v-col>
-              <v-card class="ma-2">
-                <boardList :board="boardList" />
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-content>
+  <div id="board">
+    <v-img src="@/assets/images/banner/board.png" />
+    <v-card class="mx-1">
+      <v-toolbar flat color="customTheme" dark>
+        <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
+      </v-toolbar>
+      <v-row no-gutters>
+        <v-col style="max-width: 200px;">
+          <v-card flat>
+            <v-list flat>
+              <v-list-item-group>
+                <v-list-item
+                  v-for="(menu, index) in menus"
+                  :key="index"
+                  @click="routeTo(menu.route)"
+                >
+                  <v-list-item-icon>
+                    <v-icon>{{ menu.icon }}</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ menu.text }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card class="ma-2">
+            <boardList :board="boardList" />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card>
+  </div>
 </template>
 
 <script>

@@ -1,0 +1,50 @@
+.v-toolbar__content {
+    padding-top: 0;
+}
+
+#header-container {
+    height: 56px;
+}
+
+.header-logo-container {
+    height: 56px;
+    .header-logo {
+        position: relative;
+        height: auto;
+        width: 100%;
+    }
+}
+
+.header-menu-container {
+    height: 56px;
+    padding: 0;
+    .header-menu {
+        background-color: transparent;
+    }
+}
+
+.header-usermenu-container {
+    height: 56px;
+    .header-user-btn {
+        padding: 0;
+        float: right;
+    }
+}
+
+.header-hamburger {
+    float: right;
+    height: 100% !important;
+}
+
+.header-user {
+    float: right;
+    height: 100% !important;
+}
+
+.logo {
+    font-size: 20px;
+}
+
+#navDrawer {
+    opacity: 0.8;
+}
