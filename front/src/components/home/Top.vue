@@ -65,7 +65,7 @@
         threshold: 0.5
       }"
     >
-      <p class="main-title animated fadeIn" aria-disabled>
+      <p class="main-title animated bounce" aria-disabled>
         새로운 모임
       </p>
     </v-lazy>

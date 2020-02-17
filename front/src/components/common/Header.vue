@@ -3,18 +3,19 @@
     <v-app-bar prominent flat height="56px">
       <v-row id="header-container">
         <!-- 로고 -->
-        <v-col class="header-logo-container" cols="4" sm="3" md="2">
+        <v-col class="header-logo-container">
           <router-link to="/home">
             <v-img
+              class="logo"
               src="@/assets/images/LogoText7.png"
               contain
-              style="max-height:52px;"
             ></v-img>
           </router-link>
         </v-col>
         <!-- 로고 끝 -->
+        <v-spacer></v-spacer>
         <!-- 메뉴 -->
-        <v-col class="header-menu-container" sm="6" md="8">
+        <v-col class="header-menu-container">
           <template>
             <v-tabs
               class="header-menu d-none d-sm-flex justify-center"
@@ -28,8 +29,9 @@
           </template>
         </v-col>
         <!-- 메뉴 끝 -->
+        <v-spacer></v-spacer>
         <!-- 유저메뉴 / 햄버거 -->
-        <v-col class="header-usermenu-container pl-0" cols="8" sm="3" md="2">
+        <v-col class="header-usermenu-container pl-0">
           <v-btn
             class="header-user-btn d-none d-sm-inline-block px-0"
             @click="toSignup"
@@ -54,6 +56,16 @@
           <!-- <v-container class="align-right"> -->
           <!--  -->
           <template v-if="isAuth">
+            <v-btn to="/msgbox" id="mail-btn" elevation="0" color="white">
+              <v-badge
+                :content="numAlarm"
+                :value="numAlarm"
+                color="red"
+                overlap
+              >
+                <v-icon style="color:black">mdi-email</v-icon>
+              </v-badge>
+            </v-btn>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn text x-large class="header-user pa-0" v-on="on">
@@ -168,6 +180,7 @@
   </div>
 </template>
 <script>
+import AlarmService from "@/services/alarm.service";
 export default {
   name: "appHeader",
   data() {
@@ -186,7 +199,7 @@ export default {
       navigations: [
         { title: "스터디 홈", route: "/home" },
         { title: "스터디", route: "/study/search" },
-        { title: "게시판", route: "/board/share" },
+        { title: "게시판", route: "/board/share" }
       ],
       userpages: [
         { title: "정보 수정", route: "/user/mypage" },
@@ -199,7 +212,8 @@ export default {
         { title: "로그아웃", name: "signout" }
       ],
       userInfo: {},
-      isLoading: false
+      isLoading: false,
+      numAlarm: null
     };
   },
   computed: {
@@ -244,6 +258,11 @@ export default {
         this.$router.push({ name: "signup" });
       }
     }
+  },
+  created() {
+    AlarmService.getAlarmNumber().then(numAlarm => {
+      this.numAlarm = numAlarm.data.num_alarm;
+    });
   }
 };
 </script>
