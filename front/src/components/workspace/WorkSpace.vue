@@ -2,7 +2,7 @@
   <v-card
     id="workspace_card"
     flat
-    class="ma-0 px-1 pt-0 pb-0 customTheme lighten-2"
+    class="customTheme lighten-2"
   >
     <v-row align="center" justify="center">
       <!-- 상단 탭 버튼 -->
@@ -176,19 +176,12 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
-<<<<<<< HEAD
     if (!window.opener) {
       this.$router.push({ name: "home" });
     }
   },
   created() {
     if (!window.opener) return;
-=======
-      // if (!window.opener) {this.$router.push({name : 'home'})}
-  },
-  created() {
-    // if (!window.opener) return
->>>>>>> 7dda99c615654520c1ce6c8d12e47799df951bd6
     this.user = this.debuging
       ? {
           user_id: `${Math.ceil(40 + Math.random() * 40)}`,
@@ -217,17 +210,10 @@ export default {
   mounted() {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
-<<<<<<< HEAD
 
     if (!window.opener) return;
     window.onkeyup = event => {
       if (event.keyCode == 27) {
-=======
-    
-    // if (!window.opener) return
-    window.onkeyup = (event)=>{
-      if(event.keyCode==27){
->>>>>>> 7dda99c615654520c1ce6c8d12e47799df951bd6
         this.overlay = false;
       }
     };
