@@ -1,7 +1,10 @@
 <template>
   <div id="topleft">
     <div v-if="isExistMyGroup">
-      <p class="main-title pl-8 pt-5 animated fadeIn slow">나의 모임</p>
+      <!-- 가입한 모임 목록 -->
+      <p class="main-title pl-8 pt-5 animated fadeIn" aria-disabled>
+        나의 모임
+      </p>
       <v-row class="mx-auto">
         <v-col
           cols="6"
@@ -10,85 +13,161 @@
           v-for="item in myStudyList"
           :key="item.id"
         >
-          <v-card
-            elevation="1"
-            max-width="300px"
-            class="animated fadeInRight card slow"
-            :style="getStyle(item.order)"
-            @click="viewDetail(item)"
-          >
-            <v-img :src="item.image_url" class="studyCardImg"></v-img>
-            <v-card-title class="card-title"
-              ><p class="ellipsis">{{ item.name }}</p>
-            </v-card-title>
-            <v-card-text class="card-text">
-              <span>
-                <small>by {{ item.captain.name }} </small><br />
-                <small
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              v-if="!hover"
+              elevation="1"
+              class="animated fadeInRight card"
+              :style="getStyle(item.order)"
+              @click="moveDetail(item)"
+            >
+              <v-row class="card-img-container" align="center">
+                <v-col class="py-0">
+                  <v-img
+                    :src="item.image_url"
+                    class="studyCardImg"
+                    align="center"
+                  ></v-img>
+                </v-col>
+              </v-row>
+              <small class="pl-4 pt-4 card-small-text font-weight-thin">{{
+                item.minor_class.name
+              }}</small>
+              <p class="ellipsis pl-4 font-weight-bold card-title">
+                {{ item.name }}
+              </p>
+              <p class="card-tail-container">
+                <small class="card-tail card-small-text"
                   >{{ item.start_time | getTime }} ~
                   {{ item.end_time | getTime }}</small
+                ><br />
+                <small class="card-tail card-small-text">{{
+                  item.process_days | getDays
+                }}</small>
+              </p>
+              <v-expand-transition>
+                <div
+                  v-if="hover"
+                  class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-3 white--text"
+                  style="height: 100%;"
                 >
-                / <small>{{ item.process_days | getDays }}</small>
-              </span>
-              <span class="ellipsis">
-                <v-icon>emoji_flags</v-icon>{{ item.goal }}
-              </span>
-              <span class="ellipsis-multi mb-0">
-                {{ item.description }}
-              </span>
-            </v-card-text>
-          </v-card>
+                  $14.99
+                </div>
+              </v-expand-transition>
+            </v-card>
+          </v-hover>
         </v-col>
       </v-row>
     </div>
+    <!-- 가입한 모임목록 끝 -->
     <div style="height:5%"></div>
+
+    <!-- 새로운 모임 목록 -->
     <v-lazy
-          :options="{
-            threshold: 0.5
-          }"
-          transition="fade-transition"
-        >
-    <p class="main-title pl-8 pt-5 animated fadeIn slow">새로운 모임</p>
+      :options="{
+        threshold: 0.5
+      }"
+      transition="fade-transition"
+    >
+      <p class="main-title pl-8 pt-5 animated fadeIn" aria-disabled>
+        새로운 모임
+      </p>
     </v-lazy>
     <v-row class="mx-auto">
       <v-col cols="6" sm="4" md="3" v-for="item in studyList" :key="item.id">
-        <v-lazy
-          :options="{
-            threshold: 0.5
-          }"
-          transition="fade-transition"
-        >
-          <v-card
-            elevation="1"
-            max-width="300px"
-            class="animated fadeInRight card slow"
-            :style="getStyle(item.order)"
-            @click="viewDetail(item)"
+        <v-hover v-slot:default="{ hover }">
+          <v-lazy
+            :options="{
+              threshold: 0.4
+            }"
+            transition="fade-transition"
           >
-            <v-img :src="item.image_url" class="studyCardImg"></v-img>
-            <v-card-title class="card-title"
-              ><p class="ellipsis">{{ item.name }}</p>
-            </v-card-title>
-            <v-card-text class="card-text">
-              <span>
-                <small>by {{ item.captain.name }} </small><br />
-                <small
+            <v-card
+              v-if="!hover"
+              elevation="1"
+              class="animated fadeIn card"
+              :style="getStyle(item.order)"
+              @click="viewDetail(item)"
+            >
+              <v-row class="card-img-container" align="center">
+                <v-col class="py-0">
+                  <v-img
+                    :src="item.image_url"
+                    class="studyCardImg"
+                    align="center"
+                  ></v-img>
+                </v-col>
+              </v-row>
+              <small class="pl-4 pt-4 card-small-text font-weight-thin">{{
+                item.minor_class.name
+              }}</small>
+              <p class="ellipsis pl-4 font-weight-bold card-title">
+                {{ item.name }}
+              </p>
+              <p class="card-tail-container">
+                <small class="card-tail card-small-text"
                   >{{ item.start_time | getTime }} ~
                   {{ item.end_time | getTime }}</small
-                >
-                / <small>{{ item.process_days | getDays }}</small>
-              </span>
-              <p class="ellipsis mb-2">
-                <v-icon>emoji_flags</v-icon>{{ item.goal }}
+                ><br />
+                <small class="card-tail card-small-text">{{
+                  item.process_days | getDays
+                }}</small>
               </p>
-              <p class="ellipsis-multi mb-0">
-                {{ item.description }}
+            </v-card>
+
+            <!-- 호버되었을 때 -->
+            <v-card
+              v-else
+              elevation="1"
+              class="animated fadeIn card"
+              :style="getStyle(item.order)"
+              @click="viewDetail(item)"
+            >
+              <v-row class="card-img-container" align="center">
+                <v-col class="py-0">
+                  <v-img
+                    :src="item.image_url"
+                    class="studyCardImg"
+                    align="center"
+                  ></v-img>
+                </v-col>
+              </v-row>
+              <small class="pl-4 pt-4 card-small-text font-weight-thin">{{
+                item.minor_class.name
+              }}</small>
+              <p class="ellipsis pl-4 font-weight-bold card-title">
+                {{ item.name }}
               </p>
-            </v-card-text>
-          </v-card>
-        </v-lazy>
+              <p class="card-tail-container">
+                <small class="card-tail card-small-text"
+                  >by {{ item.captain.name }}
+                </small>
+              </p>
+              <!-- 오버랩 카드 -->
+              <div class="newstudy-card-overlap">
+                <p class="ellipsis pa-4 font-weight-bold card-overlap-title">
+                  {{ item.name }}
+                </p>
+                <p class="ellipsis-multi px-3">
+                  {{ item.description }}
+                </p>
+                <p class="pl-4 py-0 my-0 card-overlap-text">
+                  <small class="card-small-text font-weight-thin"
+                    >{{ item.minor_class.name }}<br />{{
+                      item.start_time | getTime
+                    }}
+                    ~ {{ item.end_time | getTime }}<br />{{
+                      item.process_days | getDays
+                    }}</small
+                  >
+                </p>
+              </div>
+            </v-card>
+          </v-lazy>
+        </v-hover>
       </v-col>
     </v-row>
+    <!-- 새로운 모임목록 끝 -->
     <group-modal
       :study-info="studySingle"
       :group-modal="groupModal"
@@ -158,6 +237,9 @@ export default {
       this.studySingle = studyInfo;
       this.groupModal = true;
     },
+    moveDetail(studyInfo) {
+      this.$router.push({ path: "study/", params: { study_id: studyInfo.id } });
+    },
     modalClose() {
       this.groupModal = false;
     },
@@ -183,7 +265,7 @@ export default {
   },
   filters: {
     getDays(value) {
-      if (value.length == 1) {
+      if (value.length == 1 && value[0].day == "") {
         return value[0].day;
       }
       var days = "";
@@ -216,14 +298,5 @@ export default {
 <style>
 #topleft {
   height: 100%;
-}
-
-.studyCardImg {
-  height: 140px;
-  width: auto;
-}
-
-.card {
-  border: 2px !important;
 }
 </style>

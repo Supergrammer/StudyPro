@@ -1,175 +1,183 @@
 <template>
-  <v-container id="header">
-    <v-app-bar fixed prominent max-height="56px" height="56px">
-      <v-row style="height:56px; width:100%">
-        <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">
-          <router-link to="/home" text-decoration="none">
-            <v-img
-              src="@/assets/images/LogoText.png"
-              contain
-              style="max-height:52px;"
-            ></v-img>
-          </router-link>
-        </v-col>
-        <!-- Menu Tab -->
-        <v-col cols="1" sm="6" md="8" class="py-0">
-          <template>
-            <v-tabs
-              background-color="transparent"
-              class="d-none d-sm-flex justify-center"
-              show-arrows
-            >
-              <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
-                <v-icon left>{{ menu.icon }}</v-icon>
-                <span class="d-none d-lg-flex">{{ menu.title }}</span>
-              </v-tab>
-            </v-tabs>
-          </template>
-        </v-col>
-        <v-col
-          cols="7"
-          sm="3"
-          md="2"
-          class="py-0 justify-end align-center"
-          style="height:56px;"
-        >
-          <v-btn
-            class="d-none d-sm-inline-block"
-            @click="signinModal = true"
-            v-if="!isAuth"
-            text
-          >
-            <span>로그인</span>
-          </v-btn>
-          <v-btn
-            class="black--text d-none d-sm-inline-block pt-2"
-            to="/user/signup"
-            elevation="0"
-            text
-            v-if="!isAuth"
-          >
-            <span>회원가입</span>
-          </v-btn>
-          <!-- 유저 이미지 -->
-          <!-- <v-container class="align-right"> -->
-          <!--  -->
-          <template v-if="isAuth">
-            <v-menu offset-y>
-              <template v-slot:activator="{ on }">
-                <v-btn text x-large class="pa-0" v-on="on">
-                  <v-avatar size="30" class="mx-3">
-                    <v-img :src="currentUser.profile_url"></v-img>
-                  </v-avatar>
-                  {{ currentUser.nickname }}
-                  <v-icon class="mx-2">keyboard_arrow_down</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(menu, index) in usermenuitems"
-                  :key="index"
-                  @click="clickUserMenu(menu.name)"
-                >
-                  <v-list-item-title>{{ menu.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </template>
-          <!-- </v-container> -->
-          <!-- 유저 이미지 끝 -->
-          <v-app-bar-nav-icon
-            @click="drawer = true"
-            class="d-flex d-sm-none"
-          ></v-app-bar-nav-icon>
-        </v-col>
-      </v-row>
-    </v-app-bar>
-    <!-- Signin Modal Boxs -->
-    <signin-modal :signinModal="signinModal" v-on:close="signinClose" />
-    <!-- Navigation Bar -->
-    <v-navigation-drawer
-      app
-      right
-      v-model="drawer"
-      color="black"
-      disable-resize-watcher
-      id="navDrawer"
-    >
-      <div>
-        <v-layout column transparent>
-          <v-flex class="mt-2">
-            <v-container>
-              <v-icon large class="white--text" @click="drawer = false"
-                >keyboard_arrow_right</v-icon
-              >
-              <router-link class="ml-10" to="/home" text-decoration="none">
-                <span class="logo white--text font-weight-light">Study</span>
-                <span class="logo white--text">PRO</span>
-              </router-link>
-            </v-container>
-          </v-flex>
-        </v-layout>
-      </div>
-      <v-divider class="black ma-1" />
-      <!-- Navigations -->
-      <v-list>
-        <v-list-item
-          v-for="item in navigations"
-          :key="item.title"
-          :to="item.route"
-        >
-          <v-list-item-content>
-            <v-list-item-title class="white--text">
-              {{ item.title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-      <!-- User Pages -->
-      <v-container class="my-0 pa-0" v-if="isAuth">
-        <v-divider class="white ma-5 mt-0" />
-        <v-layout column align-center>
-          <v-flex>
-            <router-link to="/user/mypage">
-              <v-avatar size="100" class="mb-3">
-                <img :src="currentUser.profile_url" alt />
-              </v-avatar>
+  <v-row id="header" justify="center">
+    <v-col cols="12" lg="9" md="12" sm="12" class="pt-0">
+      <v-app-bar fixed prominent height="56px" max-width="inherit" class="mx-auto" flat>
+        <v-row style="height:56px; width:100%">
+          <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">
+            <router-link to="/home" text-decoration="none">
+            <div style="height:100%" class="align-center">
+              <v-img
+                src="@/assets/images/LogoText.png"
+                contain
+                style="max-height:52px;"
+              ></v-img>
+              </div>
             </router-link>
-            <p align="center" class="white--text subheading">
-              {{ currentUser.nickname }}
-            </p>
-          </v-flex>
-        </v-layout>
-        <v-list>
-          <v-list-item>
-            <v-list-item-content
-              v-for="item in userpages"
-              :key="item.title"
-              :to="item.route"
+          </v-col>
+          <!-- Menu Tab -->
+          <v-col cols="1" sm="6" md="8" class="py-0">
+            <template>
+              <v-tabs
+                background-color="transparent"
+                class="d-none d-sm-flex justify-center"
+                show-arrows
+              >
+                <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
+                  <v-icon left>{{ menu.icon }}</v-icon>
+                  <span class="d-none d-lg-flex">{{ menu.title }}</span>
+                </v-tab>
+              </v-tabs>
+            </template>
+          </v-col>
+          <v-col
+            cols="7"
+            sm="3"
+            md="2"
+            class="py-0 justify-end align-center"
+            style="height:56px;"
+          >
+            <v-btn
+              class="d-none d-sm-inline-block"
+              @click="signinModal = true"
+              v-if="!isAuth"
+              text
             >
-              <v-list-item-title class="white--text underlined">
+              <span>로그인</span>
+            </v-btn>
+            <v-btn
+              class="black--text d-none d-sm-inline-block pt-2"
+              to="/user/signup"
+              elevation="0"
+              text
+              v-if="!isAuth"
+            >
+              <span>회원가입</span>
+            </v-btn>
+            <!-- 유저 이미지 -->
+            <!-- <v-container class="align-right"> -->
+            <!--  -->
+            <template v-if="isAuth">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn text x-large class="pa-0" v-on="on">
+                    <v-avatar size="30" class="mx-3">
+                      <v-img :src="currentUser.profile_url"></v-img>
+                    </v-avatar>
+                    {{ currentUser.nickname }}
+                    <v-icon class="mx-2">keyboard_arrow_down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(menu, index) in usermenuitems"
+                    :key="index"
+                    @click="clickUserMenu(menu.name)"
+                  >
+                    <v-list-item-title>{{ menu.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </template>
+            <!-- </v-container> -->
+            <!-- 유저 이미지 끝 -->
+            <v-app-bar-nav-icon
+              @click="drawer = true"
+              class="d-flex d-sm-none"
+            ></v-app-bar-nav-icon>
+          </v-col>
+        </v-row>
+      </v-app-bar>
+      <!-- Signin Modal Boxs -->
+      <signin-modal :signinModal="signinModal" v-on:close="signinClose" />
+      <!-- Navigation Bar -->
+      <v-navigation-drawer
+        app
+        right
+        v-model="drawer"
+        color="black"
+        disable-resize-watcher
+        id="navDrawer"
+      >
+        <div>
+          <v-layout column transparent>
+            <v-flex class="mt-2">
+              <v-container>
+                <v-icon large class="white--text" @click="drawer = false"
+                  >keyboard_arrow_right</v-icon
+                >
+                <router-link class="ml-10" to="/home" text-decoration="none">
+                  <span class="logo white--text font-weight-light">Study</span>
+                  <span class="logo white--text">PRO</span>
+                </router-link>
+              </v-container>
+            </v-flex>
+          </v-layout>
+        </div>
+        <v-divider class="black ma-1" />
+        <!-- Navigations -->
+        <v-list>
+          <v-list-item
+            v-for="item in navigations"
+            :key="item.title"
+            :to="item.route"
+          >
+            <v-list-item-content>
+              <v-list-item-title class="white--text">
                 {{ item.title }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
-      </v-container>
-      <v-container v-else></v-container>
-      <template v-slot:append>
-        <v-card-actions class="justify-center" v-if="!isAuth">
-          <v-btn text class="pink--text" @click="signinModal = true"
-            >로그인</v-btn
-          >
-          <v-btn text class="pink--text transparent" elevation="0" to="/signup"
-            >회원가입</v-btn
-          >
-        </v-card-actions>
-        <v-card-actions class="justify-center" v-else>
-          <v-btn text class="pink--text" @click="signout">로그아웃</v-btn>
-        </v-card-actions>
-      </template>
-    </v-navigation-drawer>
-  </v-container>
+        <!-- User Pages -->
+        <v-container class="my-0 pa-0" v-if="isAuth">
+          <v-divider class="white ma-5 mt-0" />
+          <v-layout column align-center>
+            <v-flex>
+              <router-link to="/user/mypage">
+                <v-avatar size="100" class="mb-3">
+                  <img :src="currentUser.profile_url" alt />
+                </v-avatar>
+              </router-link>
+              <p align="center" class="white--text subheading">
+                {{ currentUser.nickname }}
+              </p>
+            </v-flex>
+          </v-layout>
+          <v-list>
+            <v-list-item>
+              <v-list-item-content
+                v-for="item in userpages"
+                :key="item.title"
+                :to="item.route"
+              >
+                <v-list-item-title class="white--text underlined">
+                  {{ item.title }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-container>
+        <v-container v-else></v-container>
+        <template v-slot:append>
+          <v-card-actions class="justify-center" v-if="!isAuth">
+            <v-btn text class="pink--text" @click="signinModal = true"
+              >로그인</v-btn
+            >
+            <v-btn
+              text
+              class="pink--text transparent"
+              elevation="0"
+              to="/signup"
+              >회원가입</v-btn
+            >
+          </v-card-actions>
+          <v-card-actions class="justify-center" v-else>
+            <v-btn text class="pink--text" @click="signout">로그아웃</v-btn>
+          </v-card-actions>
+        </template>
+      </v-navigation-drawer>
+    </v-col>
+  </v-row>
 </template>
 <script>
 export default {
@@ -185,7 +193,7 @@ export default {
         { icon: "group", title: "스터디", route: "/study/search" },
         { icon: "library_books", title: "게시판", route: "/board/share" },
         { icon: "date_range", title: "일정", route: "/calendar/mycal" },
-        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" },
+        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
       ],
       navigations: [
         { title: "스터디 홈", route: "/home" },

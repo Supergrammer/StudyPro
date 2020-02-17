@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container style="min-height: 500px">
     <v-list v-if="isCaptain">
       <v-toolbar elevation="0" style="border-bottom: 5px solid #736C70;">
         <v-toolbar-title>가입 요청 목록</v-toolbar-title>
@@ -145,6 +145,22 @@
                   color="red"
                   >close</v-icon
                 >
+
+                <v-icon
+                  v-else-if="
+                    !isCaptain &&
+                      member.level != 'captain' &&
+                      member.id == currentUser.uid
+                  "
+                  style="font-size:15px"
+                  @click="
+                    (modalType = 'selfdel'),
+                      (selectedUser = member),
+                      (modal = true)
+                  "
+                  color="red"
+                  >탈퇴하기</v-icon
+                >
               </v-col>
             </v-row>
           </v-col>
@@ -153,12 +169,15 @@
 
       <modal :open-modal="modal" :close="modalClose">
         <template v-slot:text>
-          <span v-if="modalType == 'delete'">{{
-            selectedUser.nickname
-          }}</span>
-          <span v-if="modalType != 'delete' && modalType != 'error'">{{
-            selectedUser.user.nickname
-          }}</span>
+          <span v-if="modalType == 'delete'">{{ selectedUser.nickname }}</span>
+          <span
+            v-if="
+              modalType != 'delete' &&
+                modalType != 'error' &&
+                modalType != 'selfdel'
+            "
+            >{{ selectedUser.user.nickname }}</span
+          >
           {{ modalText[modalType] }}
           <p v-if="modalType == 'greeting'">{{ selectedUser.comment }}</p>
         </template>
@@ -185,6 +204,15 @@
               v-show="modalType == 'delete'"
               >예</v-btn
             >
+
+            <v-btn
+              text
+              @click="deleteMember"
+              class="primary--text"
+              v-show="modalType == 'selfdel'"
+              >예</v-btn
+            >
+
             <v-btn
               text
               @click="modal = false"
@@ -213,10 +241,10 @@ export default {
   props: ["study_id"],
 
   data: () => ({
-    thisUser: "",
-    thisCaptain: "",
+    // thisUser: "",
+    // thisCaptain: "",
 
-    flag: false,
+    // flag: false,
     modal: false,
     modalType: "",
     member: {},
@@ -234,6 +262,7 @@ export default {
       accept: "님의 가입 요청을 승인하시겠습니까?",
       decline: "님의 가입 요청을 거절하시겠습니까?",
       delete: "님을 탈퇴시키겠습니까?",
+      selfdel: "정말로 탈퇴하시겠습니까?",
       error: "오류가 발생했습니다"
     }
   }),
@@ -329,7 +358,6 @@ export default {
     },
 
     async declineMember() {
-      console.log(this.selectedUser);
       var res = await StudyService.joinStudy({
         apply_id: this.selectedUser.id,
         accept: false
@@ -346,12 +374,19 @@ export default {
     },
 
     async deleteMember() {
-      await StudyService.deleteUser({
+      var res = await StudyService.deleteUser({
         study_id: this.study_id,
         user_id: this.selectedUser.id
+      }).then(res => {
+        return res.data;
       });
-      
-      this.modal = false;
+      if (res.state == "success") {
+        this.getApplyList();
+        this.getjoinedUser();
+        this.modal = false;
+      } else {
+        this.modalType = "error";
+      }
     },
 
     modalClose() {
