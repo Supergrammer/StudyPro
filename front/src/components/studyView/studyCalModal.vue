@@ -251,6 +251,7 @@
 
 <script>
 import { format } from "date-fns";
+import WorkService from "@/services/work.service"
 
 export default {
   name: "addmodal",
@@ -272,14 +273,17 @@ export default {
       endTime: "",
       name: "",
       content: "",
-      group: "empty",
+      group: "schedule",
       color: "primary"
     },
     event_id: '',
 
     message: "",
 
-    groupOptions: [{ text: "선택안함", value: "empty" }],
+    groupOptions: [
+      { text: "일정", value: "schedule" },
+      { text: "목표", value: "goal" }
+      ],
 
     colorOptions: [
       { text: "Primary", value: "primary" },
@@ -307,7 +311,7 @@ export default {
       { text: "Black", value: "black" }
     ]
   }),
-  props: ["addModal", "isUpdate", "propEvent"],
+  props: ["addModal", "isUpdate", "propEvent", "study_id"],
   watch: {
     addModal() {
       this.open = this.addModal;
@@ -390,6 +394,7 @@ export default {
 
       // 추가할 데이터
       var newEvent = {
+        type: "study",
         name: this.input.name,
         content: this.input.content,
         start:
@@ -402,19 +407,21 @@ export default {
             : this.input.endDay,
         group: this.input.group,
         color: this.input.color,
-        event_id: this.event_id
+        study_id: this.study_id
       };
-
+      console.log("추가 엑시오스", newEvent)
       //데이터추가 엑시오스
-
+      WorkService.createWork(newEvent);
       //테스트 변수 제거해야함
       this.$emit("reload", newEvent);
       this.close();
     },
 
     update() {
-      // 수정 데이터
+      //수정 데이터
       var updateEvent = {
+        type:"study",
+        work_id: this.propEvent.id,
         name: this.input.name,
         content: this.input.content,
         start:
@@ -428,10 +435,11 @@ export default {
         group: this.input.group,
         color: this.input.color
       };
-
+    
       //수정 엑시오스 요청
-      this.$emit('reload', updateEvent)
-      this.close()
+      WorkService.updateWork(updateEvent);
+      this.$emit("reload", updateEvent);
+      this.close();
     }
   },
 

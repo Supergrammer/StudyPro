@@ -76,7 +76,6 @@ export default {
   name: "studydetail",
   components: {
     StudyHome: () => import("@/components/studydetail/StudyHome"),
-    StudySchedule: () => import("@/components/studydetail/StudySchedule"),
     StudyBoard: () => import("@/components/studydetail/StudyBoard"),
     StudyMember: () => import("@/components/studydetail/StudyMember")
   },

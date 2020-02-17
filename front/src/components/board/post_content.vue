@@ -17,6 +17,14 @@
             style="max-width: 30px;"
           >{{ this.post_contents.num_like + this.post_contents.like }}</v-col>
         </v-row>
+        <v-row no-gutters>
+          <div v-for="file in post_contents.files" :key="file.id">
+            <v-btn @click="fileDownload(file)" elevation="0" color="white">
+              <v-icon style="color:black">attachment</v-icon>
+              <span :class="ml-2">{{file.file_name}}</span>
+            </v-btn>
+          </div>
+        </v-row>
       </v-card>
 
       <v-row no-gutters class="mb-3">
@@ -127,6 +135,7 @@
 
 <script>
 import PostService from "@/services/post.service";
+import FileService from "@/services/file.service";
 
 export default {
   props: ["post_id"],
@@ -177,6 +186,16 @@ export default {
   },
 
   methods: {
+     fileDownload(file) {
+      FileService.downloadFile(file.file_url).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", file.file_name);
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
     async getPost() {
       const post = await PostService.getPostContents({
         type: "common",

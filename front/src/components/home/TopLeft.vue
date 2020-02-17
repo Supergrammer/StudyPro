@@ -30,6 +30,54 @@
                 >
                 / <small>{{ item.process_days | getDays }}</small>
               </span>
+              <span class="ellipsis">
+                <v-icon>emoji_flags</v-icon>{{ item.goal }}
+              </span>
+              <span class="ellipsis-multi mb-0">
+                {{ item.description }}
+              </span>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+    <div style="height:5%"></div>
+    <v-lazy
+          :options="{
+            threshold: 0.5
+          }"
+          transition="fade-transition"
+        >
+    <p class="main-title pl-8 pt-5 animated fadeIn slow">새로운 모임</p>
+    </v-lazy>
+    <v-row class="mx-auto">
+      <v-col cols="6" sm="4" md="3" v-for="item in studyList" :key="item.id">
+        <v-lazy
+          :options="{
+            threshold: 0.5
+          }"
+          transition="fade-transition"
+        >
+          <v-card
+            elevation="1"
+            max-width="300px"
+            class="animated fadeInRight card slow"
+            :style="getStyle(item.order)"
+            @click="viewDetail(item)"
+          >
+            <v-img :src="item.image_url" class="studyCardImg"></v-img>
+            <v-card-title class="card-title"
+              ><p class="ellipsis">{{ item.name }}</p>
+            </v-card-title>
+            <v-card-text class="card-text">
+              <span>
+                <small>by {{ item.captain.name }} </small><br />
+                <small
+                  >{{ item.start_time | getTime }} ~
+                  {{ item.end_time | getTime }}</small
+                >
+                / <small>{{ item.process_days | getDays }}</small>
+              </span>
               <p class="ellipsis mb-2">
                 <v-icon>emoji_flags</v-icon>{{ item.goal }}
               </p>
@@ -38,40 +86,7 @@
               </p>
             </v-card-text>
           </v-card>
-        </v-col>
-      </v-row>
-    </div>
-    <p class="main-title pl-8 pt-5 animated fadeIn slow">새로운 모임</p>
-    <v-row class="mx-auto">
-      <v-col cols="6" sm="4" md="3" v-for="item in studyList" :key="item.id">
-        <v-card
-          elevation="1"
-          max-width="300px"
-          class="animated fadeInRight card slow"
-          :style="getStyle(item.order)"
-          @click="viewDetail(item)"
-        >
-          <v-img :src="item.image_url" class="studyCardImg"></v-img>
-          <v-card-title class="card-title"
-            ><p class="ellipsis">{{ item.name }}</p>
-          </v-card-title>
-          <v-card-text class="card-text">
-            <span>
-              <small>by {{ item.captain.name }} </small><br />
-              <small
-                >{{ item.start_time | getTime }} ~
-                {{ item.end_time | getTime }}</small
-              >
-              / <small>{{ item.process_days | getDays }}</small>
-            </span>
-            <p class="ellipsis mb-2">
-              <v-icon>emoji_flags</v-icon>{{ item.goal }}
-            </p>
-            <p class="ellipsis-multi mb-0">
-              {{ item.description }}
-            </p>
-          </v-card-text>
-        </v-card>
+        </v-lazy>
       </v-col>
     </v-row>
     <group-modal
@@ -84,7 +99,7 @@
 
 <script>
 import StudyService from "@/services/study.service";
-import UserService from '@/services/user.service'
+import UserService from "@/services/user.service";
 export default {
   data: () => ({
     isActive: false,
@@ -109,20 +124,20 @@ export default {
       }
     },
     groupModal: false,
-    myStudyList: [],
+    myStudyList: []
   }),
-  watch:{
-    async isAuth(){
-      if(this.isAuth){
+  watch: {
+    async isAuth() {
+      if (this.isAuth) {
         this.myStudyList = await UserService.getMyGroups();
-      }else{
+      } else {
         this.myStudyList = [];
       }
     }
   },
   async created() {
     this.studyList = [];
-    if(this.isAuth){
+    if (this.isAuth) {
       this.myStudyList = await UserService.getMyGroups();
     }
     var list = await StudyService.getAllStudy();
@@ -131,7 +146,6 @@ export default {
       this.studyList.push(list.shift());
       this.studyList[i].order = i;
     }
-
   },
   mounted() {
     this.isActive = false;
@@ -154,14 +168,14 @@ export default {
       };
 
       return styleObject;
-    },
+    }
   },
-  computed:{
-    isAuth(){
-      return this.$store.getters['auth/isAuth']
+  computed: {
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
     },
-    isExistMyGroup(){
-      if(this.myStudyList.length > 0){
+    isExistMyGroup() {
+      if (this.myStudyList.length > 0) {
         return true;
       }
       return false;
