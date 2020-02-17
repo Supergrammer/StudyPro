@@ -162,7 +162,8 @@
             color="primary--text transparent"
             elevation="0"
             @click="regGroup"
-            >상세페이지로</v-btn
+            >
+            {{studyInfo.membership_level ? '스터디로 가기' : '가입하러가기'}}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -222,6 +223,7 @@ export default {
         days += weekofdays[value[i].day]+ ' '
       }
 
+      if (days == 'undefined ' ) return "미정"
       return days;
     }
   }

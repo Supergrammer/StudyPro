@@ -61,13 +61,6 @@ const AUTH = "/auth"
 const NOTICE_APPLY = "/notice_apply"
 const RESULT_APPLY = "/result_apply"
 
-
-//email
-const EMAIL = "/email"
-const AUTH = "/auth"
-const NOTICE_APPLY = "/notice_apply"
-const RESULT_APPLY = "/result_apply"
-
 const routes = {
     home : HOME,
 

@@ -39,7 +39,7 @@ app.use(routes.posts, postRouter);
 app.use(routes.works, workRouter);
 app.use(routes.applies, applyRouter);
 app.use(routes.alarms, alarmRouter);
-app.use(routes.email, emailRouter);
+// app.use(routes.email, emailRouter);
 app.use('/class', classRouter);
 //app.use(routes.email, emailRouter);
 
