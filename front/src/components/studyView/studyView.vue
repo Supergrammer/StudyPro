@@ -44,7 +44,14 @@
     </v-navigation-drawer>
 
     <v-card flat>
-      <v-img src="@/assets/images/cherryblossom.jpg" aspect-ratio="7"></v-img>
+      <div id="group-img-container">
+        <v-img src="@/assets/images/banner/group_default.png" />
+        <v-row justify="end">
+          <v-btn text id="group-img-btn">
+            <v-icon color="white">settings</v-icon>
+          </v-btn>
+        </v-row>
+      </div>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
           <router-view></router-view>
@@ -55,7 +62,6 @@
 </template>
 
 <script>
-
 import StudyService from "@/services/study.service";
 import AuthService from "@/services/auth.service";
 export default {
@@ -97,8 +103,7 @@ export default {
     };
   },
 
-  created() {
-  },
+  created() {},
 
   async mounted() {
     if (!this.isAuth) {
@@ -125,25 +130,23 @@ export default {
   },
 
   methods: {
-
     async loadStudyInfo() {
       await AuthService.checkUserDefault();
       this.studyInfo = await StudyService.getStudyInfo({
         study_id: this.study_id
       }).then(res => {
-        console.log('data', res)
+        console.log("data", res);
         return res.data;
       });
     },
-
 
     routeTo(route) {
       this.$router.push({ name: route.routes, params: route.params });
     },
     toWorkspace() {
       if (!this.isJoined) {
-        window.alert("스터디에 가입해주세요")
-        return
+        window.alert("스터디에 가입해주세요");
+        return;
       }
       let workspace = this.$router.resolve({
         name: "workspace",

@@ -2,9 +2,9 @@
   <div id="top">
     <div v-if="isExistMyGroup">
       <!-- 가입한 모임 목록 -->
-      <p class="main-title animated bounce" aria-disabled>
+      <p class="main-title animated fadeIn" aria-disabled>
         나의 모임
-      </p>
+      </p> 
       <v-row>
         <v-col
           cols="6"
@@ -65,7 +65,7 @@
         threshold: 0.5
       }"
     >
-      <p class="main-title animated bounce" aria-disabled>
+      <p class="main-title animated fadeIn" aria-disabled>
         새로운 모임
       </p>
     </v-lazy>

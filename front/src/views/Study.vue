@@ -1,6 +1,5 @@
 <template>
   <div id="study">
-    <v-img src="@/assets/images/banner/study.png" />
     <router-view/>
   </div>
 </template>
