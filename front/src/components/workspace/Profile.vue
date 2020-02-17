@@ -4,16 +4,11 @@
         <v-list class="pa-0">
           <v-list-item>
             <v-list-item-avatar>
-              <img :src="user.profile_url" alt="PengSoo" />
+              <img :src="user.profile_url" alt="Profile" />
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>{{user.nickname}}</v-list-item-title>
             </v-list-item-content>
-            <v-list-item-action>
-              <v-btn :class="profile.fav ? 'red--text' : ''" icon @click="profile.fav = !profile.fav">
-                <v-icon>favorite</v-icon>
-              </v-btn>
-            </v-list-item-action>
           </v-list-item>
         </v-list>
         <v-divider />
@@ -26,7 +21,6 @@
         </v-list>
         <v-card-actions>
           <v-btn class="ml-auto" color="error" text @click="profile.showProfile = false">닫기</v-btn>
-          <v-btn class="ml-0" color="primary" text @click="profile.showProfile = false">친구 추가</v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -41,7 +35,7 @@ export default {
         user: {},
       }
     },
-    props: ["profile", "show_profile_id", "debuging"],
+    props: ["profile", "show_profile_id"],
     watch: {
 
       show_profile_id: function() {
