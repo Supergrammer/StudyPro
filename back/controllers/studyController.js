@@ -386,9 +386,9 @@ export const read_today_attendence = async function (req, res) {
         
         
         if (today_attendence) {
-            res.send({ detail: "already attendenced" })
+            res.send({ state: "true" })
         } else {
-            res.send({ detail: "didin`t attendence" })
+            res.send({ state: "false" })
         }
     } catch (err) {
         console.log(err);
