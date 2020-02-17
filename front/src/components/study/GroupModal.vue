@@ -205,6 +205,10 @@ export default {
       return hour +':' +minute
     },
     getDays(value){
+      if(!value) return;
+      if(value.length == 1 && value[0].day == ''){
+        return "";
+      }
       var days = "";
       var weekofdays = {
         Mon: "월",

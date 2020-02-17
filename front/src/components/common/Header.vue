@@ -1,9 +1,10 @@
 <template>
-  <v-container id="header">
-    <v-app-bar fixed prominent max-height="56px" height="56px">
-      <v-row style="height:56px; width:100%">
-        <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">
-          <router-link to="/home" text-decoration="none">
+  <div id="header">
+    <v-app-bar prominent flat height="56px">
+      <v-row id="header-container">
+        <!-- 로고 -->
+        <v-col class="header-logo-container" cols="4" sm="3" md="2">
+          <router-link to="/home">
             <v-img
               src="@/assets/images/LogoText7.png"
               contain
@@ -11,12 +12,12 @@
             ></v-img>
           </router-link>
         </v-col>
-        <!-- Menu Tab -->
-        <v-col cols="1" sm="6" md="8" class="py-0">
+        <!-- 로고 끝 -->
+        <!-- 메뉴 -->
+        <v-col class="header-menu-container" sm="6" md="8">
           <template>
             <v-tabs
-              background-color="transparent"
-              class="d-none d-sm-flex justify-center"
+              class="header-menu d-none d-sm-flex justify-center"
               show-arrows
             >
               <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
@@ -26,37 +27,36 @@
             </v-tabs>
           </template>
         </v-col>
-        <v-col
-          cols="7"
-          sm="3"
-          md="2"
-          class="py-0 justify-end align-center"
-          style="height:56px;"
-        >
+        <!-- 메뉴 끝 -->
+        <!-- 유저메뉴 / 햄버거 -->
+        <v-col class="header-usermenu-container pl-0" cols="8" sm="3" md="2">
           <v-btn
-            class="d-none d-sm-inline-block"
+            class="header-user-btn d-none d-sm-inline-block px-0"
+            @click="toSignup"
+            v-if="!isAuth"
+            text
+          >
+            회원가입
+          </v-btn>
+          <v-btn
+            class="header-user-btn d-none d-sm-inline-block px-0"
             @click="signinModal = true"
             v-if="!isAuth"
             text
           >
-            <span>로그인</span>
+            로그인
           </v-btn>
-          <v-btn
-            class="black--text d-none d-sm-inline-block pt-2"
-            to="/user/signup"
-            elevation="0"
-            text
-            v-if="!isAuth"
-          >
-            <span>회원가입</span>
-          </v-btn>
+          <v-app-bar-nav-icon
+            @click="drawer = true"
+            class="header-hamburger d-flex d-sm-none"
+          ></v-app-bar-nav-icon>
           <!-- 유저 이미지 -->
           <!-- <v-container class="align-right"> -->
           <!--  -->
           <template v-if="isAuth">
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
-                <v-btn text x-large class="pa-0" v-on="on">
+                <v-btn text x-large class="header-user pa-0" v-on="on">
                   <v-avatar size="30" class="mx-3">
                     <v-img :src="currentUser.profile_url"></v-img>
                   </v-avatar>
@@ -77,10 +77,6 @@
           </template>
           <!-- </v-container> -->
           <!-- 유저 이미지 끝 -->
-          <v-app-bar-nav-icon
-            @click="drawer = true"
-            class="d-flex d-sm-none"
-          ></v-app-bar-nav-icon>
         </v-col>
       </v-row>
     </v-app-bar>
@@ -141,13 +137,13 @@
           </v-flex>
         </v-layout>
         <v-list>
-          <v-list-item>
-            <v-list-item-content
-              v-for="item in userpages"
-              :key="item.title"
-              :to="item.route"
-            >
-              <v-list-item-title class="white--text underlined">
+          <v-list-item
+            v-for="item in userpages"
+            :key="item.title"
+            :to="item.route"
+          >
+            <v-list-item-content>
+              <v-list-item-title class="white--text">
                 {{ item.title }}
               </v-list-item-title>
             </v-list-item-content>
@@ -169,7 +165,7 @@
         </v-card-actions>
       </template>
     </v-navigation-drawer>
-  </v-container>
+  </div>
 </template>
 <script>
 export default {
@@ -185,14 +181,12 @@ export default {
         { icon: "group", title: "스터디", route: "/study/search" },
         { icon: "library_books", title: "게시판", route: "/board/share" },
         { icon: "date_range", title: "일정", route: "/calendar/mycal" },
-        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" },
+        { icon: "accessibility_new", title: "내 정보", route: "/user/mypage" }
       ],
       navigations: [
         { title: "스터디 홈", route: "/home" },
         { title: "스터디", route: "/study/search" },
         { title: "게시판", route: "/board/share" },
-        { title: "일정", route: "/calendar/mycal" },
-        { title: "내 정보", route: "/user/mypage" }
       ],
       userpages: [
         { title: "정보 수정", route: "/user/mypage" },
@@ -239,33 +233,17 @@ export default {
       } else if (name == "signout") {
         this.signout();
       }
+    },
+
+    // 회원가입 클릭 메소드
+    toSignup() {
+      var path = this.$route.path.split("/");
+      if (path[1] == "user" && path[2] == "signup") {
+        return;
+      } else {
+        this.$router.push({ name: "signup" });
+      }
     }
   }
 };
 </script>
-<style scoped>
-.v-application a {
-  color: gray;
-  text-decoration: none;
-}
-.logo {
-  font-size: 20px;
-}
-.headerText {
-  color: rgba(255, 255, 255, 0.7);
-}
-#navDrawer {
-  opacity: 0.8;
-}
-.usermenu {
-  font-size: 13px;
-  color: rgba(0, 0, 0, 0.7) !important;
-}
-.usermenubtn {
-  width: 100%;
-  justify-content: start;
-}
-.dropPanel {
-  margin-top: 150px;
-}
-</style>
