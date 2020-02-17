@@ -17,7 +17,7 @@
         </v-list-item>
       </v-list>
       <v-divider class="mx-3" />
-      <v-list>
+      <!-- <v-list>
         <v-list-item @click="routeTo()">
           <v-list-item-icon>
             <v-icon medium>check</v-icon>
@@ -30,7 +30,7 @@
           </v-list-item-icon>
           <v-list-item-title>관리자 메뉴</v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-navigation-drawer>
 
     <v-card flat>

@@ -13,8 +13,8 @@
       </v-card-text>
       <v-card-actions>
         <v-row justify="center">
-        <v-btn class="primary" dark>출석 체크</v-btn>
-        <v-btn class="green" dark @click="modal = true" v-if="!isJoined">가입하기</v-btn>
+        <v-btn class="primary mr-2" dark>출석 체크</v-btn>
+        <v-btn class="green" dark @click="modal = true" v-if="!isJoined">가입 하기</v-btn>
         </v-row>
       </v-card-actions>
     </v-card>
