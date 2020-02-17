@@ -123,6 +123,9 @@ export default {
         }
       }
       this.page = 1;
+    },
+    $route() {
+      this.postUpdate();
     }
   },
   computed: {

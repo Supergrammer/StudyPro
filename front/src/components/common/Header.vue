@@ -6,8 +6,9 @@
         <v-col class="header-logo-container" cols="4" sm="3" md="2">
           <router-link to="/home">
             <v-img
-              class="header-logo"
-              src="@/assets/images/LogoText.png"
+              src="@/assets/images/LogoText7.png"
+              contain
+              style="max-height:52px;"
             ></v-img>
           </router-link>
         </v-col>

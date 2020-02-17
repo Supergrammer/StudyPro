@@ -1,6 +1,10 @@
 import {common_posts as common_post_model, common_post_likes as common_post_like_model} from "../models"
 import {study_posts as study_post_model, study_post_likes as study_post_like_model} from "../models"
+import {study_post_files, common_post_files} from "../models"
+import {study_comments, common_comments} from "../models"
 import {users} from "../models"
+import multer from "multer"
+import path from "path"
 
 export const number_post = async function(req, res) {
     try {
@@ -20,16 +24,18 @@ export const number_post = async function(req, res) {
 
 export const create_post = async function(req, res) {
     try {
-        const {study_id,writer, title, content, board, type} = req.body;
+        const writer = res.locals.user;
+        const {study_id, title, content, board, type} = req.body;       
+        const post_model = (type === 'common') ? common_post_model : study_post_model
+        const post_file = (type === 'common') ? common_post_files : study_post_files
         
-        let result;
-        console.log(req.body)
-        if (type === "common") {
-            result = await common_post_model.create({writer, title, content, board});
-        } else if (type === "study") {
-            result = await study_post_model.create({study_id,writer, title, content, board});
+        const post = await post_model.create({writer:writer.id, title, content, board, study_id})
+        if (post && req.files) {
+            req.files.forEach(file => {
+                post_file.create({post_id: post.dataValues.id, file_url: file.filename, file_name: file.originalname})
+            });
         }
-        res.send(result);
+        res.send(post);
     } catch (error){
         console.log(error);
         res.send('error');
@@ -39,7 +45,7 @@ export const create_post = async function(req, res) {
 export const update_post = async function(req, res) {
     try{
         const {post_id, title, content, type, board} = req.body;
-        console.log("¾÷µ¥ÀÌÆ®", req.body)
+        console.log("´ó•A·¡Ëa", req.body)
         let result;
         if(type === "common"){
             const post = await common_post_model.update({title, content, board}, {where: {id:post_id}})
@@ -117,6 +123,10 @@ export const read_post = async function(req, res) {
 
                     const view = post.dataValues.view
                     common_post_model.update({view:view+1}, {where:{id:post.dataValues.id}})
+
+                    const files = await common_post_files.findAll( {where: {post_id:post_id}})
+                    post.dataValues.files = files
+                    
                     res.send(post)      
                 })          
         }else if(type === "study"){
@@ -135,9 +145,11 @@ export const read_post = async function(req, res) {
                     const post_num_like = await study_post_like_model.count( {where: {study_post_id:post_id}});
                     post.dataValues.num_like = post_num_like;
                     
-
                     const view = post.dataValues.view
                     study_post_model.update({view:view+1}, {where:{id:post.dataValues.id}})
+
+                    const files = await study_post_files.findAll( {where: {post_id:post_id}})
+                    post.dataValues.files = files
                     
                     res.send(post)
                 })          
@@ -153,11 +165,23 @@ export const delete_post = async function(req, res) {
         const {post_id, type} = req.body;
         console.log(req.body)
         if(type ==="common"){
-            const post = await common_post_model.destroy({where: {id:post_id}})
-            res.send({state: "success"});
+            const post = await common_post_model.findOne({where: {id:post_id}})
+            if (post) {
+                await common_post_like_model.destroy({where: {common_post_id:post_id}})
+                await common_comments.destroy({where: {post_id:post_id}})
+                await common_post_files.destroy({where: {post_id}})
+                post.destroy()
+                res.send({state: "success"});
+            } else {
+                res.send({state: "fail"})
+            }
         }else if( type === "study"){
-            const post = await study_post_model.destroy({where: {id:post_id}})
-            if (post === '1') {
+            const post = await study_post_model.findOne({where: {id:post_id}})
+            if (post) {
+                await study_post_like_model.destroy({where: {study_post_id:post_id}})
+                await study_comments.destroy({where: {post_id:post_id}})
+                await study_post_files.destroy({where: {post_id}})
+                post.destroy()
                 res.send({state: "success"});
             } else {
                 res.send({state: "fail"})
@@ -242,3 +266,13 @@ export const search_post = async function(req, res) {
         res.send("error");
     }
 }
+export const file_upload = multer({
+    storage: multer.diskStorage({
+        destination: function(req, file, cb) {
+            cb(null, process.env.FILE_PATH);
+        }, 
+        filename: function(req, file, cb) {
+            cb(null , new Date().valueOf() + path.extname(file.originalname));
+        }
+    })
+});
