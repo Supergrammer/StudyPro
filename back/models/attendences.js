@@ -1,8 +1,9 @@
 /* jshint indent: 2 */
+import { Op } from "sequelize";
 
 module.exports = function (sequelize, DataTypes) {
 
-  const attendence = sequelize.define('common_comment_likes', {
+  const attendences = sequelize.define('attendences', {
     study_id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -31,12 +32,14 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: DataTypes.NOW
     }
   }, {
-    tableName: 'attendence'
+    tableName: 'attendences'
   });
 
-  attendence.read_today_attendence = async function (study_id, user_id, date) {
+  attendences.read_today_attendence = async function (study_id, user_id, date) {
+
     try {
       let result;
+
       result = await this.findAll(
         {
           where:
@@ -45,18 +48,19 @@ module.exports = function (sequelize, DataTypes) {
               [
                 { study_id: study_id },
                 { user_id: user_id },
-                { date :  date}
+                { date: date }
               ]
           }
         }
       )
-      return result;
+
+      return result[0];
     } catch (error) {
       console.log(error);
     }
   }
 
-  attendence.read_attendence = async function (study_id, user_id) {
+  attendences.read_attendence = async function (study_id, user_id) {
     try {
       let result;
       result = await this.findAll(
@@ -71,25 +75,20 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       )
+
       return result;
     } catch (error) {
       console.log(error);
     }
   }
 
-  attendence.create_attendence = async function (study_id, user_id) {
+  attendences.create_attendence = async function (study_id, user_id) {
     try {
       let result;
       result = await this.create(
         {
-          where:
-          {
-            [Op.and]:
-              [
-                { study_id: study_id },
-                { user_id: user_id }
-              ]
-          }
+          study_id: study_id,
+          user_id: user_id
         }
       )
       return result;
@@ -99,7 +98,5 @@ module.exports = function (sequelize, DataTypes) {
   }
 
 
-
-
-  return attendence;
+  return attendences;
 };

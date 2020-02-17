@@ -24,6 +24,8 @@ const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
 const STUDY_APPLY = "/apply"
 const STUDY_JOIN = "/join"
+const CHECK_ATTNEDENCE = "/check_attendence"
+const ATTNEDENCE = "/attendence"
 
 // Post
 const POSTS = "/posts"
@@ -72,7 +74,7 @@ const routes = {
     update_password: UPDATE_PASSWORD,
     joined_study : JOINED_STUDY,
     leave_study : LEAVE_STUDY,
-
+    
     images : IMAGES,
     
     studies : STUDIES,
@@ -82,7 +84,9 @@ const routes = {
     study_mark : STUDY_MARK,
     study_apply: STUDY_APPLY,
     study_join : STUDY_JOIN,
-
+    check_attendence : CHECK_ATTNEDENCE,
+    attendence : ATTNEDENCE,
+    
     posts : POSTS,
     post_number: POST_NUMBER,
     post_list : POST_LIST,
@@ -111,4 +115,7 @@ const routes = {
 
     alarm_number : ALARM_NUMBER
 }
+
+
+
 export default routes;
