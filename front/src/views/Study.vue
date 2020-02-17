@@ -1,7 +1,8 @@
 <template>
-  <v-content app id="study" class="pa-0">
+  <div id="study">
+    <v-img src="@/assets/images/banner/study.png" />
     <router-view/>
-  </v-content>
+  </div>
 </template>
 
 <script>
