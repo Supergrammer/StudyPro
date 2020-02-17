@@ -5,7 +5,7 @@
         <v-col cols="4" sm="3" md="2" class="py-0 pl-0" style="height:56px;">
           <router-link to="/home" text-decoration="none">
             <v-img
-              src="@/assets/images/LogoText.png"
+              src="@/assets/images/LogoText4.png"
               contain
               style="max-height:52px;"
             ></v-img>
