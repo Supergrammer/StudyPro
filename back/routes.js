@@ -1,15 +1,17 @@
+// Home
 const HOME  = "/";
 
 // User
 const USERS  = "/users";
-
 const USER_DETAIL = "/:user_id";
 const CHANGE_PASSWARD = "/change-password";
 const SIGNUP = "/signup";
 const SIGNIN = "/signin";
-const SOCIAL_SIGNIN = "/social/signin";
+const SOCIAL_SIGNIN = "/social-signin";
 const CHECK_TOKEN = "/token";
 const UPDATE_PASSWORD = "/pass"
+const JOINED_STUDY = "/joined-study";
+const LEAVE_STUDY = "/leave-study"
 
 // Images
 const IMAGES = "/images"
@@ -20,9 +22,10 @@ const STUDY = "/create";
 const STUDY_SEARCH = "/search";
 const STUDY_MARK = "/mark";
 const STUDY_DETAIL = "/detail";
+const STUDY_APPLY = "/apply"
+const STUDY_JOIN = "/join"
 
-
-//Post
+// Post
 const POSTS = "/posts"
 const POST_LIST = "/list";
 const POST_DETAIL = "/detail";
@@ -37,8 +40,6 @@ const COMMENT_like = "/comment_like";
 
 // Works
 const WORKS = "/works";
-const WORK = "/create";
-const WORK_DETAIL = "/detail";
 
 // Applies
 const APPLIES = "/applies";
@@ -49,6 +50,7 @@ const APPLY_DETAIL = "/detail";
 const ALARMS = "/alarms";
 const ALARM = "/create";
 const ALARM_DETAIL = "/detail";
+const ALARM_NUMBER = "/number"
 
 
 //email
@@ -68,6 +70,8 @@ const routes = {
     social_signin : SOCIAL_SIGNIN,
     check_token: CHECK_TOKEN,
     update_password: UPDATE_PASSWORD,
+    joined_study : JOINED_STUDY,
+    leave_study : LEAVE_STUDY,
 
     images : IMAGES,
     
@@ -76,6 +80,8 @@ const routes = {
     study_detail : STUDY_DETAIL,
     study_search : STUDY_SEARCH,
     study_mark : STUDY_MARK,
+    study_apply: STUDY_APPLY,
+    study_join : STUDY_JOIN,
 
     posts : POSTS,
     post_number: POST_NUMBER,
@@ -89,8 +95,6 @@ const routes = {
     comment_like: COMMENT_like,
 
     works : WORKS,
-    work : WORK,
-    work_detail : WORK_DETAIL,
     
     applies : APPLIES,
     apply : APPLY,
@@ -105,5 +109,6 @@ const routes = {
     notice_apply : NOTICE_APPLY,
     result_apply : RESULT_APPLY,
 
+    alarm_number : ALARM_NUMBER
 }
 export default routes;

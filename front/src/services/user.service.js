@@ -43,6 +43,14 @@ class UserService {
                 return res.data
             })
     }
+
+    // 유저 정보 요청
+    getUserById(uid) {
+        return axios.get(URL + uid)
+            .then(res => {
+                return res
+            })
+    }
 }
 
 export default new UserService()

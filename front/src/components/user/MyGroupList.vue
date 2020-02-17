@@ -1,21 +1,13 @@
 <template>
   <v-card class="mx-4" tile min-height="450px" elevation="0">
     <v-card-title>
-      가입한 그룹목록
+      내 스터디 보기
       <v-spacer></v-spacer>
-      <v-text-field
-        append-icon="search"
-        label="그룹명으로 검색"
-        single-line
-        hide-details
-        v-model="search"
-      ></v-text-field>
+      <v-text-field append-icon="search" label="그룹명으로 검색" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
     <v-row>
       <v-col class="text-end">
-        <v-btn text v-show="selected.length > 0" class="error--text"
-          >탈퇴</v-btn
-        >
+        <v-btn text v-show="selected.length > 0" class="error--text">탈퇴</v-btn>
         <v-btn text @click="loadItems">목록 갱신</v-btn>
       </v-col>
     </v-row>
@@ -27,9 +19,11 @@
       show-select
       @click:row="clicked($event)"
     >
-      <v-alert slot="no-results" icon="warning" class="ma-0">
-        Your search for "{{ search }}" found no results.
-      </v-alert>
+      <v-alert
+        slot="no-results"
+        icon="warning"
+        class="ma-0"
+      >Your search for "{{ search }}" found no results.</v-alert>
     </v-data-table>
   </v-card>
 </template>
@@ -77,7 +71,7 @@ export default {
   },
   methods: {
     clicked(event) {
-      this.$router.push({ name: "studydetail", params: { id: event.id } });
+      this.$router.push({ name: "study_home", params: { study_id: event.id } });
     },
     getTime(start, end) {
       var s_hour = Math.floor(start / 100);
@@ -91,7 +85,6 @@ export default {
 
     async loadItems() {
       var items = await UserService.getMyGroups();
-
       //리스트 정제
       this.items = [];
       for (var item of items) {
@@ -112,43 +105,19 @@ export default {
 
     getDays(process_days) {
       var days = "";
-      var days_tmp = "";
-      for (var i = 0; i < process_days.length; i++) {
-        if (process_days[i].day == "," || i == process_days.length - 1) {
-          if (i == process_days.length - 1) days_tmp += process_days[i].day;
-          switch (days_tmp) {
-            case "Mon":
-              days += "월";
-              break;
-            case "Tue":
-              days += "화";
-              break;
-            case "Wed":
-              days += "수";
-              break;
-            case "Thu":
-              days += "목";
-              break;
-            case "Fri":
-              days += "금";
-              break;
-            case "Sat":
-              days += "토";
-              break;
-            case "Sun":
-              days += "일";
-              break;
-            default:
-              days += "???";
-          }
-          if (i != process_days.length - 1) {
-            days += ", ";
-          }
-          days_tmp = "";
-        } else {
-          days_tmp += process_days[i].day;
-        }
+      var weekofdays = {
+        Mon: "월",
+        Tue: "화",
+        Wed: "수",
+        Thu: "목",
+        Fri: "금",
+        Sat: "토",
+        Sun: "일"
+      };
+      for(var d of process_days){
+        days += weekofdays[d.day] + ' '
       }
+      console.log(days)
       return days;
     },
 

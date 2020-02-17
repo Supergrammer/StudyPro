@@ -60,7 +60,7 @@
 
         <v-tab-item>
           <v-card flat>
-            <study-member />
+            <study-member :study_id="study_id" />
           </v-card>
         </v-tab-item>
       </v-tabs>
@@ -72,10 +72,10 @@
 // import io from "socket.io-client";
 
 export default {
+  props:["study_id"],
   name: "studydetail",
   components: {
     StudyHome: () => import("@/components/studydetail/StudyHome"),
-    StudySchedule: () => import("@/components/studydetail/StudySchedule"),
     StudyBoard: () => import("@/components/studydetail/StudyBoard"),
     StudyMember: () => import("@/components/studydetail/StudyMember")
   },

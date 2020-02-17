@@ -2,10 +2,7 @@
   <v-dialog id="addmodal" v-model="open" max-width="540px">
     <v-card style="overflow:hidden">
       <v-card-title class="customTheme darken-1 white--text pb-3">
-        <span
-          v-text="isUpdate ? '일정 수정' : '일정 추가'"
-          class="headline"
-        ></span>
+        <span v-text="isUpdate ? '일정 수정' : '일정 추가'" class="headline"></span>
       </v-card-title>
       <!-- 내용입력란 -->
       <v-row justify="center">
@@ -42,8 +39,7 @@
                   @click:date="$refs.startDay.save(input.startDay)"
                   no-title
                   scrollable
-                >
-                </v-date-picker>
+                ></v-date-picker>
               </v-menu>
             </v-col>
             <!-- 시작 날짜 끝 -->
@@ -108,9 +104,12 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="input.endDay" no-title scrollable
-                @click:date="$refs.endDay.save(input.endDay)">
-                </v-date-picker>
+                <v-date-picker
+                  v-model="input.endDay"
+                  no-title
+                  scrollable
+                  @click:date="$refs.endDay.save(input.endDay)"
+                ></v-date-picker>
               </v-menu>
             </v-col>
             <!-- 종료 날짜 끝 -->
@@ -154,7 +153,7 @@
           <!-- 이름입력 -->
           <v-row justify="center">
             <v-col cols="12" class="py-0">
-              <v-text-field v-model="input.name" label="일정명"> </v-text-field>
+              <v-text-field v-model="input.name" label="일정명"></v-text-field>
             </v-col>
           </v-row>
           <!-- 이름입력 끝 -->
@@ -209,15 +208,9 @@
       <v-row justify="end" class="mb-2">
         <v-col cols="12" class="text-end pb-0">
           <span class="error--text">{{ message }}</span>
-          <v-btn text color="dark lighten-2" @click="close">
-            Cancel
-          </v-btn>
-          <v-btn text color="dark lighten-2" @click="create" v-if="!isUpdate">
-            OK
-          </v-btn>
-          <v-btn text color="dark lighten-2" @click="update" v-else>
-            Update
-          </v-btn>
+          <v-btn text color="dark lighten-2" @click="close">Cancel</v-btn>
+          <v-btn text color="dark lighten-2" @click="create" v-if="!isUpdate">OK</v-btn>
+          <v-btn text color="dark lighten-2" @click="update" v-else>Update</v-btn>
         </v-col>
       </v-row>
       <!-- 버튼 끝 -->
@@ -227,6 +220,7 @@
 
 <script>
 import { format } from "date-fns";
+import WorkService from "@/services/work.service";
 
 export default {
   name: "addmodal",
@@ -248,14 +242,17 @@ export default {
       endTime: "",
       name: "",
       content: "",
-      group: "empty",
+      group: "schedule",
       color: "primary"
     },
     event_id: "",
 
     message: "",
 
-    groupOptions: [{ text: "선택안함", value: "empty" }],
+    groupOptions: [
+      { text: "일정", value: "schedule" },
+      { text: "목표", value: "goal" }
+    ],
 
     colorOptions: [
       { text: "Primary", value: "primary" },
@@ -288,6 +285,7 @@ export default {
     addModal() {
       this.open = this.addModal;
       if (this.isUpdate) {
+        
         var start_arr = this.propEvent.start.split(" ");
         var end_arr = this.propEvent.end.split(" ");
         var name_arr = this.propEvent.name.split("]");
@@ -298,9 +296,10 @@ export default {
           endTime: end_arr.length == 2 ? end_arr[1] : "",
           name: name_arr.length == 2 ? name_arr[1] : name_arr[0],
           content: this.propEvent.content,
-          group: this.propEvent.group,
+          group: this.propEvent.status,
           color: this.propEvent.color
         };
+        
         this.event_id = this.propEvent.event_id;
       }
     },
@@ -321,7 +320,7 @@ export default {
         endTime: "",
         name: "",
         content: "",
-        group: "empty",
+        group: "schedule",
         color: "primary"
       };
       this.$emit("close");
@@ -366,31 +365,7 @@ export default {
 
       // 추가할 데이터
       var newEvent = {
-        name: this.input.name,
-        content: this.input.content,
-        start:
-          this.input.startTime != ""
-            ? this.input.startDay + " " + this.input.startTime
-            : this.input.startDay,
-        end:
-          this.input.endTime != ""
-            ? this.input.endDay + " " + this.input.endTime
-            : this.input.endDay,
-        group: this.input.group,
-        color: this.input.color,
-        event_id: this.event_id
-      };
-
-      //데이터추가 엑시오스
-
-      //테스트 변수 제거해야함
-      this.$emit("reload", newEvent);
-      this.close();
-    },
-
-    update() {
-      // 수정 데이터
-      var updateEvent = {
+        type: "personal",
         name: this.input.name,
         content: this.input.content,
         start:
@@ -405,7 +380,37 @@ export default {
         color: this.input.color
       };
 
+      //데이터추가 엑시오스
+      WorkService.createWork(newEvent);
+      //테스트 변수 제거해야함
+      this.$emit("reload", newEvent);
+      this.close();
+    },
+
+    update() {
+      
+     
+
+      //수정 데이터
+      var updateEvent = {
+        type:"personal",
+        work_id: this.propEvent.id,
+        name: this.input.name,
+        content: this.input.content,
+        start:
+          this.input.startTime != ""
+            ? this.input.startDay + " " + this.input.startTime
+            : this.input.startDay,
+        end:
+          this.input.endTime != ""
+            ? this.input.endDay + " " + this.input.endTime
+            : this.input.endDay,
+        group: this.input.group,
+        color: this.input.color
+      };
+    
       //수정 엑시오스 요청
+      WorkService.updateWork(updateEvent);
       this.$emit("reload", updateEvent);
       this.close();
     }

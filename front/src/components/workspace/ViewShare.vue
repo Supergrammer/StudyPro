@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-card id="share_block" height="653px" class="ma-0 pa-0">
-    <img v-show="sharing_user_id == user.user_id || sharing_user_id == 'no one'" :src="sharing_user_id === 'no one'? unloaded_img : sharing_img" alt="">
+    <img absolute :src="unloaded_img" id="first" alt="">
       <v-btn color="primary" class='btns' v-if="sharing_possible" v-show="sharing_user_id != user.user_id" @click="sharing_user_id = user.user_id">Share Mine</v-btn>
       <v-btn color="error" class='btns' v-if="sharing_possible" v-show="sharing_user_id == user.user_id" @click="sharing_user_id = 'no one'">Stop Share</v-btn>
     </v-card>
@@ -112,7 +112,9 @@ export default {
         : this.sharing_img;
       t_img.style.position = "absolute";
       t_img.style.zIndex = 1;
-      t_img.style.width = "100%";
+      t_img.style.top = i ? "10%" :"30%"
+      t_img.style.left = i ? "23%" : "30%"
+      if (i != 0) {t_img.style.width = "50%"}
       return t_img;
     }
   },
@@ -121,8 +123,8 @@ export default {
     this.canvas.width = "1142"
     this.canvas.height = "653"
     
-    this.unloaded_img = require("../../assets/images/noru.jpg")
-    this.sharing_img = require("../../assets/images/now_sharing.jpg")
+    this.unloaded_img = require("../../assets/images/no_sharing.png")
+    this.sharing_img = require("../../assets/images/sharing.gif")
     this.share_block = document.getElementById("share_block");
     
     this.get_stream(this.canvas.captureStream(25))
@@ -179,11 +181,7 @@ export default {
                 from: this.user.user_id,
                 to: user_id
               });
-            },
-            e => {
-              console.log(e);
-            }
-          );
+            }, e => console.log(e));
         });
       }, 1000);
     });
@@ -236,10 +234,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  img {
-    width: 100%;
+  #first {
+    width: 50%;
     z-index : 1;
     position: absolute;
+    left: 23%;
+    top: 10%;
   }
   video {
     width: 100%;

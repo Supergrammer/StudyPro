@@ -1,7 +1,7 @@
 <template>
   <v-content id="board" class="pa-0">
     <v-row justify="center">
-      <v-col cols="11" lg="10">
+      <v-col cols="11">
         <v-card>
           <v-toolbar flat color="customTheme" dark>
             <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
