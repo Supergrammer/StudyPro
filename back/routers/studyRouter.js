@@ -1,8 +1,13 @@
 import express from "express"
 import routes from "../routes"
 import {create_study, read_studies, join_study, delete_study, update_study, apply_study, destory_study,read_apply_study,
+<<<<<<< HEAD
     get_joined_user, delete_study_user,update_study_user_level,
     read_study, search_studies, mark_study, read_marked_studies, study_image_upload} from "../controllers/studyController"
+=======
+    get_joined_user, delete_study_user,
+    read_study, search_studies, mark_study, read_marked_studies, study_image_upload,attendence,read_today_attendence} from "../controllers/studyController"
+>>>>>>> aa0f174cb309f29fa95fcc4c6b9367f5e5959c46
 import {onlyPrivate} from "../middleware"
 
 const studyRouter = express.Router();
@@ -22,6 +27,8 @@ studyRouter.post(routes.study_join, join_study)
 studyRouter.delete(routes.study_join, delete_study_user)
 studyRouter.post(routes.study_apply , apply_study)
 studyRouter.get(routes.study_join, get_joined_user)
+studyRouter.post(routes.attendence,attendence)
+studyRouter.post(routes.check_attendence,read_today_attendence);
 
 
 export default studyRouter;

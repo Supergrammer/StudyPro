@@ -2,7 +2,7 @@
   <v-content id="study" class="pa-0">
     <v-navigation-drawer absolute permanent expand-on-hover v-if="isAuth">
       <v-list>
-        <v-list-item class>
+        <v-list-item class="mt-2">
           <v-list-item-avatar>
             <v-img :src="currentUser.profile_url"></v-img>
           </v-list-item-avatar>
@@ -27,7 +27,7 @@
         </v-list-item>
       </v-list>
       <v-divider class="mx-3" />
-      <v-list>
+      <!-- <v-list>
         <v-list-item @click="routeTo()">
           <v-list-item-icon>
             <v-icon medium>check</v-icon>
@@ -40,7 +40,7 @@
           </v-list-item-icon>
           <v-list-item-title>관리자 메뉴</v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-navigation-drawer>
 
     <v-card flat>
@@ -55,6 +55,9 @@
 </template>
 
 <script>
+
+import StudyService from "@/services/study.service";
+import AuthService from "@/services/auth.service";
 export default {
   props: ["study_id"],
   data() {
@@ -95,14 +98,20 @@ export default {
   },
 
   created() {
+  },
+
+  async mounted() {
+    if (!this.isAuth) {
+      this.$router.push({ name: "home" });
+    }
     window.closechild = () => {
       this.workspace.close();
     };
-  },
-
-  mounted() {
-    if (!this.isAuth) {
-      this.$router.push({ name: "home" });
+    await this.loadStudyInfo();
+    if (this.studyInfo.level) {
+      this.isJoined = true;
+    } else {
+      this.isJoined = false;
     }
   },
 
@@ -116,10 +125,26 @@ export default {
   },
 
   methods: {
+
+    async loadStudyInfo() {
+      await AuthService.checkUserDefault();
+      this.studyInfo = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      }).then(res => {
+        console.log('data', res)
+        return res.data;
+      });
+    },
+
+
     routeTo(route) {
       this.$router.push({ name: route.routes, params: route.params });
     },
     toWorkspace() {
+      if (!this.isJoined) {
+        window.alert("스터디에 가입해주세요")
+        return
+      }
       let workspace = this.$router.resolve({
         name: "workspace",
         params: { study_id: this.study_id }

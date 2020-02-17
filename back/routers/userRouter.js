@@ -13,7 +13,7 @@ import {
     profile_upload,
     update_password,
     get_joined_study,
-    leave_study
+    leave_study,
 } from "../controllers/userController"
 
 const userRouter = express.Router();
@@ -22,6 +22,8 @@ userRouter.post(routes.signup, profile_upload.single('img'), signup);
 userRouter.post(routes.signin, signin);
 userRouter.post(routes.social_signin, social_signin);
 userRouter.post(routes.check_token, check_token);
+
+
                             
 userRouter.get(routes.joined_study, get_joined_study);
 userRouter.get(routes.home, read_users);

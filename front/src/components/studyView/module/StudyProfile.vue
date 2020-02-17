@@ -8,13 +8,21 @@
       <v-card-title>
         <span class="Hline">{{ study_info.name }}</span>
       </v-card-title>
-      <v-card-text class="text--primary">
-        <span>스터디 소개 : {{ study_info.goal }}</span>
-      </v-card-text>
-      <v-card-actions>
+      <v-card-subtitle class="gray--text pt-1 pl-7">
+        <span>{{ study_info.goal }}</span>
+      </v-card-subtitle>
+      <v-card-subtitle class="black--text">
+        <span class="subline">
+          스터디 소개 :
+          <br />
+        </span>
+        <span class="subtxt pl-2">{{ study_info.description }}</span>
+      </v-card-subtitle>
+      <v-divider class="mx-2" />
+      <v-card-actions class="mb-2">
         <v-row justify="center">
-        <v-btn class="primary" dark>출석 체크</v-btn>
-        <v-btn class="green" dark @click="modal = true" v-if="!isJoined">가입하기</v-btn>
+          <v-btn class="primary mr-2" dark>출석 체크</v-btn>
+          <v-btn class="green" dark @click="modalOpen" v-if="!isJoined">가입하기</v-btn>
         </v-row>
       </v-card-actions>
     </v-card>
@@ -24,8 +32,8 @@
       </template>
       <template v-slot:text>
         <div v-show="reg_message == ''">
-        <p>신청글</p>
-        <v-textarea outlined hide-details v-model="comment"></v-textarea>
+          <p>신청글</p>
+          <v-textarea outlined hide-details v-model="comment"></v-textarea>
         </div>
         {{reg_message}}
       </template>
@@ -48,9 +56,9 @@ export default {
     return {
       study_info: [],
       modal: false,
-      comment: '',
-      reg_message: '',
-      isJoined: false,
+      comment: "",
+      reg_message: "",
+      isJoined: false
     };
   },
   components: {
@@ -58,14 +66,14 @@ export default {
   },
   async created() {
     this.getStudyInfo();
-    var res = await StudyService.getStudyInfo({study_id:this.study_id})
-    .then(res => {
-      return res.data;
-    })
-
-    if(res.level){
+    var res = await StudyService.getStudyInfo({ study_id: this.study_id }).then(
+      res => {
+        return res.data;
+      }
+    );
+    if (res.level) {
       this.isJoined = true;
-    }else{
+    } else {
       this.isJoined = false;
     }
   },
@@ -84,21 +92,26 @@ export default {
         comment: this.comment
       };
 
-      var res = await StudyService.getStudyInfo(payload);
-      console.log(res)
-      // var res = await StudyService.applyStudy(payload);
-      // if (res.data.state == "success") {
-      //   this.reg_message = "가입신청을 완료했습니다";
-      // } else {
-      //   this.reg_message = res.data.detail;
-      // }
+      var res = await StudyService.applyStudy(payload).then(res => {
+        return res.data;
+      });
+      if (res.state == "success") {
+        this.reg_message = "가입신청을 완료했습니다";
+      } else {
+        this.reg_message = res.data.detail;
+      }
+    },
+
+    modalOpen() {
+      this.comment = "";
+      this.modal = true;
     },
 
     modalClose() {
-      this.reg_message = '';
+      this.reg_message = "";
       this.modal = false;
     }
-  },
+  }
 };
 </script>
 
@@ -106,5 +119,12 @@ export default {
 .Hline {
   font-size: 25px !important;
   font-weight: bold !important;
+}
+.subline {
+  font-size: 18px !important;
+}
+.subtxt {
+  font-size: 15px !important;
+  color: #808080 !important;
 }
 </style>
