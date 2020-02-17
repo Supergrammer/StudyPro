@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <v-img src="@/assets/images/banner/main.png" />
-    <top class="px-4 py-10"/>
+    <top/>
   </div>
 </template>
 

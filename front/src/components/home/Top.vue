@@ -1,5 +1,5 @@
 <template>
-  <div id="topleft">
+  <div id="top">
     <div v-if="isExistMyGroup">
       <!-- 가입한 모임 목록 -->
       <p class="main-title animated bounce" aria-disabled>

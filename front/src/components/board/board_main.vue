@@ -1,10 +1,7 @@
 <template>
   <div id="board">
     <v-img src="@/assets/images/banner/board.png" />
-    <v-card class="mx-1">
-      <v-toolbar flat color="customTheme" dark>
-        <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
-      </v-toolbar>
+    <div id="board-content">
       <v-row no-gutters>
         <v-col style="max-width: 200px;">
           <v-card flat>
@@ -27,12 +24,12 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card class="ma-2">
+          <v-card class="ma-2" flat>
             <boardList :board="boardList" />
           </v-card>
         </v-col>
       </v-row>
-    </v-card>
+    </div>
   </div>
 </template>
 
