@@ -12,11 +12,9 @@
     >
       <v-icon class="white--text">fa-arrow-up</v-icon>
     </v-btn>
-    <v-footer class="customTheme" padless>
-      
+    <v-footer class="customTheme" padless style="opacity:.7;">
       <v-row justify="center" no-gutters>
-        <v-col  v-show="effects.aboutUs" cols="12" class="customTheme lighten-7 text-center white--text">About Us</v-col>
-        <v-btn
+        <!-- <v-btn
           v-for="link in links"
           :key="link"
           color="white"
@@ -25,7 +23,7 @@
           class="my-2"
           @click="effect(link)"
           >{{ link }}</v-btn
-        >
+        > -->
         <v-col
           class="customTheme lighten-1 py-3 text-center white--text"
           cols="12"

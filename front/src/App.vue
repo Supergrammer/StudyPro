@@ -11,6 +11,7 @@ import WbKakao from "@/social-signin/kakao/kakao";
 
 export default {
   mounted(){
+    window.scrollTo(0,0)
     this.$store.dispatch('auth/checkUserDefault')
     WbKakao.init()
   }
