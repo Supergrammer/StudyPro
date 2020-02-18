@@ -13,7 +13,7 @@
           </router-link>
         </v-col>
         <!-- 로고 끝 -->
-        <v-spacer></v-spacer>
+        <v-spacer ></v-spacer>
         <!-- 메뉴 -->
         <v-col class="header-menu-container">
           <template>
