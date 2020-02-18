@@ -65,7 +65,6 @@
       <v-col
         align="center"
         justify="center"
-        v-show="talk"
         cols="3"
         class="py-1 pl-0 pr-9"
       >
@@ -160,6 +159,7 @@ import Chatting from "@/components/workspace/Chatting";
 
 import recordrtc from "recordrtc";
 import saveAs from 'file-saver';
+import StudyService from "@/services/study.service";
 
 export default {
   data() {
@@ -169,7 +169,6 @@ export default {
       connected_users: [],
       sharing_id: "no one",
       debuging: false,
-      talk: true,
       current: "board",
       overlay: false,
       recording: false,
@@ -218,6 +217,7 @@ export default {
   mounted() {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
+    this.loadStudyInfo()
 
     if (!window.opener) return;
     window.onkeyup = event => {
@@ -240,6 +240,14 @@ export default {
     });
   },
   methods: {
+    async loadStudyInfo() {
+      this.studyInfo = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      }).then(res => {
+        return res.data;
+      });
+    },
+    
     record() {
       this.recording = !this.recording
       if (this.recording) {
@@ -254,7 +262,9 @@ export default {
       } else {
         this.recorder.stopRecording()
         .then(data => {
-          saveAs(data)
+          const now = new Date()
+          const name = `${this.studyInfo.name} ${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`
+          saveAs(data, name)
         })
       }
 

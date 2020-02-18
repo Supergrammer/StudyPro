@@ -194,7 +194,7 @@
                 v-model="input.color"
                 :items="colorOptions"
                 label="색상"
-                hide-details
+                :color="input.color"
                 outlined
                 dense
               ></v-select>
