@@ -15,7 +15,6 @@ import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
 import SequentialEntrance from "vue-sequential-entrance";
 import "vue-sequential-entrance/vue-sequential-entrance.css";
 
-
 Vue.use(globalComponents);
 Vue.use(infiniteScroll);
 Vue.use(PerfectScrollbar)

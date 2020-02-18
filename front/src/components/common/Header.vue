@@ -267,7 +267,7 @@ export default {
     },
     toMail() {
       if (this.$route.path.split("/")[1] != "msgbox") {
-        this.$router.push({ path: "msgbox" });
+        this.$router.push({ name: "msgbox" });
       }
     }
   },

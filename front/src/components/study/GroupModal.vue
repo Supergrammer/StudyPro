@@ -7,8 +7,8 @@
         </v-card-title>
         <v-card-text class="py-0 px-7">
           <v-container class="pb-0">
-            <v-row class="justify-center">
-              <v-img :src="studyInfo.image_url" max-height="400px"></v-img>
+            <v-row class="justify-center" id="img-container">
+              <v-img id="study-img" :src="studyInfo.image_url" contain></v-img>
             </v-row>
             <v-row class="pt-4 pb-1">
               <v-col cols="3" class="py-0">
@@ -190,7 +190,6 @@ export default {
       this.open = this.groupModal;
     },
     open() {
-      console.log(this.studyInfo);
       if (!this.open) {
         this.$emit("close");
       }
@@ -245,3 +244,15 @@ export default {
   }
 };
 </script>
+
+<style>
+#img-container{
+  height:200px;
+}
+
+#study-img{
+  height: 100%;
+  width : auto;
+}
+  
+</style>
