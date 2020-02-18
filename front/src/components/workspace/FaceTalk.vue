@@ -112,7 +112,10 @@ export default {
         const add_stream = this.video_streamings[i] ? this.local_dummy_stream : this.local_stream
         this.video_streamings[i] = !this.video_streamings[i]
         temp_btn.src = this.video_streamings[i] ? this.camera_on_img : this.camera_off_img
-        
+        console.log('addstream', add_stream)
+        console.log('delete', delete_stream)
+        console.log('localstream', this.local_stream)
+        console.log('---------------------------')
         for (let i in this.peer_connections) {
           let pc = this.peer_connections[i]
           pc.removeStream(delete_stream)
@@ -244,7 +247,7 @@ export default {
         mute_button.onclick = this.mute
       }
 
-      t_pc.addStream(this.local_stream);
+      t_pc.addStream(this.local_stream)
 
       return t_pc;
     },
@@ -306,7 +309,6 @@ export default {
       })
       .then(this.get_stream) :
       this.get_stream(this.canvas.captureStream(25))
-      
 
     this.socket.on("join", message => {
       const user_id = message.user_id;
@@ -328,7 +330,8 @@ export default {
               study_id: this.study_id,
               from: this.user.user_id,
               from_profile: this.user.user_profile_url || this.no_signal_img,
-              to: user_id
+              to: user_id,
+              isStreaming: this.video_streamings[0],
             })
           }, e => {console.log(e)})
         })      
@@ -340,6 +343,7 @@ export default {
       this.deleteBorder(video_num, this.sharing_id)
       this.connected_users[video_num] = null
       this.user_profiles[video_num] = null
+      this.video_streamings[video_num] = true
       let temp_video =  this.remote_videos[video_num]
 
       while (temp_video.firstChild) temp_video.removeChild(temp_video.lastChild)
@@ -364,6 +368,7 @@ export default {
           if (!this.connected_users[idx]) {
             this.connected_users[idx] = from;
             this.user_profiles[idx] = data.from_profile
+            this.video_streamings[idx] = data.isStreaming
             break;
           }
         }

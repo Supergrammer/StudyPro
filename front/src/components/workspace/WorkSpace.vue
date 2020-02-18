@@ -24,6 +24,10 @@
           </v-tab>
 
           <v-card flat>
+            <v-btn class="px-9" height="95" @click="record">
+              <i v-if="!recording" class="material-icons">movie</i>
+              <i v-else class="material-icons">stop</i>
+            </v-btn>
             <v-btn class="px-9" height="95" @click="help">
               <v-icon large>help_outline</v-icon>
             </v-btn>
@@ -61,7 +65,6 @@
       <v-col
         align="center"
         justify="center"
-        v-show="talk"
         cols="3"
         class="py-1 pl-0 pr-9"
       >
@@ -154,6 +157,10 @@ import ViewShare from "@/components/workspace/ViewShare";
 import FaceTalk from "@/components/workspace/FaceTalk";
 import Chatting from "@/components/workspace/Chatting";
 
+import recordrtc from "recordrtc";
+import saveAs from 'file-saver';
+import StudyService from "@/services/study.service";
+
 export default {
   data() {
     return {
@@ -161,10 +168,10 @@ export default {
       socket: "",
       connected_users: [],
       sharing_id: "no one",
-      debuging: true,
-      talk: true,
+      debuging: false,
       current: "board",
-      overlay: false
+      overlay: false,
+      recording: false,
     };
   },
 
@@ -184,13 +191,13 @@ export default {
     if (!window.opener) return;
     this.user = this.debuging
       ? {
-          user_id: `${Math.ceil(40 + Math.random() * 40)}`,
+        user_id: `${Math.ceil(40 + Math.random() * 40)}`,
           user_nickname: `${Math.ceil(Math.random() * 100000)}`,
           user_profile_url:
             "http://15.164.245.201:8000/images/profile_default.png"
         }
       : {
-          user_id: this.$store.getters["auth/getUser"].uid,
+        user_id: this.$store.getters["auth/getUser"].uid,
           user_nickname: this.$store.getters["auth/getUser"].nickname,
           user_profile_url: this.$store.getters["auth/getUser"].profile_url
         };
@@ -210,6 +217,7 @@ export default {
   mounted() {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
+    this.loadStudyInfo()
 
     if (!window.opener) return;
     window.onkeyup = event => {
@@ -232,6 +240,36 @@ export default {
     });
   },
   methods: {
+    async loadStudyInfo() {
+      this.studyInfo = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      }).then(res => {
+        return res.data;
+      });
+    },
+    
+    record() {
+      this.recording = !this.recording
+      if (this.recording) {
+        navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
+        .then(record_stream => {
+          this.recorder = new recordrtc.RecordRTCPromisesHandler(record_stream, {
+            type: 'video',
+            mimeType: 'video/webm; codecs=vp9'
+          })
+          this.recorder.startRecording();
+        })
+      } else {
+        this.recorder.stopRecording()
+        .then(data => {
+          const now = new Date()
+          const name = `${this.studyInfo.name} ${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`
+          saveAs(data, name)
+        })
+      }
+
+
+    },
     changeView(change_id) {
       this.sharing_id = change_id;
     },

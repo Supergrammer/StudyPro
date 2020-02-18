@@ -191,6 +191,9 @@ export default {
     }
   },
   mounted() {
+    window.closechild = () => {
+      this.workspace.close();
+    };
     this.check_attendence().then(res => {
       if (res.data.state === "true") {
         this.attendenced = true;
