@@ -13,7 +13,6 @@ let rooms = {};
 export const connect = () => {
     try {
         io.sockets.on('connection', function (socket) {
-            console.log(socket)
             const study_id = socket.handshake.query.study_id;
             const user_id = socket.handshake.query.user_id;
             const user_nickname = socket.handshake.query.user_nickname
@@ -58,7 +57,6 @@ export const connect = () => {
                     user_num = 1;
                 }
             console.log(room.members);
-            console.log(room.sockets.length)
             
             socket.join(study_id);
 
