@@ -1,11 +1,11 @@
 <template>
   <div>
+    <v-card class="mb-2">
+      <v-btn height="70" class="btns_room primary mb-4" large="true" @click="toWorkspace" block>
+        <v-icon color="white" class="mr-2">exit_to_app</v-icon>스터디룸
+      </v-btn>
+    </v-card>
     <v-card outlined class="mx-auto mb-2" width="600">
-      <v-card class="mb-2">
-        <v-btn height="70" class="btns_room primary" large="true" @click="routeTo" block>
-          <v-icon color="white" class="mr-2">exit_to_app</v-icon>스터디룸
-        </v-btn>
-      </v-card>
       <v-card flat>
         <v-img :src="study_info.image_url" max-height="150px"></v-img>
       </v-card>
@@ -29,15 +29,15 @@
           <template v-if="isJoined">
             <v-btn
               v-if="!attendenced"
-              class="btns_join primary"
+              class="btns_join primary mt-1"
               large
               @click="attendence"
               block
             >출석 체크</v-btn>
-            <v-btn v-else class="btns_join" disabled large block>출석 완료</v-btn>
+            <v-btn v-else class="btns_join mt-1" disabled large block>출석 완료</v-btn>
           </template>
           <template v-else>
-            <v-btn class="btns_join green" large dark @click="modalOpen" v-if="!isJoined" block>가입하기</v-btn>
+            <v-btn class="btns_join green mt-1" large dark @click="modalOpen" v-if="!isJoined" block>가입하기</v-btn>
           </template>
         </v-row>
       </v-card-actions>
@@ -190,11 +190,22 @@ export default {
       return result;
     },
 
-    routeTo() {
-      this.$router.push({ name: "workspace", params: { board: "workspace" } });
+    toWorkspace() {
+      if (!this.isJoined) {
+        window.alert("스터디에 가입해주세요");
+        return;
+      }
+      let workspace = this.$router.resolve({
+        name: "workspace",
+        params: { study_id: this.study_id }
+      });
+      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
     }
   },
   mounted() {
+    window.closechild = () => {
+      this.workspace.close();
+    };
     this.check_attendence().then(res => {
       if (res.data.state === "true") {
         this.attendenced = true;
@@ -208,7 +219,7 @@ export default {
 
 <style scoped>
 .btns_room {
-  font-size: 25px !important;
+  font-size: 27px !important;
 }
 .btns_join {
   font-size: 20px !important;

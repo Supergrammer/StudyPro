@@ -6,7 +6,7 @@
       <v-tabs vertical v-model="tabIndex">
         <v-tab class="study-tabs" v-for="item in titles" :key="item.title">
           <v-icon left>{{ item.icon }}</v-icon>
-          <span class="d-none d-sm-flex">{{ item.title }}</span>
+          <span class="d-none d-sm-flex ml-3">{{ item.title }}</span>
         </v-tab>
         <v-tab-item>
           <study-search />

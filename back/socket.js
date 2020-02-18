@@ -4,11 +4,9 @@ const option = {
     key: fs.readFileSync('./keys/private.key'),
     cert: fs.readFileSync('./keys/certificate.crt'),
     ca: fs.readFileSync('./keys/ca_bundle.crt'),
-    // cert: fs.readFileSync('../T02A106.pem')
 }
 export const server = require('http').createServer(option, app)
 
-// export const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
 let rooms = {};
@@ -23,37 +21,41 @@ export const connect = () => {
             let room = rooms[study_id];
             let user_num;
             let user;
-
+            
             //join 
             if (room) {
                 //방이 존재 할때
                 // if (room.member_cnt >= 6 || room.members.indexOf(user_id) != -1) {
-                if (room.member_cnt >= 6) {
-                    socket.emit('alreadyexist')
-                    console.log('겹침')
-                    return;
+                    if (room.member_cnt >= 6) {
+                        socket.emit('alreadyexist')
+                        console.log('겹침')
+                        return;
+                    }
+                    room.members.push(user_id);
+                    
+                    room.sockets.push(socket);
+                    room.member_socket[user_id] = socket
+                    
+                    room.member_cnt += 1;
+                    user_num = room.member_cnt;
+                    user = 'user ' + user_num;
+                    
+                    
+                } else {
+                    
+                    //존재하지 않을때
+                    user = 'user 1'
+                    
+                    room = {
+                        members: [user_id],
+                        sockets: [socket],
+                        member_cnt: 1,
+                        member_socket: {},
+                    }
+                    room.member_socket[user_id] = socket;
+                    rooms[study_id] = room;
+                    user_num = 1;
                 }
-                room.members.push(user_id);
-                room.sockets.push(socket);
-
-                room.member_cnt += 1;
-                user_num = room.member_cnt;
-                user = 'user ' + user_num;
-
-
-            } else {
-
-                //존재하지 않을때
-                user = 'user 1'
-
-                room = {
-                    members: [user_id],
-                    sockets: [socket],
-                    member_cnt: 1
-                }
-                rooms[study_id] = room;
-                user_num = 1;
-            }
             console.log(room.members);
             console.log(room.sockets.length)
             
@@ -89,6 +91,7 @@ export const connect = () => {
                 } else {
                     room.members = room.members.filter(member => (member != user_id))
                     room.sockets = room.sockets.filter(socket => (socket.id != socket_id))
+                    delete room.member_socket[user_id]
 
                     let user_num = room.member_cnt;
                     room.member_cnt -= 1;
@@ -133,9 +136,11 @@ export const connect = () => {
             //화상채팅
             socket.on('message', data => {
                 let t_socket;
-                const idx = rooms[study_id].members.indexOf(data.to)
+                // const idx = rooms[study_id].members.indexOf(data.to)
 
-                t_socket = rooms[study_id].sockets[idx]
+
+                // t_socket = rooms[study_id].sockets[idx]
+                t_socket = room.member_socket[data.to]
                 // console.log(rooms[study_id].sockets)
                 if (!t_socket) return
                 t_socket.emit('message', data)
@@ -175,9 +180,10 @@ export const connect = () => {
             })
             socket.on('viewshare', data => {
                 let t_socket;
-                const idx = rooms[study_id].members.indexOf(data.to)
+                // const idx = rooms[study_id].members.indexOf(data.to)
 
-                t_socket = rooms[study_id].sockets[idx]
+                // t_socket = rooms[study_id].sockets[idx]
+                t_socket = room.member_socket[data.to]
                 if (!t_socket) return
                 t_socket.emit('viewshare', data)
 
