@@ -25,8 +25,8 @@
 
           <v-card flat>
             <v-btn class="px-9" height="95" @click="record">
-              <i v-if="!recording" class="material-icons">movie</i>
-              <i v-else class="material-icons">stop</i>
+              <v-icon x-large v-if="!recording" class="material-icons">mdi-record-rec</v-icon>
+              <v-icon x-large v-else class="material-icons">mdi-stop</v-icon>
             </v-btn>
             <v-btn class="px-9" height="95" @click="help">
               <v-icon large>help_outline</v-icon>
@@ -282,7 +282,7 @@ export default {
     },
 
     exit() {
-      window.opener ? window.opener.closechild() : window.close();
+      window.opener.closechild ? window.opener.closechild() : window.alert("오류가 있습니다 페이지를 직접 종료해주세요")
     },
 
     connected(connected_users) {
