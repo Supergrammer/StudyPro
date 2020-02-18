@@ -168,7 +168,7 @@ export default {
       socket: "",
       connected_users: [],
       sharing_id: "no one",
-      debuging: true,
+      debuging: false,
       talk: true,
       current: "board",
       overlay: false,
@@ -184,12 +184,12 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
-    // if (!window.opener) {
-    //   this.$router.push({ name: "home" });
-    // }
+    if (!window.opener) {
+      this.$router.push({ name: "home" });
+    }
   },
   created() {
-    // if (!window.opener) return;
+    if (!window.opener) return;
     this.user = this.debuging
       ? {
         user_id: `${Math.ceil(40 + Math.random() * 40)}`,
@@ -219,7 +219,7 @@ export default {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
 
-    // if (!window.opener) return;
+    if (!window.opener) return;
     window.onkeyup = event => {
       if (event.keyCode == 27) {
         this.overlay = false;
@@ -246,7 +246,6 @@ export default {
         navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
         .then(record_stream => {
           this.recorder = new recordrtc.RecordRTCPromisesHandler(record_stream, {
-            // recorderType: 'MediaStreamRecorder',
             type: 'video',
             mimeType: 'video/webm; codecs=vp9'
           })
