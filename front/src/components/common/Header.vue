@@ -140,7 +140,7 @@
       <template v-slot:append>
         <v-card-actions class="justify-center" v-if="!isAuth">
           <v-btn text class="pink--text" @click="signinModal = true">로그인</v-btn>
-          <v-btn text class="pink--text transparent" elevation="0" to="/signup">회원가입</v-btn>
+          <v-btn text class="pink--text transparent" elevation="0" to="/user/signup">회원가입</v-btn>
         </v-card-actions>
         <v-card-actions class="justify-center" v-else>
           <v-btn text class="pink--text" @click="signout">로그아웃</v-btn>
