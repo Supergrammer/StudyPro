@@ -23,16 +23,18 @@
                   <v-text-field v-model="postData.title" clearable label="제목을 입력하세요" outlined dense></v-text-field>
                 </v-col>
               </v-row>
-              <v-divider class="mb-5 mt-0"/>
+              <v-divider class="mb-5 mt-0" />
               <v-row>
                 <v-col cols="12" class="py-0"></v-col>
               </v-row>
               <v-row style="min-height: 500px">
                 <v-col class="py-0">
-                  <Editor v-model="postData.content"
-                  mode="wysiwyg"
-                  previewStyle="vertical"
-                  height="500px"/>
+                  <Editor
+                    v-model="postData.content"
+                    mode="wysiwyg"
+                    previewStyle="vertical"
+                    height="500px"
+                  />
                 </v-col>
               </v-row>
               <v-divider class="mt-5 mb-3" />
@@ -99,6 +101,22 @@
         </v-card>
       </v-col>
     </v-row>
+    <template>
+      <ChkModal :openModal="chkOpen" v-on:close="ChkModalClose">
+        <template v-slot:toolbar>
+          <v-card-title class="error white--text pa-3 pl-3">경고</v-card-title>
+        </template>
+        <template v-slot:text>
+          <span>{{errorDetail}}</span>
+          <br><br>
+        </template>
+        <template v-slot:btn>
+          <div class="text-right mr-4">
+            <v-btn text class="primary--text mb-2" @click="ChkModalClose()">확인</v-btn>
+          </div>
+        </template>
+      </ChkModal>
+    </template>
   </v-content>
 </template>
 
@@ -114,13 +132,15 @@ import { Editor } from "@toast-ui/vue-editor";
 export default {
   components: {
     Editor: Editor,
-    requestSignin: () => import("@/components/base/RequestSignin")
+    requestSignin: () => import("@/components/base/RequestSignin"),
+    ChkModal: () => import("@/components/base/Modal")
   },
   data() {
     return {
       items: ["share", "free"],
       dialog: false,
-
+      chkOpen: false,
+      errorDetail: "",
       postData: {
         type: "common",
         writer: "",
@@ -135,7 +155,6 @@ export default {
       ]
     };
   },
-  
   computed: {
     isAuth() {
       return this.$store.getters["auth/isAuth"];
@@ -144,6 +163,17 @@ export default {
 
   methods: {
     create() {
+      if (this.postData.title == "") {
+        this.errorDetail = "제목을 입력해주세요.";
+        this.chkOpen = true;
+        return;
+      }
+      if (this.postData.content == "") {
+        this.errorDetail = "내용을 입력해주세요";
+        this.chkOpen = true;
+        return;
+      }
+
       let formData = new FormData();
       this.postData.writer = this.getUser().uid;
       for (var i = 0; i < this.files.length; i++) {
@@ -163,6 +193,9 @@ export default {
     },
     getUser() {
       return this.$store.getters["auth/getUser"];
+    },
+    ChkModalClose() {
+      this.chkOpen = false;
     }
   }
 };
