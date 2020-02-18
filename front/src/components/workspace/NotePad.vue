@@ -107,8 +107,6 @@ export default {
 
     this.editor.on("change", () => {
       if (this.is_change) {
-        console.log("왜 안바뀌냐");
-
         this.socket.emit("typing", {
           study_id: this.study_id,
           text: this.editor.getValue()
