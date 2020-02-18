@@ -634,8 +634,6 @@ export default {
     },
 
     clickDetailMenu(value, event) {
-      console.log("clickDetailMenu Method in MyCalendar.vue");
-
       switch (value) {
         case "movemycal":
           this.moveMyCal(event);
@@ -647,7 +645,6 @@ export default {
           this.delOpen = true;
           break;
         default:
-          console.log("clickDetailMenu Error");
       }
     },
 
