@@ -87,13 +87,7 @@
 
           <v-col align-self="center" align="center" cols="1">
             <a>
-              <img
-                src="@/assets/images/post_img.png"
-                v-if="member.id !== currentUser.uid"
-                style="font-size:14px"
-                class="ma-0"
-                @click="viewDetail(member)"
-              />
+              <v-icon v-if="member.id !== currentUser.uid" class="black--text ma-0" @click="viewDetail(member)">mdi-email</v-icon>
             </a>
           </v-col>
 

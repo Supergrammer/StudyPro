@@ -191,20 +191,12 @@ export default {
     },
 
     toWorkspace() {
-      if (!this.isJoined) {
-        window.alert("스터디에 가입해주세요");
-        return;
-      }
-      let workspace = this.$router.resolve({
-        name: "workspace",
-        params: { study_id: this.study_id }
-      });
-      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
+      this.$emit('toWorkspace')
     }
   },
   mounted() {
     window.closechild = () => {
-      this.workspace.close();
+      this.$emit('closeChild')
     };
     this.check_attendence().then(res => {
       if (res.data.state === "true") {

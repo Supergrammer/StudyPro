@@ -54,7 +54,7 @@
       </div>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
-          <router-view></router-view>
+          <router-view @closeChild="closeChild" @toWorkspace="toWorkspace"></router-view>
         </v-col>
       </v-row>
     </v-card>
@@ -64,6 +64,8 @@
 <script>
 import StudyService from "@/services/study.service";
 import AuthService from "@/services/auth.service";
+let open_workspace = null;
+
 export default {
   props: ["study_id"],
   data() {
@@ -109,15 +111,15 @@ export default {
     if (!this.isAuth) {
       this.$router.push({ name: "home" });
     }
-    window.closechild = () => {
-      this.workspace.close();
-    };
     await this.loadStudyInfo();
     if (this.studyInfo.level) {
       this.isJoined = true;
     } else {
       this.isJoined = false;
     }
+    window.closechild = () => {
+      open_workspace.close();
+    };
   },
 
   computed: {
@@ -152,7 +154,7 @@ export default {
         name: "workspace",
         params: { study_id: this.study_id }
       });
-      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
+      open_workspace = window.open(workspace.href, "WORKSPACE", "a");
     }
   }
 };
