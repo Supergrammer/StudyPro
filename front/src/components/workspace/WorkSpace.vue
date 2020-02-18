@@ -25,8 +25,8 @@
 
           <v-card flat>
             <v-btn class="px-9" height="95" @click="record">
-              <i v-if="!recording" class="material-icons">movie</i>
-              <i v-else class="material-icons">stop</i>
+              <v-icon x-large v-if="!recording" class="material-icons">mdi-record-rec</v-icon>
+              <v-icon x-large v-else class="material-icons">mdi-stop</v-icon>
             </v-btn>
             <v-btn class="px-9" height="95" @click="help">
               <v-icon large>help_outline</v-icon>
@@ -65,7 +65,6 @@
       <v-col
         align="center"
         justify="center"
-        v-show="talk"
         cols="3"
         class="py-1 pl-0 pr-9"
       >
@@ -160,6 +159,7 @@ import Chatting from "@/components/workspace/Chatting";
 
 import recordrtc from "recordrtc";
 import saveAs from 'file-saver';
+import StudyService from "@/services/study.service";
 
 export default {
   data() {
@@ -168,8 +168,7 @@ export default {
       socket: "",
       connected_users: [],
       sharing_id: "no one",
-      debuging: true,
-      talk: true,
+      debuging: false,
       current: "board",
       overlay: false,
       recording: false,
@@ -184,12 +183,12 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
-    // if (!window.opener) {
-    //   this.$router.push({ name: "home" });
-    // }
+    if (!window.opener) {
+      this.$router.push({ name: "home" });
+    }
   },
   created() {
-    // if (!window.opener) return;
+    if (!window.opener) return;
     this.user = this.debuging
       ? {
         user_id: `${Math.ceil(40 + Math.random() * 40)}`,
@@ -218,8 +217,9 @@ export default {
   mounted() {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
+    this.loadStudyInfo()
 
-    // if (!window.opener) return;
+    if (!window.opener) return;
     window.onkeyup = event => {
       if (event.keyCode == 27) {
         this.overlay = false;
@@ -240,13 +240,20 @@ export default {
     });
   },
   methods: {
+    async loadStudyInfo() {
+      this.studyInfo = await StudyService.getStudyInfo({
+        study_id: this.study_id
+      }).then(res => {
+        return res.data;
+      });
+    },
+    
     record() {
       this.recording = !this.recording
       if (this.recording) {
         navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
         .then(record_stream => {
           this.recorder = new recordrtc.RecordRTCPromisesHandler(record_stream, {
-            // recorderType: 'MediaStreamRecorder',
             type: 'video',
             mimeType: 'video/webm; codecs=vp9'
           })
@@ -255,7 +262,9 @@ export default {
       } else {
         this.recorder.stopRecording()
         .then(data => {
-          saveAs(data)
+          const now = new Date()
+          const name = `${this.studyInfo.name} ${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`
+          saveAs(data, name)
         })
       }
 
@@ -273,7 +282,7 @@ export default {
     },
 
     exit() {
-      window.opener ? window.opener.closechild() : window.close();
+      window.opener.closechild ? window.opener.closechild() : window.alert("오류가 있습니다 페이지를 직접 종료해주세요")
     },
 
     connected(connected_users) {
