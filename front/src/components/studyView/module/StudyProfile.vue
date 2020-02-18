@@ -65,6 +65,9 @@
 
 <script>
 import StudyService from "@/services/study.service";
+import UserService from "@/services/user.service";
+import EmailService from "@/services/email.service";
+
 
 export default {
   props: ["study_id"],
@@ -118,8 +121,17 @@ export default {
       var res = await StudyService.applyStudy(payload).then(res => {
         return res.data;
       });
+      
       if (res.state == "success") {
         this.reg_message = "가입신청을 완료했습니다";
+        let captain_info = await UserService.getUserContent(
+          this.study_info.captain
+        );
+        let captain_email = captain_info.email;
+        let study_name = this.study_info.name;
+        EmailService.noticeApply(captain_email, study_name,this.study_id);
+
+
       } else {
         this.reg_message = res.data.detail;
       }

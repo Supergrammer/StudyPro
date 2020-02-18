@@ -14,21 +14,18 @@
           </v-col>
 
           <v-col align="center" cols="2">
-            <p style="font-size:14px" class="ma-0 pt-2">
-              {{ newbie.user.nickname }}
-            </p>
+            <p style="font-size:14px" class="ma-0 pt-2">{{ newbie.user.nickname }}</p>
           </v-col>
 
           <v-col align="center" cols="1">
-            <p style="font-size:14px" class="ma-0 pt-2">
-              {{ newbie.user.gender == "M" ? "남성" : "여성" }}
-            </p>
+            <p
+              style="font-size:14px"
+              class="ma-0 pt-2"
+            >{{ newbie.user.gender == "M" ? "남성" : "여성" }}</p>
           </v-col>
 
           <v-col align="center" cols="5">
-            <p style="font-size:14px" class="ma-0 pt-2">
-              {{ newbie.user.email }}
-            </p>
+            <p style="font-size:14px" class="ma-0 pt-2">{{ newbie.user.email }}</p>
           </v-col>
 
           <v-col align="center" cols="1">
@@ -39,8 +36,7 @@
                   (modal = true)
               "
               color="black"
-              >more_horiz</v-icon
-            >
+            >more_horiz</v-icon>
           </v-col>
 
           <v-col align="center" cols="1">
@@ -49,8 +45,7 @@
                 (modalType = 'accept'), (selectedUser = newbie), (modal = true)
               "
               color="green"
-              >check</v-icon
-            >
+            >check</v-icon>
           </v-col>
 
           <v-col align="center" cols="1">
@@ -59,8 +54,7 @@
                 (modalType = 'decline'), (selectedUser = newbie), (modal = true)
               "
               color="red"
-              >close</v-icon
-            >
+            >close</v-icon>
           </v-col>
         </v-row>
       </v-list-item>
@@ -80,35 +74,27 @@
           </v-col>
 
           <v-col align-self="center" align="center" cols="2">
-            <p style="font-size:14px" class="ma-0">
-              {{ member.nickname }}
-            </p>
+            <p style="font-size:14px" class="ma-0">{{ member.nickname }}</p>
           </v-col>
 
           <v-col align-self="center" align="center" cols="1">
-            <p style="font-size:14px" class="ma-0">
-              {{ member.gender == "M" ? "남성" : "여성" }}
-            </p>
+            <p style="font-size:14px" class="ma-0">{{ member.gender == "M" ? "남성" : "여성" }}</p>
           </v-col>
 
           <v-col align-self="center" align="center" cols="4">
-            <p style="font-size:14px" class="ma-0">
-              {{ member.email }}
-            </p>
+            <p style="font-size:14px" class="ma-0">{{ member.email }}</p>
           </v-col>
 
           <v-col align-self="center" align="center" cols="1">
             <a>
-            <!-- <img src="@/assets/images/post_img.png" v-if="member.id !== currentUser.uid" style="font-size:14px" class="ma-0" @click="viewDetail(member)"> -->
-            
-            <v-icon v-if="member.id !== currentUser.uid" class="black--text ma-0" @click="viewDetail(member)">mdi-email</v-icon>
+              <v-icon v-if="member.id !== currentUser.uid" class="black--text ma-0" @click="viewDetail(member)">mdi-email</v-icon>
             </a>
           </v-col>
-        
+
           <v-col align="center" cols="3">
             <!-- <v-icon @click="viewGreeting(member)" color="black"
               >more_horiz</v-icon
-            > -->
+            >-->
             <v-row>
               <v-col cols="6">
                 <v-img
@@ -151,8 +137,7 @@
                       (modal = true)
                   "
                   color="red"
-                  >close</v-icon
-                >
+                >close</v-icon>
 
                 <v-icon
                   v-else-if="
@@ -167,22 +152,17 @@
                       (modal = true)
                   "
                   color="red"
-                  >탈퇴하기</v-icon
-                >
+                >탈퇴하기</v-icon>
               </v-col>
             </v-row>
           </v-col>
         </v-row>
       </v-list-item>
-        <template>
-          <group-modal
-            :group-modal="groupModal"
-            :user="user"
-            v-on:close="modalClose"
-          />
-        </template>
+      <template>
+        <group-modal :group-modal="groupModal" :user="user" v-on:close="modalClose" />
+      </template>
 
-      <modal :open-modal="modal" :close="modalClose">
+      <modal :open-modal="modal" :user="user" :close="modalClose">
         <template v-slot:text>
           <span v-if="modalType == 'delete'">{{ selectedUser.nickname }}</span>
           <span
@@ -192,64 +172,44 @@
                 modalType != 'selfdel' &&
                 modalType != 'greeting'
             "
-            >{{ selectedUser.user.nickname }}</span
-          >
+          >{{ selectedUser.user.nickname }}</span>
           {{ modalText[modalType] }}
-
           <p
             v-if="modalType == 'greeting'"
             class="mt-5 pt-2"
             style="white-space:pre;border-top: 1px solid #262F33;"
-          >
-            {{ selectedUser.comment }}
-          </p>
+          >{{ selectedUser.comment }}</p>
         </template>
         <template v-slot:btn>
           <div class="text-end pr-3 pb-3">
-            <v-btn
-              text
-              @click="acceptMember"
-              class="primary--text"
-              v-show="modalType == 'accept'"
-              >예</v-btn
-            >
+            <v-btn text @click="acceptMember" class="primary--text" v-show="modalType == 'accept'">예</v-btn>
             <v-btn
               text
               @click="declineMember"
               class="primary--text"
               v-show="modalType == 'decline'"
-              >예</v-btn
-            >
-            <v-btn
-              text
-              @click="deleteMember"
-              class="primary--text"
-              v-show="modalType == 'delete'"
-              >예</v-btn
-            >
+            >예</v-btn>
+            <v-btn text @click="deleteMember" class="primary--text" v-show="modalType == 'delete'">예</v-btn>
 
             <v-btn
               text
               @click="deleteMember"
               class="primary--text"
               v-show="modalType == 'selfdel'"
-              >예</v-btn
-            >
+            >예</v-btn>
 
             <v-btn
               text
               @click="modal = false"
               class="error--text"
               v-show="modalType != 'error' && modalType != 'greeting'"
-              >아니오</v-btn
-            >
+            >아니오</v-btn>
             <v-btn
               text
               @click="modal = false"
               class="error--text"
               v-show="modalType == 'error' || modalType == 'greeting'"
-              >확인</v-btn
-            >
+            >확인</v-btn>
           </div>
         </template>
       </modal>
@@ -266,14 +226,11 @@
 
         <div class="mt-4">
           <p>"{{ this.studyInfo.name }}" 스터디에 지금 가입하세요!</p>
-          <v-btn text color="green lighten-2" @click="modalOpen"
-            >가입하기</v-btn
-          >
+          <v-btn text color="green lighten-2" @click="modalOpen">가입하기</v-btn>
           <!-- <v-btn text color="error" @click="goBack">이전으로</v-btn> -->
         </div>
       </v-col>
     </v-row>
-    
 
     <modal :open-modal="modal" v-on:close="modalClose">
       <template v-slot:toolbar v-if="reg_message == ''">
@@ -288,12 +245,8 @@
       </template>
       <template v-slot:btn>
         <div class="text-end pr-3 pb-3">
-          <v-btn elevation="0" @click="regGroup" v-show="reg_message == ''"
-            >가입신청</v-btn
-          >
-          <v-btn elevation="0" @click="modalClose" v-show="reg_message != ''"
-            >확인</v-btn
-          >
+          <v-btn elevation="0" @click="regGroup" v-show="reg_message == ''">가입신청</v-btn>
+          <v-btn elevation="0" @click="modalClose" v-show="reg_message != ''">확인</v-btn>
         </div>
       </template>
     </modal>
@@ -302,6 +255,8 @@
 
 <script>
 import StudyService from "@/services/study.service";
+import EmailService from "@/services/email.service";
+import UserService from "@/services/user.service";
 
 export default {
   props: ["study_id"],
@@ -310,8 +265,7 @@ export default {
     comment: "",
     reg_message: "",
     groupModal: false,
-
-
+    user:"",
     modal: false,
     modalType: "",
     member: {},
@@ -388,31 +342,17 @@ export default {
 
     async changeLevel(member) {
       if (!this.isCaptain) {
-        window.alert("스터디장이 아닙니다")
-        return
+        window.alert("스터디장이 아닙니다");
+        return;
       }
-      const level = member.level === 'silver' ? 'gold' : 'silver'
-      await StudyService.changeUserLevel({study_id: this.study_id, user_id: member.id, level: level})
-      location.reload()
+      const level = member.level === "silver" ? "gold" : "silver";
+      await StudyService.changeUserLevel({
+        study_id: this.study_id,
+        user_id: member.id,
+        level: level
+      });
+      location.reload();
     },
-
-    confirmAccept(newbie) {
-      this.acceptModal = true;
-      this.newbie = newbie;
-    },
-    confirmDecline(newbie) {
-      this.declineModal = true;
-      this.newbie = newbie;
-    },
-    viewGreeting(newbie) {
-      this.greetingModal = true;
-      this.newbie = newbie;
-    },
-    confirmDelete(member) {
-      this.deleteModal = true;
-      this.member = member;
-    },
-
     getApplyList() {
       StudyService.getApplyList({ study_id: this.study_id }).then(
         newbieList => {
@@ -447,6 +387,13 @@ export default {
         this.getApplyList();
         this.getjoinedUser();
         this.modal = false;
+
+        //이메일 보내기
+
+        let user_email = this.selectedUser.user.email;
+        
+        let study_name = this.studyInfo.name;
+        EmailService.resultApply(user_email, study_name, this.study_id, true);
       } else {
         this.modalType = "error";
       }
@@ -463,11 +410,16 @@ export default {
         this.getApplyList();
         this.getjoinedUser();
         this.modal = false;
+
+        //이메일 보내기
+        let user_email = this.selectedUser.user.email;
+        let study_name = this.studyInfo.name;
+        EmailService.resultApply(user_email, study_name, this.study_id, false);
       } else {
         this.modalType = "error";
       }
-    },
 
+    },
     async deleteMember() {
       var res = await StudyService.deleteUser({
         study_id: this.study_id,
@@ -479,12 +431,18 @@ export default {
         this.getApplyList();
         this.getjoinedUser();
         this.modal = false;
+        let user_info = await UserService.getUserContent(this.selectedUser.id);
+        let user_email = user_info.email;
+
+        let study_name = this.studyInfo.name;
+        EmailService.noticeDrop(user_email, study_name, this.study_id);
+
       } else {
         this.modalType = "error";
       }
     },
 
-    modalOpen() {
+    async modalOpen() {
       this.comment = "";
       this.modal = true;
     },
@@ -502,7 +460,15 @@ export default {
       var res = await StudyService.applyStudy(payload).then(res => {
         return res.data;
       });
+      console.log(res);
+
       if (res.state == "success") {
+        //이메일 보내기
+        let captain_info = await UserService.getUserContent(this.studyInfo.captain);
+        let captain_email = captain_info.email;
+        let study_name = this.studyInfo.name;
+        EmailService.noticeApply(captain_email, study_name, this.study_id);
+
         this.reg_message = "가입신청을 완료했습니다";
       } else {
         this.reg_message = res.data.detail;
