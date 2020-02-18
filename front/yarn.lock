@@ -7580,9 +7580,9 @@ prosemirror-view@1.13.4:
     prosemirror-transform "^1.1.0"
 
 prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.13.3:
-  version "1.13.11"
-  resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.13.11.tgz#2a284ccb290720242f4aae49f99d67d1109f0194"
-  integrity sha512-/PISZHY3HeTZGR+ptbK7HP4wTuxZa0WJCsNMDVC8z98YW+uMwl5ZpiO+FBDAHNYPas0+SUxNu2C547hcRjQLkw==
+  version "1.14.2"
+  resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.14.2.tgz#23eb89f6101e9671b5e0c19d82ee0ad9de5608de"
+  integrity sha512-9yPVH6OLyaEraHjWHbSk2DB0R/1TsEE6AA1LI+vmCypXXA+zTzNrktUFzBhSJHehXDoEJcQfnl1Wdp5GPSh2+g==
   dependencies:
     prosemirror-model "^1.1.0"
     prosemirror-state "^1.0.0"
@@ -9090,10 +9090,10 @@ tiptap-utils@^1.8.3:
     prosemirror-tables "1.0.0"
     prosemirror-utils "0.9.6"
 
-tiptap-vuetify@^2.11.1:
-  version "2.11.1"
-  resolved "https://registry.yarnpkg.com/tiptap-vuetify/-/tiptap-vuetify-2.11.1.tgz#3613115fa3b5010d2265bc44e71150bc2318771e"
-  integrity sha512-5jt9ucvUkwIOe6XcnbJpitW1mivM4RBmxA00sZaqowEbTcpHnn9dynZYOqUTBW0ymrlt9PkI56YMCheSeWF7mg==
+tiptap-vuetify@^2.12.1:
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/tiptap-vuetify/-/tiptap-vuetify-2.12.1.tgz#c6c41e956f33d06ff812bcbe7ea3e4425da2bb42"
+  integrity sha512-rm4aOzXdnbx44sfMjjaUwcDp34N+116eMLCsRY2Q///BqBxfmJ7NJ8hCGFaDMbEIf03QDoePZQ8+PLoEppuZGA==
   dependencies:
     popper.js "^1.16.1"
     tiptap "^1.16.2"
