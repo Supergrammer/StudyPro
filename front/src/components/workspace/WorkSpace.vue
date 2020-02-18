@@ -24,6 +24,10 @@
           </v-tab>
 
           <v-card flat>
+            <v-btn class="px-9" height="95" @click="record">
+              <i v-if="!recording" class="material-icons">movie</i>
+              <i v-else class="material-icons">stop</i>
+            </v-btn>
             <v-btn class="px-9" height="95" @click="help">
               <v-icon large>help_outline</v-icon>
             </v-btn>
@@ -154,6 +158,9 @@ import ViewShare from "@/components/workspace/ViewShare";
 import FaceTalk from "@/components/workspace/FaceTalk";
 import Chatting from "@/components/workspace/Chatting";
 
+import recordrtc from "recordrtc";
+import saveAs from 'file-saver';
+
 export default {
   data() {
     return {
@@ -164,7 +171,8 @@ export default {
       debuging: true,
       talk: true,
       current: "board",
-      overlay: false
+      overlay: false,
+      recording: false,
     };
   },
 
@@ -176,21 +184,21 @@ export default {
     Chatting: Chatting
   },
   beforeCreate() {
-    if (!window.opener) {
-      this.$router.push({ name: "home" });
-    }
+    // if (!window.opener) {
+    //   this.$router.push({ name: "home" });
+    // }
   },
   created() {
-    if (!window.opener) return;
+    // if (!window.opener) return;
     this.user = this.debuging
       ? {
-          user_id: `${Math.ceil(40 + Math.random() * 40)}`,
+        user_id: `${Math.ceil(40 + Math.random() * 40)}`,
           user_nickname: `${Math.ceil(Math.random() * 100000)}`,
           user_profile_url:
             "http://15.164.245.201:8000/images/profile_default.png"
         }
       : {
-          user_id: this.$store.getters["auth/getUser"].uid,
+        user_id: this.$store.getters["auth/getUser"].uid,
           user_nickname: this.$store.getters["auth/getUser"].nickname,
           user_profile_url: this.$store.getters["auth/getUser"].profile_url
         };
@@ -211,7 +219,7 @@ export default {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
 
-    if (!window.opener) return;
+    // if (!window.opener) return;
     window.onkeyup = event => {
       if (event.keyCode == 27) {
         this.overlay = false;
@@ -232,6 +240,27 @@ export default {
     });
   },
   methods: {
+    record() {
+      this.recording = !this.recording
+      if (this.recording) {
+        navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
+        .then(record_stream => {
+          this.recorder = new recordrtc.RecordRTCPromisesHandler(record_stream, {
+            // recorderType: 'MediaStreamRecorder',
+            type: 'video',
+            mimeType: 'video/webm; codecs=vp9'
+          })
+          this.recorder.startRecording();
+        })
+      } else {
+        this.recorder.stopRecording()
+        .then(data => {
+          saveAs(data)
+        })
+      }
+
+
+    },
     changeView(change_id) {
       this.sharing_id = change_id;
     },
