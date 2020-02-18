@@ -55,11 +55,6 @@
         </div>
         <v-row no-gutters justify="center">
           <v-col offset="1" cols="11" class="mr-7 mt-5">
-            <router-view></router-view>
-          </v-col>
-        </v-row>
-        <v-row no-gutters justify="center">
-          <v-col offset="1" cols="11" class="mr-7 mt-5">
             <router-view
               @toWorkspace="toWorkspace"
             ></router-view>
