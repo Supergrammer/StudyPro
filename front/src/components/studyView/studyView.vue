@@ -58,15 +58,27 @@
             <router-view></router-view>
           </v-col>
         </v-row>
+<<<<<<< HEAD
       </v-card>
     </div>
     <request-signin v-else />
+=======
+      </div>
+      <v-row no-gutters justify="center">
+        <v-col offset="1" cols="11" class="mr-7 mt-5">
+          <router-view @closeChild="closeChild" @toWorkspace="toWorkspace"></router-view>
+        </v-col>
+      </v-row>
+    </v-card>
+>>>>>>> 6f8a9a2ff0477d3b7ff3c3ec6a43783a5e8ae861
   </v-content>
 </template>
 
 <script>
 import StudyService from "@/services/study.service";
 import AuthService from "@/services/auth.service";
+let open_workspace = null;
+
 export default {
   props: ["study_id"],
   data() {
@@ -111,15 +123,24 @@ export default {
 
 
   async mounted() {
+<<<<<<< HEAD
     window.closechild = () => {
       this.workspace.close();
     };
+=======
+    if (!this.isAuth) {
+      this.$router.push({ name: "home" });
+    }
+>>>>>>> 6f8a9a2ff0477d3b7ff3c3ec6a43783a5e8ae861
     await this.loadStudyInfo();
     if (this.studyInfo.level) {
       this.isJoined = true;
     } else {
       this.isJoined = false;
     }
+    window.closechild = () => {
+      open_workspace.close();
+    };
   },
 
   computed: {
@@ -154,7 +175,7 @@ export default {
         name: "workspace",
         params: { study_id: this.study_id }
       });
-      this.workspace = window.open(workspace.href, "WORKSPACE", "a");
+      open_workspace = window.open(workspace.href, "WORKSPACE", "a");
     }
   }
 };

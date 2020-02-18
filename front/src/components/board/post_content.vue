@@ -194,8 +194,10 @@ export default {
   },
 
   created() {
+    
     this.getPost();
     this.getComment();
+    console.log(this.post_contents);
   },
 
   watch: {
@@ -244,6 +246,8 @@ export default {
         post_id: this.post_id
       });
       this.post_contents = post.data;
+      console.log(this.post_contents);
+      
       if (this.post_contents.like) {
         this.post_contents.num_like--;
       }
