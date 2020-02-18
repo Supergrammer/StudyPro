@@ -1,9 +1,5 @@
 <template>
-  <v-card
-    id="workspace_card"
-    flat
-    class="customTheme lighten-2"
-  >
+  <v-card id="workspace_card" flat class="customTheme lighten-2">
     <v-row align="center" justify="center">
       <!-- 상단 탭 버튼 -->
       <v-col class="py-1 pr-1">
@@ -43,11 +39,6 @@
               </v-card>
             </v-row>
           </v-tab-item>
-          <v-tab-item id="NotePad">
-            <v-card outlined>
-              <NotePad :socket="socket" :study_id="study_id" />
-            </v-card>
-          </v-tab-item>
           <v-tab-item id="ViewShare">
             <v-card outlined>
               <ViewShare
@@ -59,15 +50,15 @@
               />
             </v-card>
           </v-tab-item>
+          <v-tab-item id="NotePad">
+            <v-card outlined>
+              <NotePad :socket="socket" :study_id="study_id" />
+            </v-card>
+          </v-tab-item>
         </v-tabs>
       </v-col>
       <!-- 상단 탭 버튼 끝 -->
-      <v-col
-        align="center"
-        justify="center"
-        cols="3"
-        class="py-1 pl-0 pr-9"
-      >
+      <v-col align="center" justify="center" cols="3" class="py-1 pl-0 pr-9">
         <v-card outlined tile>
           <v-row no-gutters hidden class="pa-0">
             <FaceTalk
@@ -82,12 +73,7 @@
           <v-row no-gutters>
             <v-col cols="12">
               <v-card outlined>
-                <Chatting
-                  class="pa-0 ma-0"
-                  :socket="socket"
-                  :study_id="study_id"
-                  :user="user"
-                />
+                <Chatting class="pa-0 ma-0" :socket="socket" :study_id="study_id" :user="user" />
               </v-card>
             </v-col>
           </v-row>
@@ -145,7 +131,6 @@
         </div>
       </v-img>
     </v-overlay>
-
   </v-card>
 </template>
 
@@ -158,7 +143,7 @@ import FaceTalk from "@/components/workspace/FaceTalk";
 import Chatting from "@/components/workspace/Chatting";
 
 import recordrtc from "recordrtc";
-import saveAs from 'file-saver';
+import saveAs from "file-saver";
 import StudyService from "@/services/study.service";
 
 export default {
@@ -171,7 +156,7 @@ export default {
       debuging: false,
       current: "board",
       overlay: false,
-      recording: false,
+      recording: false
     };
   },
 
@@ -191,13 +176,13 @@ export default {
     if (!window.opener) return;
     this.user = this.debuging
       ? {
-        user_id: `${Math.ceil(40 + Math.random() * 40)}`,
+          user_id: `${Math.ceil(40 + Math.random() * 40)}`,
           user_nickname: `${Math.ceil(Math.random() * 100000)}`,
           user_profile_url:
             "http://15.164.245.201:8000/images/profile_default.png"
         }
       : {
-        user_id: this.$store.getters["auth/getUser"].uid,
+          user_id: this.$store.getters["auth/getUser"].uid,
           user_nickname: this.$store.getters["auth/getUser"].nickname,
           user_profile_url: this.$store.getters["auth/getUser"].profile_url
         };
@@ -217,7 +202,7 @@ export default {
   mounted() {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight + 100);
-    this.loadStudyInfo()
+    this.loadStudyInfo();
 
     if (!window.opener) return;
     window.onkeyup = event => {
@@ -247,28 +232,31 @@ export default {
         return res.data;
       });
     },
-    
+
     record() {
-      this.recording = !this.recording
+      this.recording = !this.recording;
       if (this.recording) {
-        navigator.mediaDevices.getDisplayMedia({video: true, audio: true})
-        .then(record_stream => {
-          this.recorder = new recordrtc.RecordRTCPromisesHandler(record_stream, {
-            type: 'video',
-            mimeType: 'video/webm; codecs=vp9'
-          })
-          this.recorder.startRecording();
-        })
+        navigator.mediaDevices
+          .getDisplayMedia({ video: true, audio: true })
+          .then(record_stream => {
+            this.recorder = new recordrtc.RecordRTCPromisesHandler(
+              record_stream,
+              {
+                type: "video",
+                mimeType: "video/webm; codecs=vp9"
+              }
+            );
+            this.recorder.startRecording();
+          });
       } else {
-        this.recorder.stopRecording()
-        .then(data => {
-          const now = new Date()
-          const name = `${this.studyInfo.name} ${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`
-          saveAs(data, name)
-        })
+        this.recorder.stopRecording().then(data => {
+          const now = new Date();
+          const name = `${
+            this.studyInfo.name
+          } ${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`;
+          saveAs(data, name);
+        });
       }
-
-
     },
     changeView(change_id) {
       this.sharing_id = change_id;
@@ -303,5 +291,4 @@ export default {
   min-width: 1530px;
   padding-top: 0px !important;
 }
-
 </style>
