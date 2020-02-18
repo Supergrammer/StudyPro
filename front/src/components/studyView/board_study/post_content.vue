@@ -30,7 +30,7 @@
       <v-row no-gutters class="mb-3">
         <v-col cols="12">
           <v-card flat class="pa-3">
-            <span v-html="this.post_contents.content"></span>
+            <Viewer :value="this.post_contents.content" />
           </v-card>
         </v-col>
       </v-row>
@@ -128,7 +128,6 @@
                 v-model="new_comment"
               ></v-textarea>
             </v-col>
-            {{isWriter}}
             <v-col align-self="center" cols="2" class="mb-5 ml-2">
               <v-btn dark class="green my-3" @click="createComment">
                 <v-icon left dark>create</v-icon>댓글 달기
@@ -168,10 +167,19 @@
 
 <script>
 import PostService from "@/services/post.service";
-import FileService from "@/services/file.service"
+import FileService from "@/services/file.service";
+
+import "tui-editor/dist/tui-editor.css";
+import "tui-editor/dist/tui-editor-contents.css";
+import "codemirror/lib/codemirror.css";
+
+import { Viewer } from "@toast-ui/vue-editor";
 
 export default {
   props: ["post_id", "board_name"],
+  components: {
+    Viewer: Viewer,
+  },
   data() {
     return {
       dialog: false,

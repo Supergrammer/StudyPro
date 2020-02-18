@@ -12,6 +12,7 @@
                 <v-list flat>
                   <v-list-item-group>
                     <v-list-item
+                      color="blue darken-2"
                       v-for="(menu, index) in menus"
                       :key="index"
                       @click="routeTo(menu.route)"

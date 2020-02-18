@@ -3,7 +3,7 @@
     <v-app-bar prominent flat height="56px">
       <v-row id="header-container">
         <!-- 로고 -->
-        <v-col class="header-logo-container">
+        <v-col class="header-logo-container" cols="4" sm="3" md="2">
           <router-link to="/home">
             <v-img
               class="logo"
@@ -13,14 +13,10 @@
           </router-link>
         </v-col>
         <!-- 로고 끝 -->
-        <v-spacer ></v-spacer>
         <!-- 메뉴 -->
-        <v-col class="header-menu-container">
+        <v-col class="header-menu-container d-none d-sm-flex" sm="6" md="8">
           <template>
-            <v-tabs
-              class="header-menu d-none d-sm-flex justify-center"
-              show-arrows
-            >
+            <v-tabs class="header-menu justify-center" show-arrows>
               <v-tab :to="menu.route" v-for="menu in menus" :key="menu.title">
                 <v-icon left>{{ menu.icon }}</v-icon>
                 <span class="d-none d-lg-flex">{{ menu.title }}</span>
@@ -29,9 +25,8 @@
           </template>
         </v-col>
         <!-- 메뉴 끝 -->
-        <v-spacer></v-spacer>
         <!-- 유저메뉴 / 햄버거 -->
-        <v-col class="header-usermenu-container pl-0">
+        <v-col class="header-usermenu-container pl-0" cols="8" sm="3" md="2">
           <v-btn
             class="header-user-btn d-none d-sm-inline-block px-0"
             @click="toSignup"
@@ -50,43 +45,53 @@
           </v-btn>
           <v-app-bar-nav-icon
             @click="drawer = true"
-            class="header-hamburger d-flex d-sm-none"
+            class="header-user-btn d-flex d-sm-none"
           ></v-app-bar-nav-icon>
           <!-- 유저 이미지 -->
-          <!-- <v-container class="align-right"> -->
-          <!--  -->
-          <template v-if="isAuth">
-            <v-btn to="/msgbox" id="mail-btn" elevation="0" color="white">
-              <v-badge
-                :content="numAlarm"
-                :value="numAlarm"
-                color="red"
-                overlap
-              >
-                <v-icon style="color:black">mdi-email</v-icon>
-              </v-badge>
-            </v-btn>
-            <v-menu offset-y>
-              <template v-slot:activator="{ on }">
-                <v-btn text x-large class="header-user pa-0" v-on="on">
-                  <v-avatar size="30" class="mx-3">
-                    <v-img :src="currentUser.profile_url"></v-img>
-                  </v-avatar>
-                  {{ currentUser.nickname }}
-                  <v-icon class="mx-2">keyboard_arrow_down</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(menu, index) in usermenuitems"
-                  :key="index"
-                  @click="clickUserMenu(menu.name)"
+          <v-row justify="end">
+            <v-col class="pa-0" sm="2">
+              <div v-if="isAuth" class="header-user-btn align-center" @click="toMail">
+                <v-badge
+                  :content="numAlarm"
+                  :value="numAlarm"
+                  color="red"
+                  overlap
                 >
-                  <v-list-item-title>{{ menu.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </template>
+                  <v-icon style="color:black">mdi-email</v-icon>
+                </v-badge>
+              </div>
+            </v-col>
+            <v-col class="pa-0" sm="10">
+              <template v-if="isAuth">
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      text
+                      x-large
+                      class="header-user-btn pa-0"
+                      id="header-user-drop"
+                      v-on="on"
+                    >
+                      <v-avatar size="30" class="mx-3">
+                        <v-img :src="currentUser.profile_url"></v-img>
+                      </v-avatar>
+                      {{ currentUser.nickname }}
+                      <v-icon class="mx-2">keyboard_arrow_down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      v-for="(menu, index) in usermenuitems"
+                      :key="index"
+                      @click="clickUserMenu(menu.name)"
+                    >
+                      <v-list-item-title>{{ menu.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </template>
+            </v-col>
+          </v-row>
           <!-- </v-container> -->
           <!-- 유저 이미지 끝 -->
         </v-col>
@@ -213,7 +218,7 @@ export default {
       ],
       userInfo: {},
       isLoading: false,
-      numAlarm: null
+      numAlarm: 0
     };
   },
   computed: {
@@ -235,7 +240,9 @@ export default {
       this.isLoading = true;
       this.$store.dispatch("auth/logout");
       this.isLoading = false;
-      this.$router.push({ name: "home" });
+      if (this.$route.path.split("/")[1] != "home") {
+        this.$router.push({ name: "home" });
+      }
     },
     clickUserMenu(name) {
       if (name == "info") {
@@ -256,6 +263,11 @@ export default {
         return;
       } else {
         this.$router.push({ name: "signup" });
+      }
+    },
+    toMail() {
+      if (this.$route.path.split("/")[1] != "msgbox") {
+        this.$router.push({ path: "msgbox" });
       }
     }
   },

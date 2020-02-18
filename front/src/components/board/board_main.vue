@@ -8,6 +8,7 @@
             <v-list flat>
               <v-list-item-group v-model="menu" class="primary--text">
                 <v-list-item
+                  color="blue darken-2"
                   v-for="(menu, index) in menus"
                   :key="index"
                   
