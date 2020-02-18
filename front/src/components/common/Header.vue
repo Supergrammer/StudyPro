@@ -5,11 +5,7 @@
         <!-- 로고 -->
         <v-col class="header-logo-container" cols="4" sm="3" md="2">
           <router-link to="/home">
-            <v-img
-              class="logo"
-              src="@/assets/images/LogoText7.png"
-              contain
-            ></v-img>
+            <v-img class="logo" src="@/assets/images/LogoText7.png" contain></v-img>
           </router-link>
         </v-col>
         <!-- 로고 끝 -->
@@ -32,32 +28,21 @@
             @click="toSignup"
             v-if="!isAuth"
             text
-          >
-            회원가입
-          </v-btn>
+          >회원가입</v-btn>
           <v-btn
             class="header-user-btn d-none d-sm-inline-block px-0"
             @click="signinModal = true"
             v-if="!isAuth"
             text
-          >
-            로그인
-          </v-btn>
-          <v-app-bar-nav-icon
-            @click="drawer = true"
-            class="header-user-btn d-flex d-sm-none"
-          ></v-app-bar-nav-icon>
+          >로그인</v-btn>
+          <v-app-bar-nav-icon @click="drawer = true" class="header-user-btn d-flex d-sm-none"></v-app-bar-nav-icon>
           <!-- 유저 이미지 -->
           <v-row justify="end">
             <v-col class="pa-0" sm="2">
               <div v-if="isAuth" class="header-user-btn align-center" @click="toMail">
-                <v-badge
-                  :content="numAlarm"
-                  :value="numAlarm"
-                  color="red"
-                  overlap
-                >
-                  <v-icon style="color:black">mdi-email</v-icon>
+                <v-badge :content="numAlarm" :value="numAlarm" color="red" overlap>
+                  <v-icon v-if="isAuth" class="black--text">mdi-email</v-icon>
+                  <v-icon v-else class="gray--text">mdi-email</v-icon>
                 </v-badge>
               </div>
             </v-col>
@@ -112,9 +97,7 @@
         <v-layout column transparent>
           <v-flex class="mt-2">
             <v-container>
-              <v-icon large class="white--text" @click="drawer = false"
-                >keyboard_arrow_right</v-icon
-              >
+              <v-icon large class="white--text" @click="drawer = false">keyboard_arrow_right</v-icon>
               <router-link class="ml-10" to="/home" text-decoration="none">
                 <span class="logo white--text font-weight-light">Study</span>
                 <span class="logo white--text">PRO</span>
@@ -126,15 +109,9 @@
       <v-divider class="black ma-1" />
       <!-- Navigations -->
       <v-list>
-        <v-list-item
-          v-for="item in navigations"
-          :key="item.title"
-          :to="item.route"
-        >
+        <v-list-item v-for="item in navigations" :key="item.title" :to="item.route">
           <v-list-item-content>
-            <v-list-item-title class="white--text">
-              {{ item.title }}
-            </v-list-item-title>
+            <v-list-item-title class="white--text">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -148,21 +125,13 @@
                 <img :src="currentUser.profile_url" alt />
               </v-avatar>
             </router-link>
-            <p align="center" class="white--text subheading">
-              {{ currentUser.nickname }}
-            </p>
+            <p align="center" class="white--text subheading">{{ currentUser.nickname }}</p>
           </v-flex>
         </v-layout>
         <v-list>
-          <v-list-item
-            v-for="item in userpages"
-            :key="item.title"
-            :to="item.route"
-          >
+          <v-list-item v-for="item in userpages" :key="item.title" :to="item.route">
             <v-list-item-content>
-              <v-list-item-title class="white--text">
-                {{ item.title }}
-              </v-list-item-title>
+              <v-list-item-title class="white--text">{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -170,12 +139,8 @@
       <v-container v-else></v-container>
       <template v-slot:append>
         <v-card-actions class="justify-center" v-if="!isAuth">
-          <v-btn text class="pink--text" @click="signinModal = true"
-            >로그인</v-btn
-          >
-          <v-btn text class="pink--text transparent" elevation="0" to="/signup"
-            >회원가입</v-btn
-          >
+          <v-btn text class="pink--text" @click="signinModal = true">로그인</v-btn>
+          <v-btn text class="pink--text transparent" elevation="0" to="/signup">회원가입</v-btn>
         </v-card-actions>
         <v-card-actions class="justify-center" v-else>
           <v-btn text class="pink--text" @click="signout">로그아웃</v-btn>
@@ -186,6 +151,8 @@
 </template>
 <script>
 import AlarmService from "@/services/alarm.service";
+import {EventBus} from "@/plugins/event-bus"
+
 export default {
   name: "appHeader",
   data() {
@@ -229,6 +196,11 @@ export default {
       return this.$store.getters["auth/isAuth"];
     }
   },
+  watch: {
+    $route() {
+      this.getAlarmNumber();
+    }
+  },
   components: {
     signinModal: () => import("@/components/user/SigninModal")
   },
@@ -255,7 +227,6 @@ export default {
         this.signout();
       }
     },
-
     // 회원가입 클릭 메소드
     toSignup() {
       var path = this.$route.path.split("/");
@@ -267,13 +238,19 @@ export default {
     },
     toMail() {
       if (this.$route.path.split("/")[1] != "msgbox") {
-        this.$router.push({ path: "msgbox" });
+        this.$router.push({ name: "msgbox" });
       }
+    },
+    getAlarmNumber() {
+      AlarmService.getAlarmNumber().then(numAlarm => {
+        this.numAlarm = numAlarm.data.num_alarm;
+      });
     }
   },
   created() {
-    AlarmService.getAlarmNumber().then(numAlarm => {
-      this.numAlarm = numAlarm.data.num_alarm;
+    this.getAlarmNumber();
+    EventBus.$on("mailChk", () => {
+      this.getAlarmNumber();
     });
   }
 };
