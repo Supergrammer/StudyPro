@@ -1,6 +1,11 @@
 <template>
   <div>
     <v-card outlined class="mx-auto mb-2" width="600">
+      <v-card class="mb-2">
+        <v-btn height="70" class="btns_room primary" large="true" @click="routeTo" block>
+          <v-icon color="white" class="mr-2">exit_to_app</v-icon>스터디룸
+        </v-btn>
+      </v-card>
       <v-card flat>
         <v-img :src="study_info.image_url" max-height="150px"></v-img>
       </v-card>
@@ -13,16 +18,27 @@
       </v-card-subtitle>
       <v-card-subtitle class="black--text">
         <span class="subline">
-          스터디 소개 :
+          소개말
           <br />
         </span>
         <span class="subtxt pl-2">{{ study_info.description }}</span>
       </v-card-subtitle>
       <v-divider class="mx-2" />
       <v-card-actions class="mb-2">
-        <v-row justify="center">
-          <v-btn class="primary mr-2" dark>출석 체크</v-btn>
-          <v-btn class="green" dark @click="modalOpen" v-if="!isJoined">가입하기</v-btn>
+        <v-row justify="center mx-0">
+          <template v-if="isJoined">
+            <v-btn
+              v-if="!attendenced"
+              class="btns_join primary"
+              large
+              @click="attendence"
+              block
+            >출석 체크</v-btn>
+            <v-btn v-else class="btns_join" disabled large block>출석 완료</v-btn>
+          </template>
+          <template v-else>
+            <v-btn class="btns_join green" large dark @click="modalOpen" v-if="!isJoined" block>가입하기</v-btn>
+          </template>
         </v-row>
       </v-card-actions>
     </v-card>
@@ -58,8 +74,15 @@ export default {
       modal: false,
       comment: "",
       reg_message: "",
-      isJoined: false
+      isJoined: false,
+      attendenced: false
     };
+  },
+
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/getUser"].id;
+    }
   },
   components: {
     modal: () => import("@/components/base/Modal")
@@ -110,12 +133,74 @@ export default {
     modalClose() {
       this.reg_message = "";
       this.modal = false;
+    },
+    getCurrentDate() {
+      let today = new Date();
+      let dd = today.getDate();
+      let mm = today.getMonth() + 1; //January is 0!
+      let yyyy = today.getFullYear();
+
+      if (dd < 10) {
+        dd = "0" + dd;
+      }
+      if (mm < 10) {
+        mm = "0" + mm;
+      }
+
+      return (today = yyyy + "-" + mm + "-" + dd);
+    },
+
+    async attendence() {
+      let payload = {
+        study_id: this.study_id,
+        user_id: this.$store.getters["auth/getUser"].uid
+      };
+
+      let result = await StudyService.attendence(payload);
+
+      if (result.data.state === "success") {
+        alert("출석 하셨습니다.");
+        this.attendenced = true;
+      } else if (result.data.state === "fail") {
+        alert("출석에 실패했습니다.");
+      }
+
+      console.log(this.attendenced);
+    },
+
+    async check_attendence() {
+      let payload = {
+        study_id: this.study_id,
+        user_id: this.$store.getters["auth/getUser"].uid,
+        date: this.getCurrentDate()
+      };
+      let result = await StudyService.checkAttendence(payload);
+      return result;
+    },
+
+    routeTo() {
+      this.$router.push({ name: "workspace", params: { board: "workspace" } });
     }
+  },
+  mounted() {
+    this.check_attendence().then(res => {
+      if (res.data.state === "true") {
+        this.attendenced = true;
+      } else if (res.data.state === "false") {
+        this.attendenced = false;
+      }
+    });
   }
 };
 </script>
 
 <style scoped>
+.btns_room {
+  font-size: 25px !important;
+}
+.btns_join {
+  font-size: 20px !important;
+}
 .Hline {
   font-size: 25px !important;
   font-weight: bold !important;
