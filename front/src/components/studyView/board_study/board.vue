@@ -1,11 +1,8 @@
 <template>
   <v-content id="board" class="pa-0">
     <v-row justify="center">
-      <v-col cols="11">
-        <v-card>
-          <v-toolbar flat color="customTheme" dark>
-            <v-toolbar-title class="ml-5">게시판</v-toolbar-title>
-          </v-toolbar>
+      <v-col cols="12">
+        <v-card flat>
           <v-row no-gutters>
             <v-col style="max-width: 200px;">
               <v-card flat>
@@ -29,7 +26,7 @@
               </v-card>
             </v-col>
             <v-col>
-              <v-card class="ma-2">
+              <v-card flat class="ma-2">
                 <boardList :board_name="boardList" :study_id="$route.params.study_id" />
               </v-card>
             </v-col>
