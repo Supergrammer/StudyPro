@@ -197,7 +197,11 @@
         v-on:reload="reload"
       />
     </div>
-    <request-signin v-else />
+    <request-signin v-else>
+      <template v-slot:text>
+          <p>로그인이 필요합니다</p>
+        </template>
+    </request-signin>
   </div>
 </template>
 

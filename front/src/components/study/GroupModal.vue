@@ -124,18 +124,15 @@
               <v-col cols="3" class="py-0">
                 <v-content text class="py-0 font-weight-bold">그룹장</v-content>
               </v-col>
-              <v-col class="py-0" @click="captainClick(studyInfo.captain)">
-                
-                  <v-content text class="py-0">
-    
-                      {{
-                      studyInfo.captain.nickname
-                      }}
-                <a>
+              <v-col class="py-0" @click="sendMsg(studyInfo.captain)">
+                <v-content text class="py-0">
+                  {{
+                  studyInfo.captain.nickname
+                  }}
+                  <a>
                     <v-icon class="primary--text">mdi-email</v-icon>
                   </a>
-                  </v-content>
-                
+                </v-content>
               </v-col>
             </v-row>
 
@@ -167,7 +164,18 @@
       </v-card>
     </v-dialog>
     <template>
-      <MsgSendModal :group-modal="MsgModal" :user="studyInfo.captain" v-on:close="modalClose" />
+      <SendMsgModal
+        :group-modal="msgOpen"
+        :user="studyInfo.captain"
+        v-on:close="SendMsgModalClose"
+      />
+    </template>
+    <template>
+      <LoginChkModal :openModal="loginChkOpen" v-on:close="LoginChkModalClose">
+        <template v-slot:text>
+          <span>로그인이 필요한 기능입니다.</span>
+        </template>
+      </LoginChkModal>
     </template>
   </div>
 </template>
@@ -177,13 +185,20 @@ export default {
   name: "groupmodal",
   data: () => ({
     greetComment: "",
-    MsgModal: false,
+    msgOpen: false,
+    loginChkOpen: false,
     open: false,
     captain: null
   }),
   props: ["groupModal", "studyInfo"],
   components: {
-    MsgSendModal: () => import("@/components/user/messenger/MsgSendModal")
+    SendMsgModal: () => import("@/components/user/messenger/MsgSendModal"),
+    LoginChkModal: () => import("@/components/base/Modal")
+  },
+  computed: {
+    isAuth() {
+      return this.$store.getters["auth/isAuth"];
+    }
   },
   watch: {
     groupModal() {
@@ -202,12 +217,19 @@ export default {
         params: { study_id: this.studyInfo.id }
       });
     },
-    captainClick(captain) {
-      this.captain = captain;
-      this.MsgModal = true;
+    sendMsg(captain) {
+      if (this.isAuth) {
+        this.captain = captain;
+        this.msgOpen = true;
+      } else {
+        this.loginChkOpen = true;
+      }
     },
-    modalClose() {
-      this.MsgModal = false;
+    SendMsgModalClose() {
+      this.msgOpen = false;
+    },
+    LoginChkModalClose() {
+      this.loginChkOpen = false;
     }
   },
   filters: {
