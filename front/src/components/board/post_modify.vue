@@ -34,32 +34,6 @@
               </v-row>
               <v-divider class="mt-5 mb-3" />
               <v-row>
-                <v-col>
-                  <v-file-input
-                    :rules="rules"
-                    accept="image/png, image/jpeg, image/bmp"
-                    outlined
-                    v-model="files"
-                    color="deep-purple accent-4"
-                    label="Attach File"
-                    counter
-                    multiple
-                    placeholder="Select Files"
-                    prepend-icon="mdi-paperclip"
-                    :show-size="1000"
-                  >
-                    <template v-slot:selection="{ index, text }">
-                      <v-chip v-if="index < 5" color="deep-purple accent-4" dark label>{{ text }}</v-chip>
-                      <span
-                        v-else-if="index === 5"
-                        class="overline grey--text text--darken-3 mx-2"
-                      >+{{ files.length - 5 }} File(s)</span>
-                    </template>
-                  </v-file-input>
-                </v-col>
-              </v-row>
-              <v-divider />
-              <v-row>
                 <v-col class="text-end">
                   <v-dialog v-model="dialog" persistent max-width="290">
                     <template v-slot:activator="{ on }">

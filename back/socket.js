@@ -13,6 +13,7 @@ let rooms = {};
 export const connect = () => {
     try {
         io.sockets.on('connection', function (socket) {
+            console.log(socket)
             const study_id = socket.handshake.query.study_id;
             const user_id = socket.handshake.query.user_id;
             const user_nickname = socket.handshake.query.user_nickname
@@ -71,12 +72,6 @@ export const connect = () => {
 
             });
 
-            socket.on('disconnect', function (data) {
-                // socket_id = socket.id;
-                // console.log(rooms, 'exit')
-            });
-
-
             socket.on('leave', function (data) {
                 console.log("떠난다");
                 
@@ -133,22 +128,16 @@ export const connect = () => {
             socket.on('send message', function (data) {
                 io.sockets.to(study_id).emit('receive message', data);
             });
+
             //화상채팅
             socket.on('message', data => {
-                let t_socket;
-                // const idx = rooms[study_id].members.indexOf(data.to)
+                const t_socket = room.member_socket[data.to]
 
-
-                // t_socket = rooms[study_id].sockets[idx]
-                t_socket = room.member_socket[data.to]
-                // console.log(rooms[study_id].sockets)
                 if (!t_socket) return
                 t_socket.emit('message', data)
             })
 
             //노트패드
-
-
             socket.on('typing', data => {
                 let study_id = data.study_id;
                 socket.broadcast.to(study_id).emit('typing', data);
@@ -168,8 +157,6 @@ export const connect = () => {
                 io.to(socket_id).emit('send_pad', data)
             })
 
-
-
             //화면공유
             socket.on('viewsharestart', data => {
 
@@ -179,14 +166,10 @@ export const connect = () => {
                 socket.to(study_id).emit('viewsharejoin', data.user_id)
             })
             socket.on('viewshare', data => {
-                let t_socket;
-                // const idx = rooms[study_id].members.indexOf(data.to)
+                const t_socket = room.member_socket[data.to]
 
-                // t_socket = rooms[study_id].sockets[idx]
-                t_socket = room.member_socket[data.to]
                 if (!t_socket) return
                 t_socket.emit('viewshare', data)
-
             })
         });
     } catch (error) {

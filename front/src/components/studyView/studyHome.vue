@@ -17,7 +17,7 @@
         <v-row no-gutters>
           <v-col>
             <v-card flat>
-              <study-profile :study_id="this.study_id" />
+              <study-profile @closeChild="closeChild" @toWorkspace="toWorkspace" :study_id="this.study_id" />
             </v-card>
           </v-col>
         </v-row>
@@ -35,6 +35,14 @@ export default {
       import("@/components/studyView/module/StudyMiniBoard"),
     StudyTodoList: () => import("@/components/studyView/module/StudyTodoList"),
     StudyProfile: () => import("@/components/studyView/module/StudyProfile")
+  },
+  methods: {
+    toWorkspace() {
+      this.$emit('toWorkspace')
+    },
+    closeChild() {
+      this.$emit('closeChild')
+    }
   }
 };
 </script>
