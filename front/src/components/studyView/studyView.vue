@@ -61,7 +61,6 @@
         <v-row no-gutters justify="center">
           <v-col offset="1" cols="11" class="mr-7 mt-5">
             <router-view
-              @closeChild="closeChild"
               @toWorkspace="toWorkspace"
             ></router-view>
           </v-col>
@@ -71,6 +70,8 @@
     <request-signin v-else />
   </v-content>
 </template>
+
+
 
 <script>
 import StudyService from "@/services/study.service";
