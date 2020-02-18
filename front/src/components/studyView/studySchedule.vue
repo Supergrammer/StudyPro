@@ -210,47 +210,49 @@
               <p class="issue-container-title text-center">
                 {{ issue.title }}
               </p>
-              <v-hover v-slot:default="{ hover }">
-                <div class="issue-container py-2">
-                  <div class="issue-card">
-                    <v-hover v-slot:default="{ hover }">
-                      <Movable
-                        class="moveable"
-                        v-bind="{draggable:true}"
-                        @drag="handleDrag"
-                      >
-                        <v-card :class="{ 'issue-selected': hover }">
-                          <v-container>
-                            <p class="issue-card-text" aria-disabled>정택진</p>
-                            <p class="issue-card-title" aria-disabled>
-                              이슈 제목
-                            </p>
-                            <p class="issue-card-text" aria-disabled>
-                              2020-02-18 ~ 2020-02-20
-                            </p>
-                            <p class="issue-card-text" aria-disabled>
-                              18:00 ~ 20:00
-                            </p>
-                          </v-container>
-                        </v-card>
-                      </Movable>
-                    </v-hover>
-                  </div>
-                  <!-- 호버 액션 -->
-                  <div
-                    class="issue-hover animated fadeIn faster"
-                    v-if="picked && hover"
+              <div class="issue-container py-2">
+                <draggable
+                  class="list-group"
+                  :list="issue.items"
+                  group="issue"
+                  v-bind="dragOptions"
+                  @start="drag = true"
+                  @end="drag = false"
+                >
+                  <transition-group
+                    type="transition"
+                    :name="!drag ? 'flip-list' : null"
                   >
-                    <div class="issue-hover-inner"></div>
-                  </div>
-                  <!-- 호버 액션 끝 -->
-                  <!-- 드래그 액션 -->
-                  <div class="issue-hover animated fadeIn faster" v-if="false">
-                    <div class="issue-hover-inner"></div>
-                  </div>
-                  <!-- 드래그 액션 끝 -->
-                </div>
-              </v-hover>
+                    <div v-for="item in issue.items" :key="item.order">
+                      <v-card class="issue-card list-group-item">
+                        <i
+                          :class="
+                            item.fixed
+                              ? 'fa fa-anchor'
+                              : 'glyphicon glyphicon-pushpin'
+                          "
+                          @click="item.fixed = !item.fixed"
+                          aria-hidden="true"
+                        ></i>
+                        <v-container>
+                          <p class="issue-card-text" aria-disabled>
+                            {{ item.captaion }}
+                          </p>
+                          <p class="issue-card-title" aria-disabled>
+                            {{ item.name }}
+                          </p>
+                          <p class="issue-card-text" aria-disabled>
+                            {{ item.start_date }} ~ {{ item.end_date }}
+                          </p>
+                          <p class="issue-card-text" aria-disabled>
+                            {{ item.start_time }} ~ {{ item.end_time }}
+                          </p>
+                        </v-container>
+                      </v-card>
+                    </div>
+                  </transition-group>
+                </draggable>
+              </div>
             </v-col>
             <!-- 할일 끝 -->
           </v-row>
@@ -323,15 +325,115 @@ export default {
     ],
     delOpen: false,
     picked: false,
-    issues: [{ title: "할 일" }, { title: "진행 중" }, { title: "완료" }],
-    moveable: {
-      draggable: true
-    }
+    issues: [
+      {
+        title: "할 일",
+        items: [
+          {
+            name: "헬로우1",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 1
+          },
+          {
+            name: "헬로우2",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 2
+          },
+          {
+            name: "헬로우3",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 3
+          }
+        ]
+      },
+      {
+        title: "진행 중",
+        items: [
+          {
+            name: "헬로우1",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 4
+          },
+          {
+            name: "헬로우2",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 5
+          },
+          {
+            name: "헬로우3",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 6
+          }
+        ]
+      },
+      {
+        title: "완료",
+        items: [
+          {
+            name: "헬로우1",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 7
+          },
+          {
+            name: "헬로우2",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 8
+          },
+          {
+            name: "헬로우3",
+            start_date: "2020-02-18",
+            end_date: "2020-02-20",
+            start_time: "18:00",
+            end_time: "20:00",
+            captain: "정택진",
+            order: 9
+          }
+        ]
+      }
+    ],
+    drag: false
   }),
   components: {
     studyCalModal: () => import("@/components/studyView/studyCalModal"),
     requestSignin: () => import("@/components/base/RequestSignin"),
-    Movable: () => import("@/components/base/Movable")
+    draggable: () => import("vuedraggable")
+  },
+  watch: {
+    dragArray() {
+      console.log(this.dragArray);
+    }
   },
   computed: {
     title() {
@@ -377,6 +479,14 @@ export default {
       } else {
         return "white";
       }
+    },
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
   },
   mounted() {
@@ -567,9 +677,6 @@ export default {
     putUserSchedule() {
       this.selectedOpen = false;
       this.userOpen = false;
-    },
-    handleDrag({ target, transform }) {
-      target.style.transform = transform;
     }
   }
 };
