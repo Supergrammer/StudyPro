@@ -143,7 +143,7 @@ const routes = [{
         name: 'workspace',
         components: {
             header: null,
-            default: workspace,
+            submain: workspace,
             footer: null
         },
     },
