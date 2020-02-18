@@ -34,7 +34,6 @@ export const connect = () => {
                     return;
                 }
                 room.members.push(user_id);
-
                 room.sockets.push(socket);
 
                 room.member_cnt += 1;
