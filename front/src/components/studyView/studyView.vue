@@ -146,7 +146,6 @@ export default {
       this.studyInfo = await StudyService.getStudyInfo({
         study_id: this.study_id
       }).then(res => {
-        console.log("data", res);
         return res.data;
       });
     },
