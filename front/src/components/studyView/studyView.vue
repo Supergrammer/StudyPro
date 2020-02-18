@@ -1,33 +1,34 @@
 <template>
   <v-content id="study" class="pa-0">
-    <v-navigation-drawer absolute permanent expand-on-hover v-if="isAuth">
-      <v-list>
-        <v-list-item class="mt-2">
-          <v-list-item-avatar>
-            <v-img :src="currentUser.profile_url"></v-img>
-          </v-list-item-avatar>
-          <v-list-item-title>{{ currentUser.nickname }}</v-list-item-title>
-        </v-list-item>
-        <v-divider class="ma-3 mb-0" />
-        <v-list-item
-          v-for="(menu, index) in menus"
-          :key="index"
-          @click="routeTo(menu.route)"
-        >
-          <v-list-item-icon>
-            <v-icon medium>{{ menu.icon }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>{{ menu.title }}</v-list-item-title>
-        </v-list-item>
-        <v-list-item @click="toWorkspace">
-          <v-list-item-icon>
-            <v-icon medium>developer_board</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>스터디 룸</v-list-item-title>
-        </v-list-item>
-      </v-list>
-      <v-divider class="mx-3" />
-      <!-- <v-list>
+    <div v-if="isAuth">
+      <v-navigation-drawer absolute permanent expand-on-hover v-if="isAuth">
+        <v-list>
+          <v-list-item class="mt-2">
+            <v-list-item-avatar>
+              <v-img :src="currentUser.profile_url"></v-img>
+            </v-list-item-avatar>
+            <v-list-item-title>{{ currentUser.nickname }}</v-list-item-title>
+          </v-list-item>
+          <v-divider class="ma-3 mb-0" />
+          <v-list-item
+            v-for="(menu, index) in menus"
+            :key="index"
+            @click="routeTo(menu.route)"
+          >
+            <v-list-item-icon>
+              <v-icon medium>{{ menu.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ menu.title }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="toWorkspace">
+            <v-list-item-icon>
+              <v-icon medium>developer_board</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>스터디 룸</v-list-item-title>
+          </v-list-item>
+        </v-list>
+        <v-divider class="mx-3" />
+        <!-- <v-list>
         <v-list-item @click="routeTo()">
           <v-list-item-icon>
             <v-icon medium>check</v-icon>
@@ -41,16 +42,27 @@
           <v-list-item-title>관리자 메뉴</v-list-item-title>
         </v-list-item>
       </v-list> -->
-    </v-navigation-drawer>
+      </v-navigation-drawer>
 
-    <v-card flat>
-      <div id="group-img-container">
-        <v-img src="@/assets/images/banner/group_default.png" />
-        <v-row justify="end">
-          <v-btn text id="group-img-btn">
-            <v-icon color="white">settings</v-icon>
-          </v-btn>
+      <v-card flat>
+        <div id="group-img-container">
+          <v-img src="@/assets/images/banner/group_default.png" />
+          <v-row justify="end">
+            <v-btn text id="group-img-btn">
+              <v-icon color="white">settings</v-icon>
+            </v-btn>
+          </v-row>
+        </div>
+        <v-row no-gutters justify="center">
+          <v-col offset="1" cols="11" class="mr-7 mt-5">
+            <router-view></router-view>
+          </v-col>
         </v-row>
+<<<<<<< HEAD
+      </v-card>
+    </div>
+    <request-signin v-else />
+=======
       </div>
       <v-row no-gutters justify="center">
         <v-col offset="1" cols="11" class="mr-7 mt-5">
@@ -58,6 +70,7 @@
         </v-col>
       </v-row>
     </v-card>
+>>>>>>> 6f8a9a2ff0477d3b7ff3c3ec6a43783a5e8ae861
   </v-content>
 </template>
 
@@ -104,13 +117,21 @@ export default {
       ]
     };
   },
+  components:{
+    requestSignin: () => import('@/components/base/RequestSignin')
+  },
 
-  created() {},
 
   async mounted() {
+<<<<<<< HEAD
+    window.closechild = () => {
+      this.workspace.close();
+    };
+=======
     if (!this.isAuth) {
       this.$router.push({ name: "home" });
     }
+>>>>>>> 6f8a9a2ff0477d3b7ff3c3ec6a43783a5e8ae861
     await this.loadStudyInfo();
     if (this.studyInfo.level) {
       this.isJoined = true;
