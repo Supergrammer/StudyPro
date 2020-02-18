@@ -59,6 +59,7 @@ const ALARM_NUMBER = "/number";
 const EMAIL = "/email"
 const AUTH = "/auth"
 const NOTICE_APPLY = "/notice_apply"
+const NOTICE_DROP = "/notice_drop"
 const RESULT_APPLY = "/result_apply"
 
 const routes = {
@@ -112,6 +113,7 @@ const routes = {
     email:EMAIL,
     auth:AUTH,
     notice_apply : NOTICE_APPLY,
+    notice_drop : NOTICE_DROP,
     result_apply : RESULT_APPLY,
 
     alarm_number : ALARM_NUMBER
