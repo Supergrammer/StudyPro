@@ -21,7 +21,6 @@
         "register-service-worker": "^1.6.2",
         "simplemd": "^0.1.1",
         "socket.io": "^2.3.0",
-        "tiptap-vuetify": "^2.12.1",
         "tui-editor": "^1.4.10",
         "v-calendar": "^1.0.0-beta.23",
         "vue": "^2.6.10",
