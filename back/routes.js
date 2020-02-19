@@ -76,7 +76,7 @@ const routes = {
     update_password: UPDATE_PASSWORD,
     joined_study : JOINED_STUDY,
     leave_study : LEAVE_STUDY,
-    
+
     images : IMAGES,
     files : FILES,
     
@@ -119,7 +119,4 @@ const routes = {
     notice_drop : NOTICE_DROP,
     result_apply : RESULT_APPLY,
 }
-
-
-
 export default routes;
