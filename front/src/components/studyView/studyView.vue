@@ -55,13 +55,7 @@
         </div>
         <v-row no-gutters justify="center">
           <v-col offset="1" cols="11" class="mr-7 mt-5">
-            <router-view></router-view>
-          </v-col>
-        </v-row>
-        <v-row no-gutters justify="center">
-          <v-col offset="1" cols="11" class="mr-7 mt-5">
             <router-view
-              @closeChild="closeChild"
               @toWorkspace="toWorkspace"
             ></router-view>
           </v-col>
@@ -71,6 +65,8 @@
     <request-signin v-else />
   </v-content>
 </template>
+
+
 
 <script>
 import StudyService from "@/services/study.service";
@@ -150,7 +146,6 @@ export default {
       this.studyInfo = await StudyService.getStudyInfo({
         study_id: this.study_id
       }).then(res => {
-        console.log("data", res);
         return res.data;
       });
     },
