@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card class="mb-2">
-      <v-btn height="70" class="btns_room primary mb-4" large="true" @click="toWorkspace" block>
+      <v-btn height="70" class="btns_room primary mb-4" large @click="toWorkspace" block>
         <v-icon color="white" class="mr-2">exit_to_app</v-icon>스터디룸
       </v-btn>
     </v-card>
