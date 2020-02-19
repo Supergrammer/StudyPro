@@ -250,7 +250,7 @@ export default {
           const now = new Date();
           const name = `${
             this.studyInfo.name
-          } ${now.getFullYear()}-${now.getMonth()}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`;
+          } ${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours()}${"'"}${now.getMinutes()}${"''"}`;
           saveAs(data, name);
         });
       }
