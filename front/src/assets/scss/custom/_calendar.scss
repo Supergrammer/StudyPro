@@ -11,8 +11,8 @@
 }
 
 .issue-container {
-    position: relative;
-    min-height: 600px;
+    display: block;
+    height: 100%;
     background-color: rgb(240, 240, 240);
 }
 
@@ -60,7 +60,32 @@
     background-color: rgb(240, 240, 250) !important;
 }
 
-.moveable {
-    position: relative;
-    margin: 0 auto;
+.flip-list-move {
+    transition: transform 0.5s;
+}
+
+.no-move {
+    transition: transform 0s;
+}
+
+.ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+
+.list-group {
+    height: 100% !important;
+    width: 100% !important;
+    span {
+        display: block;
+        min-height: 100%;
+    }
+}
+
+.list-group-item {
+    cursor: move;
+}
+
+.list-group-item i {
+    cursor: pointer;
 }
