@@ -1,8 +1,8 @@
 <template>
   <div id="mycal">
     <div v-if="isAuth">
-      <v-row class="fill-height ml-2" align="center" justify="center">
-        <v-col cols="12">
+      <v-row class="ml-4" align="center" justify="center">
+        <v-col cols="11" sm="12" offset="1" offset-sm="0">
           <v-expansion-panels style="z-Index:0;">
             <v-expansion-panel>
               <v-expansion-panel-header>
@@ -203,67 +203,118 @@
             </v-expansion-panel>
           </v-expansion-panels>
 
-          <!-- 이슈 등록 -->
+          <!-- 이슈 -->
           <v-row class="mt-8">
-            <!-- 할일 -->
             <v-col cols="4" v-for="issue in issues" :key="issue.title">
               <p class="issue-container-title text-center">
                 {{ issue.title }}
               </p>
-              <div class="issue-container py-2">
-                <draggable
-                  class="list-group"
-                  :list="issue.items"
-                  group="issue"
-                  v-bind="dragOptions"
-                  @start="drag = true"
-                  @end="drag = false"
-                >
-                  <transition-group
-                    type="transition"
-                    :name="!drag ? 'flip-list' : null"
+              <!-- 이슈 박스 -->
+              <div class="issue-container py-2 px-2">
+                <!-- 할일 기능 -->
+                <div v-if="issue.title == '할 일'">
+                  <!-- 등록 버튼 -->
+                  <v-btn
+                    class="issue-reg-btn primary white--text mb-4"
+                    width="100%"
+                    @click="(modal = true), (isUpdate = false)"
+                    >일정 등록</v-btn
                   >
-                    <div v-for="item in issue.items" :key="item.order">
-                      <v-card class="issue-card list-group-item">
-                        <i
-                          :class="
-                            item.fixed
-                              ? 'fa fa-anchor'
-                              : 'glyphicon glyphicon-pushpin'
-                          "
-                          @click="item.fixed = !item.fixed"
-                          aria-hidden="true"
-                        ></i>
-                        <v-container>
-                          <p class="issue-card-text" aria-disabled>
-                            {{ item.captaion }}
-                          </p>
-                          <p class="issue-card-title" aria-disabled>
-                            {{ item.name }}
-                          </p>
-                          <p class="issue-card-text" aria-disabled>
-                            {{ item.start_date }} ~ {{ item.end_date }}
-                          </p>
-                          <p class="issue-card-text" aria-disabled>
-                            {{ item.start_time }} ~ {{ item.end_time }}
-                          </p>
-                        </v-container>
-                      </v-card>
-                    </div>
-                  </transition-group>
-                </draggable>
+                  <!-- 등록버튼 끝 -->
+                  <!-- 기본 카드 -->
+                  <draggable
+                    class="list-default-group"
+                    :list="default_items"
+                    :group="{ name: 'issue', pull: 'clone', put: false }"
+                    v-bind="dragOptions"
+                  >
+                    <transition-group
+                      type="transition"
+                      :name="!drag ? 'flip-list' : null"
+                    >
+                      <div
+                        class="list-group-item"
+                        v-for="item in default_items"
+                        :key="item.id"
+                      >
+                        <v-card
+                          class="issue-card default-card"
+                          :color="item.color"
+                          @click="isUpdate=true, propEvent=item, modal=true"
+                        >
+                          <v-container>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.user_nickname }}
+                            </p>
+                            <p class="issue-card-title" aria-disabled>
+                              {{ item.name }}
+                            </p>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.dates | filterDate }}
+                            </p>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.start_time }} ~ {{ item.end_time }}
+                            </p>
+                          </v-container>
+                        </v-card>
+                      </div>
+                    </transition-group>
+                  </draggable>
+                  <!-- 기본 카드 끝 -->
+                </div>
+                <!-- 할일 기능 끝 -->
+                <!-- 등록된 카드 -->
+                <div class="issue-list-container">
+                  <draggable
+                    class="list-group"
+                    :list="issue.items"
+                    v-bind="dragOptions"
+                    @start="drag = true"
+                    @end="drag = false"
+                  >
+                    <transition-group
+                      type="transition"
+                      :name="!drag ? 'flip-list' : null"
+                    >
+                      <div v-for="item in issue.items" :key="item.id">
+                        <v-card
+                          class="issue-card list-group-item"
+                          :color="item.color"
+                          @click="isUpdate=true, propEvent=item, modal=true"
+                        >
+                          <v-container>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.user_nickname }}
+                            </p>
+                            <p class="issue-card-title" aria-disabled>
+                              {{ item.name }}
+                            </p>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.dates | filterDate }}
+                            </p>
+                            <p class="issue-card-text" aria-disabled>
+                              {{ item.start_time }} ~ {{ item.end_time }}
+                            </p>
+                          </v-container>
+                        </v-card>
+                      </div>
+                    </transition-group>
+                  </draggable>
+                </div>
+                <!-- 등록된 카드 끝 -->
               </div>
+              <!-- 이슈 박스 끝 -->
             </v-col>
-            <!-- 할일 끝 -->
+            <!-- 이슈 끝 -->
           </v-row>
         </v-col>
       </v-row>
       <study-cal-modal
-        :add-modal="addModal"
+        :add-modal="modal"
         :is-update="isUpdate"
         :prop-event="propEvent"
         :study_id="study_id"
-        v-on:close="addModal = false"
+        v-on:close="(modal = false), (isUpdate = false)"
         v-on:reload="reload"
       />
     </div>
@@ -295,28 +346,9 @@ export default {
     userOpen: false,
     selectedOpen: false,
     events: [],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1"
-    ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party"
-    ],
     propEvent: {},
     isUpdate: false,
-    addModal: false,
+    modal: false,
     detail: false,
     detailMenus: [
       { title: "내 일정에 추가", value: "movemycal" },
@@ -325,102 +357,19 @@ export default {
     ],
     delOpen: false,
     picked: false,
+    default_items: [],
     issues: [
       {
         title: "할 일",
-        items: [
-          {
-            name: "헬로우1",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 1
-          },
-          {
-            name: "헬로우2",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 2
-          },
-          {
-            name: "헬로우3",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 3
-          }
-        ]
+        items: []
       },
       {
         title: "진행 중",
-        items: [
-          {
-            name: "헬로우1",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 4
-          },
-          {
-            name: "헬로우2",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 5
-          },
-          {
-            name: "헬로우3",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 6
-          }
-        ]
+        items: []
       },
       {
         title: "완료",
-        items: [
-          {
-            name: "헬로우1",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 7
-          },
-          {
-            name: "헬로우2",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 8
-          },
-          {
-            name: "헬로우3",
-            start_date: "2020-02-18",
-            end_date: "2020-02-20",
-            start_time: "18:00",
-            end_time: "20:00",
-            captain: "정택진",
-            order: 9
-          }
-        ]
+        items: []
       }
     ],
     drag: false
@@ -431,8 +380,8 @@ export default {
     draggable: () => import("vuedraggable")
   },
   watch: {
-    dragArray() {
-      console.log(this.dragArray);
+    issues() {
+      console.log(this.issues);
     }
   },
   computed: {
@@ -483,31 +432,16 @@ export default {
     dragOptions() {
       return {
         animation: 200,
-        group: "description",
+        group: "issue",
         disabled: false,
         ghostClass: "ghost"
       };
     }
   },
   mounted() {
-    //console.log("studySChedule.vue", this.study_id)
-    //   임시 더미 입력
     // 마운트시 내 일정 엑시오스 요청
-    WorkService.getWorks({ type: "study", study_id: this.study_id }).then(
-      works => {
-        works.data.map(work => {
-          work.name = "[" + work.status + "]" + work.name;
-          work.color = work.color
-            ? work.color
-            : "primary"; /* 빨리 여기를 수정해야 한다. */
-          work.start = work.start_date;
-          work.end = work.end_date;
-        });
-
-        this.events = works.data;
-      }
-    );
-    this.$refs.calendar.checkChange();
+    this.reload();
+    // this.$refs.calendar.checkChange();
   },
   methods: {
     viewDay({ date }) {
@@ -585,52 +519,53 @@ export default {
       //   this.events = events;
     },
 
-    loadAddModal(event) {
-      if (!event) {
-        this.isUpdate = false;
-        this.addModal = true;
-      } else {
-        this.isUpdate = true;
-        this.propEvent = event;
-        this.addModal = true;
-      }
-    },
-
-    reload(/*event*/) {
-      // 추가할 데이터 // 테스트용
-      // var newEvent = {
-      //   name:
-      //     event.group == "empty"
-      //       ? event.name
-      //       : "[" + event.group + "]" + event.name,
-      //   content: event.content,
-      //   start: event.start,
-      //   end: event.end,
-      //   group: event.group,
-      //   color: event.color,
-      //   event_id: 0,
-      //   group_id: 0
-      // };
-      // //테스트라인
-      // this.events.push(newEvent);
-
-      // // 일정목록 리로드
+    async reload() {
+      // 일정목록 리로드
       // this.$refs.calendar.checkChange();
-      WorkService.getWorks({ type: "study", study_id: this.study_id }).then(
-        async works => {
-          await works.data.map(work => {
-            work.name = "[" + work.status + "]" + work.name;
-            work.color = work.color
-              ? work.color
-              : "primary"; /* 빨리 여기를 수정해야 한다. */
-            work.start = work.start_date;
-            work.end = work.end_date;
-          });
-
-          this.events = works.data;
-          this.$refs.calendar.checkChange();
+      // WorkService.getWorks({ type: "study", study_id: this.study_id }).then(
+      //   async works => {
+      //     await works.data.map(work => {
+      //       work.name = "[" + work.status + "]" + work.name;
+      //       work.color = work.color
+      //         ? work.color
+      //         : "primary"; /* 빨리 여기를 수정해야 한다. */
+      //       work.start = work.start_date;
+      //       work.end = work.end_date;
+      //     });
+      //     this.events = works.data;
+      //     this.$refs.calendar.checkChange();
+      //   }
+      // );
+      let payload = {
+        type: "study",
+        study_id: this.study_id
+      };
+      let res = await WorkService.getWorks(payload);
+      this.default_items = [];
+      this.issues[0].items = [];
+      this.issues[1].items = [];
+      this.issues[2].items = [];
+      for (let item of res) {
+        switch (item.status) {
+          case "기본":
+            this.default_items.push(item);
+            break;
+          case "할 일":
+            this.issues[0].items.push(item);
+            break;
+          case "진행 중":
+            this.issues[1].items.push(item);
+            break;
+          case "완료":
+            this.issues[2].items.push(item);
+            break;
+          default:
+            console.log(
+              "reload method in studyScehdule.vue error",
+              item.status
+            );
         }
-      );
+      }
     },
 
     clickDetailMenu(value, event) {
@@ -677,6 +612,19 @@ export default {
     putUserSchedule() {
       this.selectedOpen = false;
       this.userOpen = false;
+    }
+  },
+  filters: {
+    filterDate(values) {
+      if (values == "") return;
+      let result = "";
+      values = values.split("/");
+      for (let value of values) {
+        let arr = value.split("-");
+        result += " " + arr[1] + "/" + arr[2];
+      }
+
+      return result;
     }
   }
 };
