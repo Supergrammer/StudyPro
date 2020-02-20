@@ -25,11 +25,7 @@
       </v-card-subtitle>
       <v-divider class="mx-2" />
       <v-card-actions class="mb-2">
-<<<<<<< HEAD
-        <v-row class="center mx-0">
-=======
         <v-row class="mx-0">
->>>>>>> 0482e02cb9bef337258a98ad0de9aedb4c0a17a2
           <template v-if="isJoined">
             <v-btn
               v-if="!attendenced"
