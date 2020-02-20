@@ -411,6 +411,7 @@ export default {
   methods: {
     async loadDeaultList() {
       this.items = await this.$store.dispatch("study/getAllStudy");
+
       this.copyItems = this.items.slice(0);
 
       this.displayItems = [];
@@ -640,6 +641,7 @@ export default {
   async mounted() {
     this.majorItems = [];
     const getMajorRes = await this.$store.dispatch("study/getMajorClass"); //await api.getMajorClasses();
+    
     for (let i = 0; i < getMajorRes.length; i++) {
       this.majorItems.push({
         value: getMajorRes[i].id,
@@ -647,7 +649,6 @@ export default {
         callback: () => {}
       });
     }
-
     await this.loadDeaultList();
   }
 };

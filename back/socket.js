@@ -5,7 +5,7 @@ const option = {
     cert: fs.readFileSync('./keys/certificate.crt'),
     ca: fs.readFileSync('./keys/ca_bundle.crt'),
 }
-export const server = require('http').createServer(option, app)
+export const server = require('https').createServer(option, app)
 
 const io = require('socket.io')(server)
 
@@ -13,11 +13,10 @@ let rooms = {};
 export const connect = () => {
     try {
         io.sockets.on('connection', function (socket) {
-            // console.log(socket)
             const study_id = socket.handshake.query.study_id;
             const user_id = socket.handshake.query.user_id;
             const user_nickname = socket.handshake.query.user_nickname
-            // console.log("study id :", study_id, ', user id :', user_id, user_nickname ,'join' );
+            console.log("study id :", study_id, ', user id :', user_id, user_nickname ,'join' );
             //방 찾기
             let room = rooms[study_id];
             let user_num;
@@ -57,6 +56,7 @@ export const connect = () => {
                     rooms[study_id] = room;
                     user_num = 1;
                 }
+            console.log(room.members);
             
             socket.join(study_id);
 
@@ -144,7 +144,6 @@ export const connect = () => {
             socket.on('load_pad', data => {
                 let study_id = data.study_id;
                 if (rooms[study_id].member_cnt <= 1) return;
-                console.log("로드");
 
                 let load_socket = room.sockets[0];
                 load_socket.emit('load_pad', socket.id);
