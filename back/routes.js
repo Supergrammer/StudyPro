@@ -27,6 +27,7 @@ const STUDY_APPLY = "/apply"
 const STUDY_JOIN = "/join"
 const CHECK_ATTNEDENCE = "/check_attendence"
 const ATTNEDENCE = "/attendence"
+const CHANGE_LEVEL = "/change-level"
 
 // Post
 const POSTS = "/posts"
@@ -75,7 +76,7 @@ const routes = {
     update_password: UPDATE_PASSWORD,
     joined_study : JOINED_STUDY,
     leave_study : LEAVE_STUDY,
-    
+
     images : IMAGES,
     files : FILES,
     
@@ -88,7 +89,8 @@ const routes = {
     study_join : STUDY_JOIN,
     check_attendence : CHECK_ATTNEDENCE,
     attendence : ATTNEDENCE,
-    
+    change_level : CHANGE_LEVEL,
+        
     posts : POSTS,
     post_number: POST_NUMBER,
     post_list : POST_LIST,
@@ -109,16 +111,12 @@ const routes = {
     alarms : ALARMS,
     alarm : ALARM,
     alarm_detail : ALARM_DETAIL,
+    alarm_number : ALARM_NUMBER,
 
     email:EMAIL,
     auth:AUTH,
     notice_apply : NOTICE_APPLY,
     notice_drop : NOTICE_DROP,
     result_apply : RESULT_APPLY,
-
-    alarm_number : ALARM_NUMBER
 }
-
-
-
 export default routes;

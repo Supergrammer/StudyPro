@@ -2,7 +2,7 @@
   <v-card id="workspace_card" flat class="customTheme lighten-2">
     <v-row align="center" justify="center">
       <!-- 상단 탭 버튼 -->
-      <v-col class="py-1 pr-1">
+      <v-col class="py-1 pr-0">
         <v-tabs height="95" grow icons-and-text centered dark color="cyan">
           <v-tabs-slider color="red"></v-tabs-slider>
 
@@ -197,7 +197,7 @@ export default {
   },
   mounted() {
     window.moveTo(0, 0);
-    window.resizeTo(screen.availWidth, screen.availHeight + 100);
+    window.resizeTo(1540 ,824);
     this.loadStudyInfo();
     
 

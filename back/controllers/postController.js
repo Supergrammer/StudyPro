@@ -45,7 +45,7 @@ export const create_post = async function(req, res) {
 export const update_post = async function(req, res) {
     try{
         const {post_id, title, content, type, board} = req.body;
-        console.log("´ó•A·¡Ëa", req.body)
+        console.log("ì—…ë°ì´íŠ¸", req.body)
         let result;
         if(type === "common"){
             const post = await common_post_model.update({title, content, board}, {where: {id:post_id}})
