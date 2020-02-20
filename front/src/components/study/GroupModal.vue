@@ -178,7 +178,7 @@
       </v-card>
     </v-dialog>
     <template>
-      <SendMsgModal
+      <SendMsgModal v-if="studyInfo !=null"
         :group-modal="msgOpen"
         :user="studyInfo.captain"
         v-on:close="SendMsgModalClose"

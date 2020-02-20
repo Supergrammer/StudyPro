@@ -24,12 +24,8 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    start_date: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    end_date: {
-      type: DataTypes.DATE,
+    dates: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     content: {
@@ -44,8 +40,24 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    color: {
+    start_time: {
       type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    end_time: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    user_nickname:{
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    study_name:{
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    members:{
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {

@@ -15,8 +15,7 @@ let connect_smtp = () => {
 }
 
 let send_mail =(receiver,title, content) =>{
-    
-    console.log(receiver,title,content);
+
     let mailOpt = {
         from: 'studyproauth@gmail.com',
         to: receiver,
@@ -35,6 +34,7 @@ let send_mail =(receiver,title, content) =>{
 }
 
 
+
 export const auth_mail = (req,res) => {
     connect_smtp();
     // var url = 'http://' + req.get('host')+'/confirmEmail'+'?key='+key_for_verify;
@@ -47,7 +47,6 @@ export const auth_mail = (req,res) => {
     content += '<span>1234<span>'
     
     //전송
-    
     send_mail(receiver, title , content);
     res.send("메일 발송 완료")
 }

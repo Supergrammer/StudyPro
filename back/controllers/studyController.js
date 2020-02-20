@@ -58,23 +58,17 @@ export const apply_study = async function(req, res) {
         const study = await studies.findOne({where:{id:study_id}})
         
         if (study && user) {
-            //console.log("여기는 와야지 ")
             const existing_user = await users_and_studies.findOne({where:{user_id:user.id, study_id}})
-            //console.log("이게 맞는데 ")
             if (existing_user) {
-                //console.log("AAA이미 가입된 사용자")
                 res.send({state:"fail", detail:"이미 가입된 사용자입니다."})
                 return;
             }
             const apply = await applies.findOne({where:{study_id, user_id:user.id}})
             if (apply) {
-                //console.log("가입 대기 중입니다.")
                 res.send({state:"fail", detail:"가입 대기 중입니다."})
                 return;
             } else {
-                //console.log("A오잉?")
                 const new_apply = await applies.create({study_id, user_id:user.id, comment:comment}) 
-                //console.log(ress)
                 res.send({state:"success", new_apply})
             }
         } else {
@@ -110,14 +104,10 @@ export const read_apply_study = async function(req, res) {
 
 export const join_study = async function(req, res) {
     const {apply_id, accept} = req.body
-    console.log("AAAAAAAAAAAAAAAAAAAAAA")
-    console.log(req.body)
     const apply = await applies.findOne({where:{id:apply_id}})
-    console.log(apply)
     if (apply) {
         const user_id = apply.dataValues.user_id;
         const study_id = apply.dataValues.study_id;
-        console.log(accept)
         if (accept) {
             const join = await users_and_studies.findOrCreate({
                 where: {user_id, study_id},
@@ -139,7 +129,6 @@ export const join_study = async function(req, res) {
 export const get_joined_user = async function(req, res) {
     try{
        const {study_id} = req.query
-     //console.log(req) 
         users_and_studies.findAll({where:{study_id}})
             .map(async (res)=>{
                 const user = await users.findOne({where:{id:res.dataValues.user_id}})
@@ -278,13 +267,15 @@ export const read_study = async function(req, res) {
         const user = res.locals.user;
         
         const study = await studies.findOne({where:{id:study_id}})
+        const num_joined_student  = await users_and_studies.count({where:{study_id:study_id}})
         if (study){
             if (user){
                 const level = await users_and_studies.findOne({where:{study_id, user_id:user.id}})
                 if (level){
                     study.dataValues.level = level.dataValues.level
-                }
+                }  
             }
+            study.dataValues.num_joined_student = num_joined_student;
             res.send(study)
         } else {
             res.send({state:"fail", detail:"존재하지 않는 스터디입니다."})
@@ -413,3 +404,15 @@ export const attendence = function (req, res) {
         res.send(err)
     }
 };
+
+
+export const image_url_update = function(req, res) {
+    studies.findAll()
+        .map(study => {
+            const image_url = study.dataValues.image_url;
+            console.log(image_url)
+            const new_image_url = image_url.replace(process.env.OLD_IMAGE_URL, process.env.IMAGE_URL)
+            console.log(image_url, new_image_url)
+            studies.update({image_url: new_image_url}, {where:{id:study.dataValues.id}})
+        })
+}

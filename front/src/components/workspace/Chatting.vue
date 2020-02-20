@@ -108,9 +108,9 @@ export default {
   span {
     display: inline-block;
     border-radius: 5px;
-    font-family: '중고딕';
-    font-weight: bolder;
-    font-size: 12px;
+    font-family: 'MapoPeacefull';
+    /* font-weight: bolder; */
+    font-size: 14px;
   }
   .chat {
     margin-top: 5px;
