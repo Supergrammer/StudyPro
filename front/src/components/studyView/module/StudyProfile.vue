@@ -54,7 +54,7 @@
         {{reg_message}}
       </template>
       <template v-slot:btn>
-        <div class="text-end pr-3 pb-3">
+        <div class="text-end pr-3 pb-3 pt-5">
           <v-btn elevation="0" @click="regGroup" v-show="reg_message == ''">가입신청</v-btn>
           <v-btn elevation="0" @click="modalClose" v-show="reg_message != ''">확인</v-btn>
         </div>
