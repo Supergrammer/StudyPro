@@ -474,7 +474,6 @@ export default {
   methods: {
     async loadDeaultList() {
       this.items = await this.$store.dispatch("study/getAllStudy");
-
       this.copyItems = this.items.slice(0);
 
       this.displayItems = [];
@@ -484,16 +483,19 @@ export default {
       }
     },
 
-    loadMore() {
+    async loadMore() {
       this.busy = true;
-      let len = 10;
-      if (this.copyItems.length < 10) len = this.copyItems.length;
-      setTimeout(() => {
+      let len = (this.copyItems.length < 10)? this.copyItems.length:10;
+      await setTimeout(() => {
         for (var i = 0; i < len; i++) {
-          this.displayItems.push(this.copyItems.shift());
+          let insert = this.copyItems.shift()
+          if(insert){
+            this.displayItems.push(insert);
+          }
         }
-        this.busy = false;
-      }, 1000);
+      }, 500);
+
+      this.busy = false;
     },
 
     async searchEnter() {

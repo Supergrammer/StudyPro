@@ -120,7 +120,13 @@ class StudyService {
         })
     }
 
-
+    destroyStudy(payload) {
+        return axios.delete(URL, { data: payload })
+            .then(res => {
+                console.log(res)
+                return res.data
+            })
+    }
 
 }
 
