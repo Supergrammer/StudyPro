@@ -28,7 +28,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     name: {
       type: DataTypes.STRING(45),
-      allowNull: false
+      allowNull: true
     },
     nickname: {
       type: DataTypes.STRING(45),
@@ -41,7 +41,15 @@ module.exports = function (sequelize, DataTypes) {
     auth: {
       type: DataTypes.INTEGER,
       allowNull: true
-    }
+    },
+    profile_url: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
+    about: {
+      type: DataTypes.STRING(150),
+      allowNull: true,
+    },
   }, {
     tableName: 'users'
   });
@@ -76,26 +84,44 @@ module.exports = function (sequelize, DataTypes) {
   users.save = async function (user, platform_type, auth) {
     try {
       const {
-        email,
-        phone,
-        password,
-        name,
-        nickname,
-        gender } = user;
+        email, phone, password, name, nickname, gender, profile_url, about
+       } = user;
 
-      const hash = await users.hash(password);
-      const new_user = await this.create({
-        email,
-        platform_type,
-        phone,
-        password: hash,
-        name,
-        nickname,
-        gender,
-        auth: auth || 0
-      })
-      return new_user;
+    
+      if (platform_type == "local") {
+        const hash = await users.hash(password);
+        const new_user = await this.create({
+          email,
+          platform_type,
+          phone,
+          password: hash,
+          name,
+          nickname,
+          gender,
+          auth: auth || 0,
+          profile_url,
+          about
+        })
+        return new_user;
+      } else {
+        const new_user = await this.create({
+          email,
+          platform_type,
+          phone,
+          password,
+          name,
+          nickname,
+          gender,
+          auth: auth || 0,
+          profile_url,
+          about
+        })
+        return new_user;
+      }
+
+
     } catch (err) {
+      console.log(err)
       return false;
     }
   }

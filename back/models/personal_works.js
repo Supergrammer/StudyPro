@@ -16,20 +16,8 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    study_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'studies',
-        key: 'id'
-      }
-    },
-    start_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false
-    },
-    end_date: {
-      type: DataTypes.DATEONLY,
+    dates: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
     content: {
@@ -38,6 +26,26 @@ module.exports = function(sequelize, DataTypes) {
     },
     status: {
       type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    start_time: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    end_time: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    user_nickname:{
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    members:{
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {

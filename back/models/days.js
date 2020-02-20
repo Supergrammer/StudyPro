@@ -26,11 +26,25 @@ module.exports = function(sequelize, DataTypes) {
 
   
   days.create_days = async function(study_id, days) {
-
-    for (const day of days) {
+    if (typeof days === 'undefined') {
+      return;
+    }
+    
+    const progress_days = days.split(',');
+    for (const day of progress_days) {
       this.create({study_id, day})
     }
   }
+
+  days.read_days = async function(study_id) {
+    const progress_days = await days.findAll({where:{study_id}})
+        .map(day=> {
+          delete day.dataValues.id          
+          return day
+        })
+        return progress_days
+    } 
+
 
   return days;
 };

@@ -38,7 +38,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     created_date: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: DataTypes.NOW
     },
     view: {
       type: DataTypes.INTEGER,
@@ -157,18 +158,18 @@ module.exports = function(sequelize, DataTypes) {
     return result;
   }
 
-  study_posts.list_study_post = async function(study_id,board){
+  study_posts.list_study_post = async function(study_id,board, offset){
     let result;
     
     result = await this.findAll(
-      {
-        where : 
-        {
+      { offset: Number(offset),
+        limit: 10,
+        where : {
           study_id : study_id,
-          board : board
-        }
-      }
-    )
+          board : board,
+        },
+        order:  [['id','DESC']]
+    })
     return result;
   }
 
