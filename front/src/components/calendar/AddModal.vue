@@ -185,7 +185,7 @@
           >
             추가
           </v-btn>
-          <v-btn
+          <!-- <v-btn
             text
             color="primary lighten-2"
             @click="update"
@@ -193,7 +193,7 @@
             :disabled="isLoading"
           >
             수정
-          </v-btn>
+          </v-btn> -->
           <v-btn text color="lighten-2" @click="close">
             취소
           </v-btn>

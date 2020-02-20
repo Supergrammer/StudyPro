@@ -307,7 +307,7 @@
             >날짜를 입력하지 않으면 달력에 표시되지 않습니다</span
           >
           <span v-show="errorType == 'timeDup'"
-            >해당시간에 이미 일정이 있습니다</span
+            >해당시간에 나의 일정이 있습니다</span
           >
         </template>
       </modal>
@@ -579,6 +579,7 @@ export default {
       this.reload();
     },
     async log(evt, title) {
+      console.log(evt, title)
       if (evt.added) {
         this.added = title;
         if (this.removed != "") {

@@ -150,13 +150,6 @@
           </v-row>
           <!-- 내용입력 끝 -->
           <!-- 이름/내용 입력 끝 -->
-          <!-- 기본일정 체크박스 -->
-          <v-row v-show="!isUpdate">
-            <v-col class="py-0 justify-end">
-              <v-checkbox v-model="input.isDefault" label="기본일정으로 등록" />
-            </v-col>
-          </v-row>
-          <!-- 기본일정 체크박스 끝 -->
         </v-col>
       </v-row>
       <!-- 내용입력란 끝 -->
@@ -192,7 +185,7 @@
           >
             만들기
           </v-btn>
-          <!-- <v-btn
+          <v-btn
             text
             color="primary lighten-2"
             @click="update"
@@ -200,7 +193,7 @@
             :disabled="isLoading"
           >
             수정
-          </v-btn> -->
+          </v-btn>
           <v-btn text color="lighten-2" @click="close">
             취소
           </v-btn>
@@ -210,7 +203,7 @@
     </v-card>
     <modal :open-modal="errorModal" v-on:close="errorModal = false">
       <template v-slot:text>
-        <span>해당시간에 이미 일정이 있습니다</span>
+        <span>해당시간에 나의 일정이 있습니다</span>
       </template>
     </modal>
   </v-dialog>
@@ -344,12 +337,9 @@ export default {
       };
 
       if (!(await this.enterIssue(newEvent))) return;
-
       //데이터추가 엑시오스
       let res = await WorkService.createWork(newEvent);
       if (res.state == 'success') {
-        newEvent.type = "personal";
-        res = await WorkService.createWork(newEvent);
         this.$emit("reload");
         this.close();
       } else {
@@ -409,7 +399,7 @@ export default {
       let copy = JSON.parse(JSON.stringify(item));
       copy.type = "personal";
       let res = await WorkService.createWork(copy);
-      if(res.id){
+      if(res.state == 'success'){
         return true;
       }
 
@@ -428,9 +418,7 @@ export default {
         start_time: this.input.startTime,
         end_time: this.input.endTime,
         status: this.propEvent.status,
-        color: ""
       };
-
       //수정 엑시오스 요청
       let res = await WorkService.updateWork(updateEvent);
       if (res.state == "success") {
