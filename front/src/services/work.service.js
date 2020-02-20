@@ -24,7 +24,7 @@ class workService {
 
     deleteWork(payload) {
         AuthHeader.changeHeadersToken()
-        return axios.delete(URL, { payload })
+        return axios.delete(URL, { data: payload })
             .then(res => {
                 return res.data
             })
