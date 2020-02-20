@@ -127,7 +127,7 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="searchForm.starttime"
-                        label="시작시간"
+                        label="시작 시간"
                         prepend-icon="access_time"
                         readonly
                         hide-details
@@ -162,7 +162,7 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="searchForm.endtime"
-                        label="시작시간"
+                        label="종료 시간"
                         prepend-icon="access_time"
                         readonly
                         hide-details
@@ -316,7 +316,7 @@
                         <v-btn
                           class="white lighten-3"
                           elevation="0"
-                          @click="(groupModal = true), (modalItem = item)"
+                          @click="grpModal(item)"
                         >
                           <span class="dark--text" style="text-decoration:underline;">view detail</span>
                         </v-btn>
@@ -599,6 +599,11 @@ export default {
       this.major = -1;
       this.minor = -1;
       this.searchInput = "";
+    },
+
+    grpModal(item) {
+      this.groupModal = true;
+      this.modalItem = item;
     }
   },
   filters: {
